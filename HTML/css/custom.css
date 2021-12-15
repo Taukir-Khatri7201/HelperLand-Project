@@ -581,6 +581,11 @@ footer {
     transition: opacity 0.3s;
 }
 
+.footer-container .footer-navigation a:hover, .footer-privacy a:hover {
+    color: #1d7a8c;
+    transition: 0.2s all ease-in;
+}
+
 .footer-container ul.footer-links {
     margin: 0;
     padding: 0;
@@ -593,6 +598,18 @@ footer {
 
 .footer-container ul.footer-links li+li {
     margin-left:30px;
+}
+
+.footer-privacy {
+    margin-top: 30px;
+    padding-top: 30px;
+    border-top: 1px solid #424242;
+}
+
+.footer-privacy, .footer-privacy a {
+    font-size: 14px;
+    line-height: 16px;
+    color: #9BA0A3;
 }
 
 /* Privacy Policy at Bottom */
@@ -1194,6 +1211,10 @@ footer {
         margin-left: 30px;
     }
 
+    .faqs-content {
+        padding-left: 31px;
+    }
+
     .common-wrapper {
         padding-bottom: 45px;
     }
@@ -1206,8 +1227,9 @@ footer {
         font-size: 16px;
     }
 
-    .price-points {
-        /* padding-left: 120px; */
+    .cleaning-header {
+        font-size: 18px;
+        line-height: 22px;
     }
 
     .whyhelperland h3 {
@@ -1250,10 +1272,6 @@ footer {
     .faq-content .nav-justified .nav-item .nav-link span {
         display: inline-block;
         max-width: 110px !important;
-    }
-
-    .faqs-content {
-        padding-left: 31px;
     }
 
     .price-points {
