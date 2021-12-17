@@ -972,6 +972,92 @@ footer {
     max-width: 286px;
 }
 
+/* Contact Us */
+.contact-banner {
+    background: url("../assets/contact-banner.png");
+}
+
+.contact-img-wrapper {
+    height: 61px;
+    margin-bottom: 20px;
+}
+
+.contact-info-wrapper p {
+    color: #4F4F4F;
+    font-size: 16px;
+    line-height: 24px;
+    margin-bottom: 0;
+}
+
+.contact-info-wrapper a {
+    text-decoration: none;
+    color: #4F4F4F;
+}
+
+.contact-info-wrapper a:hover {
+    transition: 0.2s all ease-in;
+    opacity: 60%;
+}
+
+.contact-info-wrapper {
+    margin-bottom: 50px;
+}
+
+.contact-form-header {
+    color: #4F4F4F;
+    font-weight: 700;
+    text-align: center;
+    font-size: 28px;
+    line-height: 34px;
+    margin-top: 74px;
+    margin-bottom: 23px;
+}
+
+.contact-form-container {
+    max-width: 612px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contact-form-container input, select {
+    height: 46px !important;
+    transition: none !important;
+}
+
+.contact-form-container textarea {
+    transition: none !important;
+}
+
+.contact-form-container input:focus, select:focus, textarea:focus {
+    border: 1px solid #1D7A8C !important;
+    box-shadow: none !important;
+    outline: none !important;
+    transition: none !important;
+}
+
+.form-submit-btn {
+    background-color: #1D7A8C; 
+    border-radius: 27px; 
+    border: 1px solid #FFFFFF; 
+    height: 46px; 
+    line-height: 24px; 
+    color: #fff !important; 
+    /* text-decoration: none;  */
+    min-width: 163px; 
+    font-size: 20px; 
+    font-weight: 700;
+    transition: all 0.2s ease;
+}
+
+.form-submit-btn:hover {
+    background-color: #166d7e;
+}
+
+.map-section {
+    padding-top: 0px;
+    padding-bottom: 60px;
+}
+
 @media (max-width: 1199px) {
     .convince-img {
         max-width: 270px;
@@ -1097,12 +1183,15 @@ footer {
     h1 {
         font-size: 38px !important;
     }
+
     #brand-img {
         content: url("../assets/logo-small.png");
     }
+
     .banner-content {
         padding-top: 150px;
     }
+
     .step {
         min-height: min-content !important;
         padding-bottom: 30px !important;
@@ -1111,12 +1200,15 @@ footer {
     .content-innner .btn-wrapper .blue-btn {
         margin: 30px 0px;
     }
+
     .steps-wrapper .col-md-3+.col-md-3:before {
         background-image: none !important;
     }
+
     .step {
         padding-bottom: 40px;
     }
+
     .common-header {
         font-size: 30px;
         margin-bottom: 25px;
@@ -1240,6 +1332,14 @@ footer {
     .whyhelperland img {
         max-height: 144px;
         width: auto;
+    }
+
+    .contact-info-wrapper > div {
+        margin-bottom: 30px;
+    }
+
+    .contact-img-wrapper {
+        margin-bottom: 15px;
     }
 }
 
