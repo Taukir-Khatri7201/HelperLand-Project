@@ -1042,7 +1042,8 @@ footer {
     height: 46px; 
     line-height: 24px; 
     color: #fff !important; 
-    /* text-decoration: none;  */
+    padding-left: 20px;
+    padding-right: 20px;
     min-width: 163px; 
     font-size: 20px; 
     font-weight: 700;
@@ -1056,6 +1057,85 @@ footer {
 .map-section {
     padding-top: 0px;
     padding-bottom: 60px;
+}
+
+/* Become a Provider */
+.banner-provider {
+    padding-top: 150px;
+    background-image: url("../assets/become-a-pro-banner.png");
+}
+
+.blog-section.service-pro-blog:before {
+    top: 20px;
+}
+
+.blog-section.service-pro-blog:after { 
+    top: 20px;    
+}
+
+.service-pro-blog h2 {
+    padding-top: 70px;
+}
+
+.service-pro-blog h3 {
+    color: #4F4F4F;
+    font-weight: 700;
+    font-size: 30px;
+    margin-bottom: 16px;
+}
+
+.service-pro-blog p {
+    color: #4F4F4F;
+    font-size: 18px;
+    line-height: 24px;
+    margin-bottom: 48px;
+}
+
+.how-it-works-img {
+    margin-bottom: 20px;
+}
+
+.how-it-works-img img {
+    border-radius: 50%;
+    margin-bottom: 20px;
+    box-shadow: 3px 3px 20px rgb(0 0 0 / 30%);
+}
+
+.mb-20 {
+    margin-bottom: 20px;
+}
+
+/* Registration Form */
+.registration-form {
+    padding: 23px 35px;
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    box-shadow: 0 0 16px 0 rgba(0, 0, 0, 0.15);
+    margin-bottom: 44px;
+    color: #4F4F4F;
+}
+
+.registration-form h2 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 28px;
+    color: #4F4F4F;
+    margin-bottom: 25px;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    user-select: none;
+}
+
+.form-check-input {
+    margin-top: 0px;
+}
+
+label[for="termsCheck"] a {
+    text-decoration: none;
+    color: #1fb6ff;
 }
 
 @media (max-width: 1199px) {
@@ -1176,6 +1256,10 @@ footer {
 
     .common-star-header {
         font-size: 30px;
+    }
+
+    .service-pro-blog h3 {
+        font-size: 24px;
     }
 }
 
@@ -1340,6 +1424,26 @@ footer {
 
     .contact-img-wrapper {
         margin-bottom: 15px;
+    }
+    
+    .service-pro-blog h3 {
+        margin-bottom: 10px;
+    }
+
+    .service-pro-blog p {
+        margin-bottom: 30px;
+    }
+
+    .service-pro-blog a {
+        margin-bottom: 15px !important;
+    }
+
+    .how-it-works-wrapper {
+        margin-bottom: 20px;
+    }
+
+    .service-pro-newsletter h2 {
+        padding-top: 40px;
     }
 }
 
