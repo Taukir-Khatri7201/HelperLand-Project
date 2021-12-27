@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="icon" type="image/png" href="assets/titlebar_logo.png">
+    <title> Service History | Helperland</title>
+    <link href="css/custom.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="body-container">
+        <!-- Navbar -->
+        <header>
+            <nav class="navbar navbar-dark navbar-expand-lg fixed-top secondary-navbar" id="navbar">
+                <a class="navbar-brand" href="./home.html"><img src="assets/logo-small.png" id="brand-img"
+                        alt="Helperland"></a>
+
+                <div class="d-block d-lg-none mobile-notification">
+                    <a class="nav-link" href="#">
+                        <img src="./assets/icon-notification.png" alt="Notification">
+                        <span class="badge badge-pill badge-danger custom-notification">2</span>
+                    </a>
+                </div>
+
+                <div class="d-block d-lg-none mobile-profile surround-with-border">
+                    <a class="nav-link dropdown-toggle" href="#" id="profile-dropdown-outer" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <div class="d-flex align-items-center">
+                            <img src="./assets/user.png" alt="User Profile">
+                            <img src="./assets/sp-arrow-down.png" alt="Options">
+                        </div>
+                    </a>
+                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profile-dropdown-outer">
+                        <div class="dropdown-header">Welcome, <div>Smith Patel</div>
+                        </div>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="#">My Dashboard</a>
+                        <a class="dropdown-item" href="#">My Settings</a>
+                        <a class="dropdown-item" href="#">Logout</a>
+                    </div>
+                </div>
+
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav d-flex align-items-lg-center align-items-end ml-lg-auto">
+                        <li class="nav-item small-blue-btn">
+                            <a class="nav-link" href="#">Book now</a>
+                        </li>
+
+                        <li class="nav-item btn-hover">
+                            <a class="nav-link" href="./prices.html">Prices & services</a>
+                        </li>
+                        <li class="nav-item btn-hover">
+                            <a class="nav-link" href="#">Warranty</a>
+                        </li>
+                        <li class="nav-item btn-hover">
+                            <a class="nav-link" href="#">Blog</a>
+                        </li>
+                        <li class="nav-item btn-hover">
+                            <a class="nav-link" href="./contact.html">Contact</a>
+                        </li>
+                        <li class="nav-item surround-with-border d-none d-lg-block">
+                            <a class="nav-link" href="#">
+                                <img src="./assets/icon-notification.png" alt="Notification">
+                                <span class="badge badge-pill badge-danger custom-notification">2</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item dropdown nav-profile-container d-none d-lg-block">
+                            <a class="nav-link dropdown-toggle" href="#" id="profile-dropdown" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                                <div class="d-flex align-items-center">
+                                    <img src="./assets/user.png" alt="User Profile">
+                                    <img src="./assets/sp-arrow-down.png" alt="Options">
+                                </div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profile-dropdown">
+                                <div class="dropdown-header">Welcome, <div>Smith Patel</div>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">My Dashboard</a>
+                                <a class="dropdown-item" href="#">My Settings</a>
+                                <a class="dropdown-item" href="#">Logout</a>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <section class="logged-user-container">
+            <h1>Welcome, <span>Smith!</span></h1>
+        </section>
+
+        <!-- Content Section -->
+        <section class="dashboard-section">
+            <div class="container-fluid d-lg-flex">
+                <div class="left-navigation-wrapper">
+                    <ul>
+                        <li><a href="#" title="Dashboard">Dashboard</a></li>
+                        <li class="active"><a href="#" title="Service History">Service History</a></li>
+                        <li><a href="#" title="Service Schedule">Service Schedule</a></li>
+                        <li><a href="#" title="Favourite Pros">Favourite Pros</a></li>
+                        <li><a href="#" title="Invoices">Invoices</a></li>
+                        <li><a href="#" title="Notifications">Notifications</a></li>
+                    </ul>
+                </div>
+
+                <div class="right-side-wrapper flex-grow-1">
+                    <div class="right-side-header">
+                        <h2 class="float-left header-22">Service History</h2>
+                        <a class="float-right btn rounded-pill secondary-blue-btn text-white" href="#"
+                            title="Export Data">Export</a>
+                    </div>
+
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th><a href="#" title="Service Id">Service Details <img src="./assets/sort.png"
+                                            alt="Sort"></a></th>
+                                <th><a href="#" title="Service date">Service Provider <img src="./assets/sort.png"
+                                            alt="Sort"></a></th>
+                                <th class="payment"><a href="#" title="Customer Details">Payment <img
+                                            src="./assets/sort.png" alt="Sort"></a></th>
+                                <th><a href="#" title="Distance">Status <img src="./assets/sort.png" alt="Sort"></a>
+                                </th>
+                                <th><a href="#" title="Actions">Rate SP</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div class="table-cell-info-container make-bold">
+                                            <img src="./assets/calendar.png" alt="Calendar"> 31/03/2018
+                                        </div>
+                                        <div class="table-cell-info-container">
+                                            12:00 - 18:00
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content d-flex">
+                                        <div class="service-provider-left">
+                                            <img src="./assets/cap.png" alt="Service Provider">
+                                        </div>
+                                        <div class="service-provider-right">
+                                            <div>Lyum Watson</div>
+
+                                            <div class="service-provider-right-rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star2.png" alt="Empty Rating">
+                                                <div>4</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="payment">
+                                    <div class="service-payment">&euro;63</div>
+                                </td>
+
+                                <td><a href="#" title="Completed" class="btn service-status">Completed</a></td>
+
+                                <td><a href="#" title="Rate SP" class="btn rounded-pill lighther-blue-btn">Rate SP</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div class="table-cell-info-container make-bold">
+                                            <img src="./assets/calendar.png" alt="Calendar"> 31/03/2018
+                                        </div>
+                                        <div class="table-cell-info-container">
+                                            12:00 - 18:00
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content d-flex">
+                                        <div class="service-provider-left">
+                                            <img src="./assets/cap.png" alt="Service Provider">
+                                        </div>
+                                        <div class="service-provider-right">
+                                            <div>Lyum Watson</div>
+
+                                            <div class="service-provider-right-rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star2.png" alt="Empty Rating">
+                                                <div>4</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="payment">
+                                    <div class="service-payment">&euro;63</div>
+                                </td>
+
+                                <td><a href="#" title="Completed" class="btn service-status">Completed</a></td>
+
+                                <td><a href="#" title="Rate SP" class="btn rounded-pill lighther-blue-btn">Rate SP</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div class="table-cell-info-container make-bold">
+                                            <img src="./assets/calendar.png" alt="Calendar"> 31/03/2018
+                                        </div>
+                                        <div class="table-cell-info-container">
+                                            12:00 - 18:00
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content d-flex">
+                                        <div class="service-provider-left">
+                                            <img src="./assets/cap.png" alt="Service Provider">
+                                        </div>
+                                        <div class="service-provider-right">
+                                            <div>Lyum Watson</div>
+
+                                            <div class="service-provider-right-rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star2.png" alt="Empty Rating">
+                                                <div>4</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="payment">
+                                    <div class="service-payment">&euro;63</div>
+                                </td>
+
+                                <td><a href="#" title="Cancelled" class="btn service-status btn-orange">Cancelled</a>
+                                </td>
+
+                                <td><a href="#" title="Rate SP" class="btn rounded-pill lighther-blue-btn">Rate SP</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div class="table-cell-info-container make-bold">
+                                            <img src="./assets/calendar.png" alt="Calendar"> 31/03/2018
+                                        </div>
+                                        <div class="table-cell-info-container">
+                                            12:00 - 18:00
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content d-flex">
+                                        <div class="service-provider-left">
+                                            <img src="./assets/cap.png" alt="Service Provider">
+                                        </div>
+                                        <div class="service-provider-right">
+                                            <div>Lyum Watson</div>
+
+                                            <div class="service-provider-right-rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star2.png" alt="Empty Rating">
+                                                <div>4</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="payment">
+                                    <div class="service-payment">&euro;63</div>
+                                </td>
+
+                                <td><a href="#" title="Completed" class="btn service-status">Completed</a></td>
+
+                                <td><a href="#" title="Rate SP" class="btn rounded-pill lighther-blue-btn">Rate SP</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div class="table-cell-info-container make-bold">
+                                            <img src="./assets/calendar.png" alt="Calendar"> 31/03/2018
+                                        </div>
+                                        <div class="table-cell-info-container">
+                                            12:00 - 18:00
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content d-flex">
+                                        <div class="service-provider-left">
+                                            <img src="./assets/cap.png" alt="Service Provider">
+                                        </div>
+                                        <div class="service-provider-right">
+                                            <div>Lyum Watson</div>
+
+                                            <div class="service-provider-right-rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star2.png" alt="Empty Rating">
+                                                <div>4</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="payment">
+                                    <div class="service-payment">&euro;63</div>
+                                </td>
+
+                                <td><a href="#" title="Cancelled" class="btn service-status btn-orange">Cancelled</a>
+                                </td>
+
+                                <td><a href="#" title="Rate SP" class="btn rounded-pill lighther-blue-btn">Rate SP</a>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div class="table-cell-info-container make-bold">
+                                            <img src="./assets/calendar.png" alt="Calendar"> 31/03/2018
+                                        </div>
+                                        <div class="table-cell-info-container">
+                                            12:00 - 18:00
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content d-flex">
+                                        <div class="service-provider-left">
+                                            <img src="./assets/cap.png" alt="Service Provider">
+                                        </div>
+                                        <div class="service-provider-right">
+                                            <div>Lyum Watson</div>
+
+                                            <div class="service-provider-right-rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star2.png" alt="Empty Rating">
+                                                <div>4</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td class="payment">
+                                    <div class="service-payment">&euro;63</div>
+                                </td>
+
+                                <td><a href="#" title="Completed" class="btn service-status">Completed</a></td>
+
+                                <td><a href="#" title="Rate SP" class="btn rounded-pill lighther-blue-btn">Rate SP</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="pagination-and-filter-wrapper d-sm-flex align-items-center justify-content-between">
+                        <div class="filter-wrapper">
+                            <span>Show</span>
+                            <select class="form-control">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span> entries</span>
+                            <span>Total Record : 55</span>
+                        </div>
+                        <ul>
+                            <li>
+                                <a href="#"><img src="./assets/first-page.png" alt="First Page"></a>
+                            </li>
+                            <li>
+                                <a href="#"><img src="./assets/previous.png" alt="Previous Page"></a>
+                            </li>
+                            <li class="active">
+                                <a href="#">1</a>
+                            </li>
+                            <li>
+                                <a href="#">2</a>
+                            </li>
+                            <li>
+                                <a href="#">3</a>
+                            </li>
+                            <li>
+                                <a href="#"><img src="./assets/previous.png" alt="Previous Page" class="rotate-180"></a>
+                            </li>
+                            <li>
+                                <a href="#"><img src="./assets/first-page.png" alt="First Page" class="rotate-180"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-2">
+                    <a href="./home.html" title="Helperland"><img src="./assets/footer-logo.png"
+                            alt="Helperland Logo"></a>
+                </div>
+                <div class="col-lg-8 text-center">
+                    <ul class="footer-navigation d-sm-flex flex-wrap justify-content-center align-items-center">
+                        <li>
+                            <a href="./home.html" title="Home">Home</a>
+                        </li>
+                        <li>
+                            <a href="#" title="About">About</a>
+                        </li>
+                        <li>
+                            <a href="#" title="Testimonials">Testimonials</a>
+                        </li>
+                        <li>
+                            <a href="./faq.html" title="FAQs">FAQs</a>
+                        </li>
+                        <li>
+                            <a href="#" title="Insurance Policy">Insurance Policy</a>
+                        </li>
+                        <li>
+                            <a href="#" title="Impressum">Impressum</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <ul class="footer-links d-flex justify-content-end">
+                        <li>
+                            <a href="#" title="Facebook"><img src="./assets/ic-facebook.png"></a>
+                        </li>
+                        <li>
+                            <a href="#" title="Instagram"><img src="./assets/ic-instagram.png"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-privacy text-center">
+                ©2021 Helperland. All rights reserved. <a href="#" title="Terms and Conditions">Terms and
+                    Conditions</a>
+                | <a href="#" title="Privacy Policy">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+    <!-- Bootstrap Scripts -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <!-- Bootstrap Scripts -->
+</body>
+
+</html>
