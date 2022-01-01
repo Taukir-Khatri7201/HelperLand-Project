@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="icon" type="image/png" href="assets/titlebar_logo.png">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+    <title>Service Requests | Helperland</title>
+    <link href="css/custom.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="body-container admin-wrapper">
+        <header>
+            <div>
+                <nav class="navbar navbar-dark navbar-expand-lg fixed-top secondary-navbar admin-navbar" id="navbar">
+                    <span class="fas fa-bars d-block d-xl-none" id="toggler-icon"></span>
+                    <a class="navbar-brand" href="#">helperland</a>
+                    <div class="d-flex jutify-content-end align-items-center ml-auto admin-nav-right">
+                        <img src="./assets/admin-user.png" alt="Admin Profile">
+                        <span class="d-none d-sm-block">James Smith</span>
+                        <img src="./assets/logout.png" alt="Logout" title="Logout">
+                    </div>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Details Section -->
+        <section class="admin-content">
+            <div class="d-lg-flex">
+                <div class="admin-left-nav">
+                    <ul>
+                        <li><a href="#" class="active">Service Requests</a></li>
+                        <li><a href="#">User Management</a></li>
+                    </ul>
+                </div>
+
+                <div class="right-side-wrapper admin-right-content admin-service-request flex-grow-1">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <h2 class="header-22">Service Requests</h2>
+                    </div>
+
+                    <div class="admin-filter-wrapper">
+                        <form>
+                            <div class="form-row justify-content-center">
+                                <div class="col-md col-sm-4 col-6">
+                                    <input type="text" class="form-control" id="serviceId" placeholder="Service ID">
+                                </div>
+
+                                <div class="col-md col-sm-4 col-6">
+                                    <select class="form-control">
+                                        <option disabled selected>Customer</option>
+                                        <option>Johm Smith</option>
+                                        <option>Tom Smith</option>
+                                        <option>Kevin Williams</option>
+                                        <option>Marry White</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md col-sm-4 col-6">
+                                    <select class="form-control">
+                                        <option disabled selected>Service Provider</option>
+                                        <option>John Smith</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md col-sm-4 col-6">
+                                    <select class="form-control">
+                                        <option disabled selected>Status</option>
+                                        <option>New</option>
+                                        <option>Pending</option>
+                                        <option>Completed</option>
+                                        <option>Cancelled</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md col-sm-4 col-6">
+                                    <input type="text" class="form-control admin-filter-date" id="fromDate"
+                                        placeholder="       From Date">
+
+                                </div>
+
+                                <div class="col-md col-sm-4 col-6">
+                                    <input type="text" class="form-control admin-filter-date" id="toDate"
+                                        placeholder="       To Date">
+                                </div>
+
+                                <div class="col-md col-sm-4 col-6 d-flex justify-content-md-end justify-content-center">
+                                    <a class="form-btn blue-color btn" title="Search">
+                                        <span>Search</span>
+                                    </a>
+                                    <a class="form-btn clear-btn btn" title="Clear">
+                                        <span>Clear</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <table class="table admin-table">
+                        <thead>
+                            <tr>
+                                <th><a href="#" title="Service Id">Service ID <img src="./assets/sort.png"
+                                            alt="Sort"></a>
+                                </th>
+                                <th><a href="#" title="Service Date">Service Date <img src="./assets/sort.png"
+                                            alt="Sort"></a>
+                                <th><a href="#" title="Customer Details">Customer Details <img src="./assets/sort.png"
+                                            alt="Sort"></a></th>
+                                <th><a href="#" title="Service Provider">Service Provider <img src="./assets/sort.png"
+                                            alt="Sort"></a>
+                                <th><a href="#" title="Status">Status <img src="./assets/sort.png" alt="Sort"></a></th>
+                                <th><a href="#" title="Actions">Actions</a></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td>323436</td>
+
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div class="table-cell-info-container make-bold">
+                                            <img src="./assets/calendar2.png"> 09/04/2018
+                                        </div>
+                                        <div class="table-cell-info-container">
+                                            <img src="./assets/clock.png"> 12:00 - 18:00
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div>David Bough</div>
+                                        <div>
+                                            <img src="./assets/home1.png"> Musterstrabe 5,12345 Bonn
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td></td>
+
+                                <td><a href="#" title="New" class="btn-sm service-status status-new">New</a></td>
+
+                                <td>
+                                    <a href="#" class="admin-actions dropdown-toggle" id="user1-actions"
+                                        data-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user1-actions">
+                                        <a class="dropdown-item" href="#">Edit & Reschedule</a>
+                                        <a class="dropdown-item" href="#">Refund</a>
+                                        <a class="dropdown-item" href="#">Cancel</a>
+                                        <a class="dropdown-item" href="#">Change SP</a>
+                                        <a class="dropdown-item" href="#">Escalate</a>
+                                        <a class="dropdown-item" href="#">History Log</a>
+                                        <a class="dropdown-item" href="#">Download Invoice</a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>323437</td>
+
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div class="table-cell-info-container make-bold">
+                                            <img src="./assets/calendar2.png"> 09/04/2018
+                                        </div>
+                                        <div class="table-cell-info-container">
+                                            <img src="./assets/clock.png"> 12:00 - 18:00
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div>David Bough</div>
+                                        <div>
+                                            <img src="./assets/home1.png"> Musterstrabe 5,12345 Bonn
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td></td>
+
+                                <td><a href="#" title="New" class="btn-sm service-status status-new">New</a></td>
+
+                                <td>
+                                    <a href="#" class="admin-actions dropdown-toggle" id="user1-actions"
+                                        data-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user1-actions">
+                                        <a class="dropdown-item" href="#">Edit & Reschedule</a>
+                                        <a class="dropdown-item" href="#">Refund</a>
+                                        <a class="dropdown-item" href="#">Cancel</a>
+                                        <a class="dropdown-item" href="#">Change SP</a>
+                                        <a class="dropdown-item" href="#">Escalate</a>
+                                        <a class="dropdown-item" href="#">History Log</a>
+                                        <a class="dropdown-item" href="#">Download Invoice</a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>323438</td>
+
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div class="table-cell-info-container make-bold">
+                                            <img src="./assets/calendar2.png"> 09/04/2018
+                                        </div>
+                                        <div class="table-cell-info-container">
+                                            <img src="./assets/clock.png"> 12:00 - 18:00
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div>David Bough</div>
+                                        <div>
+                                            <img src="./assets/home1.png"> Musterstrabe 5,12345 Bonn
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content d-flex">
+                                        <div class="service-provider-left">
+                                            <img src="./assets/cap.png" alt="Service Provider">
+                                        </div>
+                                        <div class="service-provider-right">
+                                            <div>Lyum Watson</div>
+
+                                            <div class="service-provider-right-rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star2.png" alt="Empty Rating">
+                                                <div>4</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td><a href="#" title="Pending" class="btn-sm service-status blue-color">Pending</a>
+                                </td>
+
+                                <td>
+                                    <a href="#" class="admin-actions dropdown-toggle" id="user1-actions"
+                                        data-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user1-actions">
+                                        <a class="dropdown-item" href="#">Edit & Reschedule</a>
+                                        <a class="dropdown-item" href="#">Refund</a>
+                                        <a class="dropdown-item" href="#">Cancel</a>
+                                        <a class="dropdown-item" href="#">Change SP</a>
+                                        <a class="dropdown-item" href="#">Escalate</a>
+                                        <a class="dropdown-item" href="#">History Log</a>
+                                        <a class="dropdown-item" href="#">Download Invoice</a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>323439</td>
+
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div class="table-cell-info-container make-bold">
+                                            <img src="./assets/calendar2.png"> 09/04/2018
+                                        </div>
+                                        <div class="table-cell-info-container">
+                                            <img src="./assets/clock.png"> 12:00 - 18:00
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div>David Bough</div>
+                                        <div>
+                                            <img src="./assets/home1.png"> Musterstrabe 5,12345 Bonn
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content d-flex">
+                                        <div class="service-provider-left">
+                                            <img src="./assets/cap.png" alt="Service Provider">
+                                        </div>
+                                        <div class="service-provider-right">
+                                            <div>Lyum Watson</div>
+
+                                            <div class="service-provider-right-rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star2.png" alt="Empty Rating">
+                                                <div>4</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td><a href="#" title="Completed" class="btn-sm service-status">Completed</a></td>
+
+                                <td>
+                                    <a href="#" class="admin-actions dropdown-toggle" id="user1-actions"
+                                        data-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user1-actions">
+                                        <a class="dropdown-item" href="#">Refund</a>
+                                        <a class="dropdown-item" href="#">Escalate</a>
+                                        <a class="dropdown-item" href="#">History Log</a>
+                                        <a class="dropdown-item" href="#">Download Invoice</a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>323440</td>
+
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div class="table-cell-info-container make-bold">
+                                            <img src="./assets/calendar2.png"> 09/04/2018
+                                        </div>
+                                        <div class="table-cell-info-container">
+                                            <img src="./assets/clock.png"> 12:00 - 18:00
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content">
+                                        <div>David Bough</div>
+                                        <div>
+                                            <img src="./assets/home1.png"> Musterstrabe 5,12345 Bonn
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td>
+                                    <div class="table-cell-content d-flex">
+                                        <div class="service-provider-left">
+                                            <img src="./assets/cap.png" alt="Service Provider">
+                                        </div>
+                                        <div class="service-provider-right">
+                                            <div>Lyum Watson</div>
+
+                                            <div class="service-provider-right-rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star1.png" alt="Filled Rating">
+                                                <img src="./assets/star2.png" alt="Empty Rating">
+                                                <div>4</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+
+                                <td><a href="#" title="Cancelled" class="btn-sm service-status btn-orange">Cancelled</a>
+                                </td>
+
+                                <td>
+                                    <a href="#" class="admin-actions dropdown-toggle" id="user1-actions"
+                                        data-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="user1-actions">
+                                        <a class="dropdown-item" href="#">Refund</a>
+                                        <a class="dropdown-item" href="#">Escalate</a>
+                                        <a class="dropdown-item" href="#">History Log</a>
+                                        <a class="dropdown-item" href="#">Download Invoice</a>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+
+                    <div
+                        class="admin-pagination pagination-and-filter-wrapper d-sm-flex align-items-center justify-content-between">
+                        <div class="filter-wrapper">
+                            <span>Show</span>
+                            <select class="form-control">
+                                <option value="10">10</option>
+                                <option value="20">20</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            <span> Entries</span>
+                        </div>
+                        <ul>
+                            <li>
+                                <a href="#"><img src="./assets/admin-previous-page.png" alt="Previous Page"></a>
+                            </li>
+                            <li class="active">
+                                <a href="#">1</a>
+                            </li>
+                            <li>
+                                <a href="#">2</a>
+                            </li>
+                            <li>
+                                <a href="#">3</a>
+                            </li>
+                            <li>
+                                <a href="#"><img src="./assets/admin-previous-page.png" alt="Previous Page"
+                                        class="rotate-180"></a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="admin-footer">
+                        &copy;2018 Helperland. All rights reserved.
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+    <!-- Bootstrap Scripts -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <!-- Bootstrap Scripts -->
+    <script src="./js/custom.js"></script>
+</body>
+
+</html>
