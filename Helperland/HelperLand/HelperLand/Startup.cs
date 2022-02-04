@@ -1,3 +1,6 @@
+using DatabaseFirstApproachPractice.Security;
+using HelperLand.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -16,9 +19,16 @@ namespace HelperLand
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc(option => {
-                option.EnableEndpointRouting = false;
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => false;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+            services.AddMvc(option => { option.EnableEndpointRouting = false; });
+            services.AddDbContext<HelperlandDBContext>();
+            services.AddSingleton<ICustomDataProtector, CustomDataProtector>();
+            services.AddDataProtection();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -30,7 +40,9 @@ namespace HelperLand
             }
 
             app.UseStaticFiles();
+            app.UseCookiePolicy();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.UseMvcWithDefaultRoute();
         }
     }

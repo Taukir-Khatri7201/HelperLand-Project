@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Homepage";
+    ViewBag.HomePage = true;
 }
 
 <!-- Banner Content Section -->
@@ -309,3 +310,29 @@
                     </div>
                 </div>
             </section>
+
+            @section Scripts {
+                <script>
+                    $(document).ready(function() {
+                        var popupstatus = '@ViewBag.PopUpStatus';
+                        if(popupstatus.length > 0) {
+                            $('#SuccessModal').modal('show');
+                            if(popupstatus === "Logout") {
+                                $('#success-msg').text("You have successfully logged out");
+                            } else if(popupstatus === "ChangePassword") {
+                                $('#success-msg').text("Password changed successfully");
+                            }
+                        }
+
+                        var invalidCredsStatus = '@ViewBag.InvalidCreds';
+                        if(invalidCredsStatus.length > 0) {
+                            if(invalidCredsStatus === "Invalid Email Address Forgot Pass") {
+                                $('#forgotpassmodal').modal('show');
+                            } else {
+                                $('#loginmodal').modal('show');
+                            }
+                            invalidCredsStaus = null;
+                        }
+                    });
+                </script>
+            }

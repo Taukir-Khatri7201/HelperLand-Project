@@ -1,0 +1,160 @@
+@model UserViewModel
+
+@{
+    ViewBag.Title = "Become a Pro";
+}
+            <section class="banner-content banner-provider">
+                <div class="content-innner d-flex justify-content-center">
+                    <div class="registration-form">
+                        <h2 class="text-center">Register Now!</h2>
+                        <div class="contact-form-container">
+                            <form asp-action="spRegistration" method="post">
+                                <div class="form-row">
+                                    <div class="form-group col-12">
+                                        <input asp-for="FirstName" class="form-control" placeholder="First name">
+                                        <span asp-validation-for="FirstName" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-12">
+                                        <input asp-for="LastName" class="form-control" placeholder="Last name">
+                                        <span asp-validation-for="LastName" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-12">
+                                        <input asp-for="Email" class="form-control" placeholder="Email Address">
+                                        <span asp-validation-for="Email" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-12">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text">+49</span>
+                                            </div>
+                                            <input asp-for="Mobile" class="form-control" 
+                                                placeholder="Phone Number" aria-describedby="number-pref">
+                                        </div>
+                                        <span asp-validation-for="Mobile" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-12">
+                                        <input asp-for="Password" class="form-control" placeholder="Password">
+                                        <span asp-validation-for="Password" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row">
+                                    <div class="form-group col-12">
+                                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Confirm Password">
+                                        <span asp-validation-for="ConfirmPassword" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-check form-group">
+                                    <input type="checkbox" class="form-check-input" id="privacyCheck">
+                                    <label class="form-check-label" for="privacyCheck">
+                                        I accept <a href="#" title="Terms and Conditions" class="blue-link">terms and conditions</a> & <a href="#"
+                                            title="Privacy Policy" class="blue-link">privacy policy</a></label>
+                                </div>
+
+                                <div class="form-row justify-content-center">
+                                    <button type="submit" class="form-submit-btn disabled-btn" id="submit-btn" disabled>
+                                        Get Started <span><img src="~/assets/arrow-white.png"></span>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="scroll-link-wrapper text-center">
+                    <a href="#service-pro-header" class="scroll-link" title="Scroll Down">
+                        <img src="~/assets/scroll-down.png" alt="Scroll-down">
+                    </a>
+                </div>
+            </section>
+
+            <!-- How it works Section -->
+            <section class="blog-section service-pro-blog pt-0">
+                <div class="container">
+                    <h2 class="common-header" id="service-pro-header">How it works</h2>
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                            <div class="row align-items-center how-it-works-wrapper">
+                                <div class="col-md-6 order-md-1 order-2 text-md-left text-center">
+                                    <h3>Register yourself</h3>
+                                    <p>Provide your basic information to register
+                                        yourself as a service provider.</p>
+                                    <a href="#" title="Read More" class="arrow-link">Read more <em><img
+                                                src="~/assets/right-arrow-blog.png" alt="Right Arrow"></em></a>
+                                </div>
+                                <div
+                                    class="col-md-6 order-md-2 order-1 d-flex justify-content-md-end justify-content-center how-it-works-img">
+                                    <img src="~/assets/how-it-works-1.png" alt="Registration">
+                                </div>
+                            </div>
+                            <div class="row align-items-center how-it-works-wrapper">
+                                <div class="col-md-6 order-md-2 order-2 text-md-left text-center">
+                                    <h3>Get service requests</h3>
+                                    <p>You will get service requests from
+                                        customes depend on service area and profile.</p>
+                                    <a href="#" title="Read More" class="arrow-link">Read more <em><img
+                                                src="~/assets/right-arrow-blog.png" alt="Right Arrow"></em></a>
+                                </div>
+                                <div
+                                    class="col-md-6 order-md-1 order-1 d-flex justify-content-md-start justify-content-center how-it-works-img">
+                                    <img src="~/assets/how-it-works-2.png" alt="Registration">
+                                </div>
+                            </div>
+                            <div class="row align-items-center how-it-works-wrapper">
+                                <div class="col-md-6 order-md-1 order-2 text-md-left text-center">
+                                    <h3>Complete service</h3>
+                                    <p>Accept service requests from your customers
+                                        and complete your work.</p>
+                                    <a href="#" title="Read More" class="arrow-link">Read more <em><img
+                                                src="~/assets/right-arrow-blog.png" alt="Right Arrow"></em></a>
+                                </div>
+                                <div
+                                    class="col-md-6 order-md-2 order-1 d-flex justify-content-md-end justify-content-center how-it-works-img">
+                                    <img src="~/assets/how-it-works-3.png" alt="Registration">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News Letter Section -->
+                <section class="news-letter bg-transparent pb-0 service-pro-newsletter">
+                    <div class="container text-center">
+                        <h2>GET OUR NEWSLETTER</h2>
+                        <div class="form-row d-flex justify-content-center align-items-center">
+                            <div class="form-group">
+                                <label for="email" style="display: none;">YOUR EMAIL</label>
+                                <input type="text" placeholder="YOUR EMAIL" id="email" class="form-control">
+                            </div>
+                            <div class="btn-wrapper">
+                                <button class="red-btn">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#privacyCheck').click(function() {
+                var checkbox = document.getElementById("privacyCheck");
+                var submitBtn = document.getElementById("submit-btn");
+                submitBtn.disabled = !(checkbox.checked);
+            });
+        });
+    </script>
+}

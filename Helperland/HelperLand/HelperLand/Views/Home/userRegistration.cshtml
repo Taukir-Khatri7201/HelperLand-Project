@@ -1,0 +1,86 @@
+﻿@model UserViewModel
+
+@{
+    ViewBag.Title = "Register";
+    ViewBag.SecondaryNav = true;
+}
+
+<div class="container common-wrapper">
+    <div class="contact-form-container">
+
+        <div class="row faq-content">
+            <div class="col-md-10 offset-md-1">
+                <h2 class="common-star-header">Create an account</h2>
+            </div>
+        </div>
+
+        <form method="post">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <input class="form-control" placeholder="First name" asp-for="FirstName">
+                    <span asp-validation-for="FirstName" class="validation-text"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <input class="form-control" placeholder="Last name" asp-for="LastName">
+                    <span asp-validation-for="LastName" class="validation-text"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="col-md-6 mb-3">
+                    <input class="form-control" placeholder="Email" asp-for="Email">
+                    <span asp-validation-for="Email" class="validation-text"></span>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="number-pref">+91</span>
+                        </div>
+                        <input class="form-control" placeholder="Mobile number" aria-describedby="number-pref" asp-for="Mobile">
+                    </div>
+                    <span asp-validation-for="Mobile" class="validation-text"></span>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <input class="form-control" placeholder="Password" asp-for="Password">
+                    <span asp-validation-for="Password" class="validation-text"></span>
+                </div>
+                <div class="form-group col-md-6">
+                    <input class="form-control" placeholder="Confirm Password" asp-for="ConfirmPassword">
+                    <span asp-validation-for="ConfirmPassword" class="validation-text"></span>
+                </div>  
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col blue-form-check">
+                    <input type="checkbox" class="form-check-input" id="privacyCheck">
+                    <label class="form-check-label" for="privacyCheck">I have read the <a href="" class="blue-link">privacy policy</a></label>
+                    <span id="privacyCheckVal" class="validation-text"></span>
+                </div>
+            </div>
+
+            <div class="form-row justify-content-center">
+                <button type="submit" id="submit-btn" class="form-submit-btn disabled-btn" disabled>Register</button>
+            </div>
+
+            <div class="form-row justify-content-center already-registered">
+                <div>Already registered? <a href="" data-toggle="modal" data-target="#loginmodal" class="blue-link">Login now</a></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#privacyCheck').click(function() {
+                var checkbox = document.getElementById("privacyCheck");
+                var submitBtn = document.getElementById("submit-btn");
+                submitBtn.disabled = !(checkbox.checked);
+            });
+        });
+    </script>
+}

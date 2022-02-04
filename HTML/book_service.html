@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
+    <link rel="icon" type="image/png" href="assets/titlebar_logo.png">
+    <title> Book Now | Helperland</title>
+    <link href="css/custom.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="body-container">
+        <!-- Navbar -->
+        <header>
+            <nav class="navbar navbar-dark navbar-expand-lg fixed-top secondary-navbar" id="navbar">
+                <a class="navbar-brand" href="#"><img src="assets/logo-small.png" id="brand-img"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse"
+                    data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                    aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav d-flex align-items-end ml-lg-auto">
+                        <li class="nav-item small-blue-btn">
+                            <a class="nav-link" href="#">Book a Cleaner</a>
+                        </li>
+                        <li class="nav-item btn-hover">
+                            <a class="nav-link" href="#">Prices</a>
+                        </li>
+                        <li class="nav-item btn-hover">
+                            <a class="nav-link" href="#">Our Guarantee</a>
+                        </li>
+                        <li class="nav-item btn-hover">
+                            <a class="nav-link" href="#">Blog</a>
+                        </li>
+                        <li class="nav-item btn-hover">
+                            <a class="nav-link" href="#">Contact</a>
+                        </li>
+                        <li class="nav-item small-blue-btn">
+                            <a class="nav-link" href="#">Login</a>
+                        </li>
+                        <li class="nav-item small-blue-btn">
+                            <a class="nav-link" href="#">Become a Helper</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <section class="common-banner book-service-banner d-none d-md-block"></section>
+
+        <!-- Book Service Section -->
+        <section class="book-service-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10 offset-md-1">
+                        <h2 class="common-star-header">Set up your cleaning service</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row row-col-5">
+                    <div class="col-sm-7 col-md-8 col-sm-12">
+                        <ul class="nav nav-tabs nav-justified book-service-tab" role="tablist">
+                            <li class="nav-item step-1">
+                                <a class="nav-link active" id="setupService-tab" data-toggle="tab" href="#setupService"
+                                    role="tab" aria-controls="setupService" aria-selected="true">
+                                    <span>
+                                        <span class="tab-icon"></span>
+                                        <span class="d-none d-md-block">Setup Service</span>
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item step-2">
+                                <a class="nav-link" id="scheduleAndPlan-tab" data-toggle="tab" href="#scheduleAndPlan"
+                                    role="tab" aria-controls="scheduleAndPlan" aria-selected="true">
+                                    <span>
+                                        <span class="tab-icon"></span>
+                                        <span class="d-none d-md-block">Schedule & Plan</span>
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item step-3">
+                                <a class="nav-link" id="yourDetails-tab" data-toggle="tab" href="#yourDetails"
+                                    role="tab" aria-controls="yourDetails" aria-selected="true">
+                                    <span>
+                                        <span class="tab-icon"></span>
+                                        <span class="d-none d-md-block">Your Details</span>
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item step-4">
+                                <a class="nav-link" id="makePayment-tab" data-toggle="tab" href="#makePayment"
+                                    role="tab" aria-controls="makePayment" aria-selected="true">
+                                    <span>
+                                        <span class="tab-icon"></span>
+                                        <span class="d-none d-md-block">Make Payment</span>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="setupService" role="tabpanel"
+                                aria-labelledby="setupService-tab">
+                                <div class="d-block d-md-none">
+                                    <h3 class="header-16 s-20">Setup Service</h3>
+                                    <hr class="container-top-outline m-0 mb-3" />
+                                </div>
+
+                                <div class="row row-col-5">
+                                    <div class="col-12">
+                                        <h3 class="header-16">Enter your Postal Code</h3>
+                                        <div class="row row-col-5">
+                                            <div class="col-sm-7 col-md-5">
+                                                <input type="text" class="form-control" placeholder="Postal Code">
+                                            </div>
+                                            <div class="col-sm-5 col-md-7 mt-sm-0 mt-3 text-sm-left text-right">
+                                                <button class="btn normal-submit-btn m-auto">Check Availability</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="scheduleAndPlan" role="tabpanel"
+                                aria-labelledby="scheduleAndPlan-tab">
+
+                                <div class="d-block d-md-none">
+                                    <h3 class="header-16 s-20">Schedule & Plan</h3>
+                                    <hr class="container-top-outline m-0 mb-3" />
+                                </div>
+
+                                <div class="row row-col5">
+                                    <div class="col-12">
+                                        <div class="row row-col-5">
+                                            <div class="col-xl-4 col-lg-6 col-12 date-input">
+                                                <h3 class="header-16">Select number of rooms and bath</h3>
+                                                <div class="row row-col-5">
+                                                    <div class="col-xl-5 col-6">
+                                                        <select id="beds" class="form-control">
+                                                            <option selected>1 bed</option>
+                                                            <option>2 bed</option>
+                                                            <option>3 bed</option>
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-xl-5 col-6">
+                                                        <select id="baths" class="form-control">
+                                                            <option selected>1 bath</option>
+                                                            <option>2 bath</option>
+                                                            <option>3 bath</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="container-top-outline" />
+
+                                        <div class="row row-col-5">
+                                            <div class="col-lg-6">
+                                                <h3 class="header-16">When you need the cleaner?</h3>
+                                                <div class="row row-col-5">
+                                                    <div class="col-lg-6 col-6">
+                                                        <input type="date" class="form-control"
+                                                            placeholder="DD/MM/YYYY">
+                                                    </div>
+
+                                                    <div class="col-lg-4 col-6">
+                                                        <select id="time" class="form-control">
+                                                            <option selected>8:00</option>
+                                                            <option>8:30</option>
+                                                            <option>9:00</option>
+                                                            <option>9:30</option>
+                                                            <option>10:00</option>
+                                                            <option>10:30</option>
+                                                            <option>11:00</option>
+                                                            <option>11:30</option>
+                                                            <option>12:00</option>
+                                                            <option>12:30</option>
+                                                            <option>13:00</option>
+                                                            <option>13:30</option>
+                                                            <option>14:00</option>
+                                                            <option>14:30</option>
+                                                            <option>15:00</option>
+                                                            <option>15:30</option>
+                                                            <option>16:00</option>
+                                                            <option>16:30</option>
+                                                            <option>17:00</option>
+                                                            <option>17:30</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-lg-6 mt-lg-0 mt-3">
+                                                <h3 class="header-16">How long do you need your cleaner to stay?</h3>
+                                                <div class="row row-col-5">
+                                                    <div class="col-md-4">
+                                                        <select id="duration" class="form-control">
+                                                            <option selected>3.0 Hrs</option>
+                                                            <option>3.5 Hrs</option>
+                                                            <option>4.0 Hrs</option>
+                                                            <option>4.5 Hrs</option>
+                                                            <option>5.0 Hrs</option>
+                                                            <option>5.5 Hrs</option>
+                                                            <option>6.0 Hrs</option>
+                                                            <option>6.5 Hrs</option>
+                                                            <option>7.0 Hrs</option>
+                                                            <option>7.5 Hrs</option>
+                                                            <option>8.0 Hrs</option>
+                                                            <option>8.5 Hrs</option>
+                                                            <option>9.0 Hrs</option>
+                                                            <option>9.5 Hrs</option>
+                                                            <option>10.0 Hrs</option>
+                                                            <option>10.5 Hrs</option>
+                                                            <option>11.0 Hrs</option>
+                                                            <option>11.5 Hrs</option>
+                                                            <option>12.0 Hrs</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <hr class="container-top-outline" />
+
+                                        <!-- Extra Services -->
+                                        <div>
+                                            <h3 class="header-16">Extra Services</h3>
+                                            <div class="row justify-content-lg-between setup-extra-services">
+                                                <div class="col-lg col-sm-4 col-6 text-center">
+                                                    <label for="insideCabinets">
+                                                        <input type="checkbox" id="insideCabinets">
+                                                        <span class="image-container">
+                                                            <span class="service-image-wrapper">
+                                                                <img src="./assets/cabinets.png" alt="Inside Cabinets">
+                                                            </span>
+                                                        </span>
+                                                        <p class="service-title">Inside Cabinets</p>
+                                                    </label>
+                                                </div>
+
+                                                <div class="col-lg col-sm-4 col-6 text-center">
+                                                    <label for="insideFridge">
+                                                        <input type="checkbox" id="insideFridge">
+                                                        <span class="image-container">
+                                                            <span class="service-image-wrapper">
+                                                                <img src="./assets/fridge.png" alt="Inside Cabinets">
+                                                            </span>
+                                                        </span>
+                                                        <p class="service-title">Inside Fridge</p>
+                                                    </label>
+                                                </div>
+
+                                                <div class="col-lg col-sm-4 col-6 text-center">
+                                                    <label for="insideOven">
+                                                        <input type="checkbox" id="insideOven">
+                                                        <span class="image-container">
+                                                            <span class="service-image-wrapper">
+                                                                <img src="./assets/oven.png" alt="Inside Cabinets">
+                                                            </span>
+                                                        </span>
+                                                        <p class="service-title">Inside Oven</p>
+                                                    </label>
+                                                </div>
+
+                                                <div class="col-lg col-sm-4 col-6 text-center">
+                                                    <label for="laundaryWash">
+                                                        <input type="checkbox" id="laundaryWash">
+                                                        <span class="image-container">
+                                                            <span class="service-image-wrapper">
+                                                                <img src="./assets/laundry.png" alt="Inside Cabinets">
+                                                            </span>
+                                                        </span>
+                                                        <p class="service-title">Laundary Wash & Dry</p>
+                                                    </label>
+                                                </div>
+
+                                                <div class="col-lg col-sm-4 col-6 text-center">
+                                                    <label for="interiorWindows">
+                                                        <input type="checkbox" id="interiorWindows">
+                                                        <span class="image-container">
+                                                            <span class="service-image-wrapper">
+                                                                <img src="./assets/windows.png" alt="Inside Cabinets">
+                                                            </span>
+                                                        </span>
+                                                        <p class="service-title">Interior Windows</p>
+                                                    </label>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                        <hr class="container-top-outline" />
+
+                                        <div class="form-group">
+                                            <h3 class="header-16">Comments</h3>
+                                            <textarea class="form-control" formcontrolname="message" maxlength="1000"
+                                                rows="3" placeholder="Comments"></textarea>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <div class="blue-form-check">
+                                                <input type="checkbox" class="form-check-input" id="pets">
+                                                <label class="form-check-label" for="pets">I have pets at home</label>
+                                            </div>
+                                        </div>
+
+                                        <hr class="container-top-outline" />
+
+                                        <div>
+                                            <div class="text-right">
+                                                <button class="btn schedule-submit-btn"> Continue </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="tab-pane fade" id="yourDetails" role="tabpanel"
+                                aria-labelledby="yourDetails-tab">
+                                <div class="d-block d-md-none">
+                                    <h3 class="header-16 s-20">Your Details</h3>
+                                    <hr class="container-top-outline m-0 mb-3" />
+                                </div>
+
+                                <h3 class="header-16">
+                                    Enter your contact details, so we can serve you in better way!
+                                </h3>
+
+                                <div class="service-address-wrapper d-flex align-items-center">
+                                    <input type="radio" id="firstAddress" name="userAddress">
+                                    <label for="firstAddress">
+                                        <div><b>Address:</b> Test1 65, Bonn 53225</div>
+                                        <div><b>Phone number:</b> 9988556644</div>
+                                    </label>
+                                </div>
+
+                                <div class="service-address-wrapper d-flex align-items-center">
+                                    <input type="radio" id="secondAddress" name="userAddress">
+                                    <label for="secondAddress">
+                                        <div><b>Address:</b> Test1 65, Bonn 53225</div>
+                                        <div><b>Phone number:</b> 9988556644</div>
+                                    </label>
+                                </div>
+
+                                <div class="service-address-wrapper d-flex align-items-center">
+                                    <input type="radio" id="thirdAddress" name="userAddress">
+                                    <label for="thirdAddress">
+                                        <div><b>Address:</b> Test1 65, Bonn 53225</div>
+                                        <div><b>Phone number:</b> 9988556644</div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="blue-outline-btn"> + Add New Address </button>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="blue-form-check">
+                                        <input type="checkbox" class="form-check-input" id="sendInvoice">
+                                        <label class="form-check-label" for="sendInvoice">Send invoice on this
+                                            address</label>
+                                    </div>
+                                </div>
+
+                                <hr class="container-top-outline" />
+
+                                <div>
+                                    <div class="text-right">
+                                        <button class="btn schedule-submit-btn"> Continue </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="makePayment" role="tabpanel"
+                                aria-labelledby="makePayment-tab">
+                                <div class="d-block d-md-none">
+                                    <h3 class="header-16 s-20">Make Payment</h3>
+                                    <hr class="container-top-outline m-0 mb-3" />
+                                </div>
+
+                                <h3 class="header-16">Pay securely with Helperland payment gateway!</h3>
+                                <div>Promo code (optional)</div>
+                                <div class="row row-col-5">
+                                    <div class="col-8 col-md-5">
+                                        <input type="text" class="form-control" placeholder="Promo code (optional)">
+                                    </div>
+                                    <div class="col-4 col-md-3 col-lg-2">
+                                        <button class="btn promo-code-btn m-auto">Apply</button>
+                                    </div>
+                                </div>
+
+                                <hr class="container-top-outline" />
+
+                                <div class="form-group">
+                                    <div class="blue-form-check">
+                                        <input type="checkbox" class="form-check-input" id="finalTermsCheck">
+                                        <label class="form-check-label" for="finalTermsCheck">
+                                            I accepted <a href="" class="blue-link">terms and conditions</a>, the
+                                            <a href="" class="blue-link">cancellation policy</a> and the <a href=""
+                                                class="blue-link">privacy policy</a>. I confirm that Helperland starts
+                                            to
+                                            execute the contract before the expiry of the withdrawal period and I lose
+                                            my right of withdrawal as a consumer with
+                                            full performance of the contract.
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <hr class="container-top-outline" />
+
+                                <div>
+                                    <div class="text-right">
+                                        <button class="btn schedule-submit-btn"> Complete Booking </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5 col-md-4 d-none d-md-block">
+                        <div class="payment-summary-wrapper">
+                            <div class="payment-summary-header">
+                                <h3>Payment Summary</h3>
+                            </div>
+
+                            <div class="payment-summary-body">
+                                <div class="section">
+                                    <div class="row mb-2">
+                                        <div class="col-12">01/01/2018 @ 4:00 pm</div>
+                                        <div class="col-12">1 bed, 1 bath.</div>
+                                    </div>
+
+                                    <div class="font-weight-bold">Duration</div>
+
+                                    <div class="row">
+                                        <div class="text-left col-8">Basic</div>
+                                        <div class="text-right col-4">3 Hrs</div>
+                                    </div>
+
+                                    <div class="row mb-2">
+                                        <div class="text-left col-8">Insider cabinets (extra)</div>
+                                        <div class="text-right col-4">30 Mins</div>
+                                    </div>
+
+                                    <hr />
+                                    <div class="row pt-2">
+                                        <div class="text-left font-weight-bold col-8">Total Service Time</div>
+                                        <div class="text-right font-weight-bold col-4">3.5 Hrs</div>
+                                    </div>
+                                </div>
+
+                                <hr />
+
+                                <div class="section">
+                                    <div class="row">
+                                        <div class="text-left col-8">Per cleaning</div>
+                                        <div class="text-right font-weight-bold col-4">$87</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="text-left col-8">Discount</div>
+                                        <div class="text-right font-weight-bold col-4">- $27</div>
+                                    </div>
+                                </div>
+
+                                <hr />
+
+                                <div class="section">
+                                    <div class="row total-payment align-items-end">
+                                        <div class="text-left col-8">Total Payment</div>
+                                        <div class="text-right font-weight-bold col-4">$63</div>
+                                    </div>
+
+                                    <div class="row align-items-end">
+                                        <div class="text-left col-8">Effective Price</div>
+                                        <div class="text-right font-weight-bold col-4 s-20">$50.4</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <small class="col-12"><span class="asterisk">*</span>You will save 20% according
+                                            to §35a EStG.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-summary-footer">
+                                <span><img src="./assets/smiley.png" alt="Smiley">See what is always included</span>
+                            </div>
+                        </div>
+
+                        <div class="book-service-questions-wrapper">
+                            <h3 class="text-center">Questions?</h3>
+                            <div class="question">
+                                <a class="question-title" data-toggle="collapse" href="#question1" role="button"
+                                    aria-expanded="false" aria-controls="question1">
+                                    <img src="./assets/right-arrow-dark.png" alt="Down Arrow">
+                                    <span>
+                                        What's included in a cleaning?
+                                    </span>
+                                </a>
+
+                                <div class="collapse" id="question1">
+                                    <div class="question-description">
+                                        Bedroom, Living Room & Common Areas, Bathrooms, Kitchen, Extras
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="question">
+                                <a class="question-title" data-toggle="collapse" href="#question2" role="button"
+                                    aria-expanded="false" aria-controls="question2">
+                                    <img src="./assets/right-arrow-dark.png" alt="Down Arrow">
+                                    <span>
+                                        Which Helperland professional will come to my place?
+                                    </span>
+                                </a>
+
+                                <div class="collapse" id="question2">
+                                    <div class="question-description">
+                                        Helperland has a vast network of experienced, top-rated cleaners. Based on the
+                                        time and date of your request, we work to
+                                        assign the best professional available.Like working with a specific pro? Add
+                                        them to your Pro Team from the mobile app
+                                        and they'll be requested first for all future bookings.You will receive an email
+                                        with details about your professional
+                                        prior to your appointment.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="question">
+                                <a class="question-title" data-toggle="collapse" href="#question3" role="button"
+                                    aria-expanded="false" aria-controls="question3">
+                                    <img src="./assets/right-arrow-dark.png" alt="Down Arrow">
+                                    <span>
+                                        Can I skip or reschedule bookings?
+                                    </span>
+                                </a>
+
+                                <div class="collapse" id="question3">
+                                    <div class="question-description">
+                                        You can reschedule any booking for free at least 24 hours in advance of the
+                                        scheduled start time. If you need to skip a
+                                        booking within the minimum commitment, we’ll credit the value of the booking to
+                                        your account. You can use this credit on
+                                        future cleanings and other Helperland services.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a href="./faq.html" class="more-help blue-link">For more help</a>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- News Letter Section -->
+        <section class="news-letter bg-white">
+            <div class="container text-center">
+                <h2>GET OUR NEWSLETTER</h2>
+                <div class="form-row d-flex justify-content-center align-items-center">
+                    <div class="form-group">
+                        <label for="email" style="display: none;">YOUR EMAIL</label>
+                        <input type="text" placeholder="YOUR EMAIL" id="email" class="form-control">
+                    </div>
+                    <div class="btn-wrapper">
+                        <button class="red-btn">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <div class="footer-container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-2">
+                    <a href="#" title="Helperland"><img src="./assets/footer-logo.png" alt="Helperland Logo"></a>
+                </div>
+                <div class="col-lg-8 text-center">
+                    <ul class="footer-navigation d-sm-flex justify-content-center align-items-center">
+                        <li>
+                            <a href="#" title="Home">Home</a>
+                        </li>
+                        <li>
+                            <a href="#" title="About">About</a>
+                        </li>
+                        <li>
+                            <a href="#" title="Testimonials">Testimonials</a>
+                        </li>
+                        <li>
+                            <a href="#" title="FAQs">FAQs</a>
+                        </li>
+                        <li>
+                            <a href="#" title="Insurance Policy">Insurance Policy</a>
+                        </li>
+                        <li>
+                            <a href="#" title="Impressum">Impressum</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-lg-2">
+                    <ul class="footer-links d-flex justify-content-end">
+                        <li>
+                            <a href="#" title="Facebook"><img src="./assets/ic-facebook.png"></a>
+                        </li>
+                        <li>
+                            <a href="#" title="Instagram"><img src="./assets/ic-instagram.png"></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-privacy text-center">
+                ©2021 Helperland. All rights reserved. <a href="#" title="Terms and Conditions">Terms and Conditions</a>
+                | <a href="#" title="Privacy Policy">Privacy Policy</a>
+            </div>
+        </div>
+    </footer>
+    <!-- Bootstrap Scripts -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+    <!-- Bootstrap Scripts -->
+</body>
+
+</html>

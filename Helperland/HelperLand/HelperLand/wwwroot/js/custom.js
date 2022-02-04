@@ -1,19 +1,19 @@
 $(document).ready(function() {
 	$(document).scroll(function () {
 		var $nav = $(".fixed-top");
-		if(!$nav.hasClass("admin-navbar")) {
+		if (!$nav.hasClass("admin-navbar") && !$nav.hasClass("secondary-navbar")) {
 			$navlinks = $("li.nav-item.btn-with-outline");
 	
 			$nav.toggleClass('scrolled', $(this).scrollTop() > $nav.height());
 			if($("nav:first").hasClass("scrolled") || $(window).width() <= 768) {
 				$navlinks.addClass("small-blue-btn");
 				if(document.getElementById("brand-img")) {
-					document.getElementById("brand-img").setAttribute("src", "assets/logo-small.png");
+					document.getElementById("brand-img").setAttribute("src", "/assets/logo-small.png");
 				}
 			} else {
 				$navlinks.removeClass("small-blue-btn");
 				if(document.getElementById("brand-img")) {
-					document.getElementById("brand-img").setAttribute("src", "assets/logo-large.png");
+					document.getElementById("brand-img").setAttribute("src", "/assets/logo-large.png");
 				}
 			}
 		}
@@ -29,7 +29,7 @@ $(document).ready(function() {
 
 	if($(window).width() <= 768) {
 		if(document.getElementById("brand-img")) {
-			document.getElementById("brand-img").setAttribute("src", "assets/logo-small.png");
+			document.getElementById("brand-img").setAttribute("src", "/assets/logo-small.png");
 		}
 	}
 
