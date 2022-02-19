@@ -1,35 +1,50 @@
-﻿using DatabaseFirstApproachPractice.Security;
+﻿using HelperLand.Security;
 using HelperLand.Data;
 using HelperLand.Models;
 using HelperLand.ViewModels;
+using HelperLand.Extensions;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Text.Json;
+using HelperLand.Utility;
 
 namespace HelperLand.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         private readonly HelperlandDBContext context;
         private readonly ICustomDataProtector protector;
+        private readonly IWebHostEnvironment env;
+        private readonly IHttpContextAccessor contextAccessor;
+        private readonly IEmailSender emailSender;
 
-        public HomeController(HelperlandDBContext context, ICustomDataProtector protector)
+        public HomeController(HelperlandDBContext context, ICustomDataProtector protector, 
+            IWebHostEnvironment env, IHttpContextAccessor contextAccessor, IEmailSender emailSender)
         {
             this.context = context;
             this.protector = protector;
+            this.env = env;
+            this.contextAccessor = contextAccessor;
+            this.emailSender = emailSender;
         }
 
         public IActionResult Index()
         {
             var popupstatus = TempData["SuccessPopUpStatus"];
             var invalidcreds = TempData["InvalidCreds"];
+            var errormsg = TempData["Error"];
+
             if (popupstatus != null)
             {
                 ViewBag.PopUpStatus = popupstatus;
@@ -39,6 +54,15 @@ namespace HelperLand.Controllers
             {
                 ViewBag.InvalidCreds = invalidcreds;
                 TempData["InvalidCreds"] = null;
+            }
+            if(errormsg != null)
+            {
+                ViewBag.Error = errormsg;
+                TempData["Error"] = null;
+            }
+            if (Request.Query["ReturnUrl"].Count > 0)
+            {
+                ViewBag.LoginRequired = Request.QueryString.Value.Split("=")[1].Replace("%2F","/");
             }
             return View();
         }
@@ -119,7 +143,7 @@ namespace HelperLand.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(CombinedViewModel model)
+        public async Task<IActionResult> Login(CombinedViewModel model, string returnUrl="")
         {
             if (ModelState.IsValid)
             {
@@ -154,12 +178,36 @@ namespace HelperLand.Controllers
                 {
                     userrole = "Admin";
                 }
+
+                if(model.LoginModel.RememberMe == true)
+                {
+                    CookieOptions cookieOptions = new CookieOptions()
+                    {
+                        Expires = DateTime.Now.AddDays(30),
+                        MaxAge = TimeSpan.FromDays(30),
+                        SameSite = SameSiteMode.Strict,
+                    };
+
+                    model.LoginModel.Password = protector.Encrypt(model.LoginModel.Password);
+                    string serialized = JsonSerializer.Serialize(model.LoginModel);
+                    Response.Cookies.Append("UserCredentials", serialized, cookieOptions);
+                }
+
                 claims.Add(new Claim(ClaimTypes.Role, userrole));
                 ClaimsIdentity claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                 ClaimsPrincipal principal = new ClaimsPrincipal(claimsIdentity);
-                AuthenticationProperties authProperties = new AuthenticationProperties() { IsPersistent = model.LoginModel.RememberMe };
+                AuthenticationProperties authProperties = new AuthenticationProperties() {
+                    IsPersistent = model.LoginModel.RememberMe,
+                    ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
+                };
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                                                 new ClaimsPrincipal(claimsIdentity), authProperties);
+                HttpContext.Session.Set<User>("User", user);
+                if(returnUrl.Length > 0)
+                {
+                    ViewBag.LoginRequired = "";
+                    return LocalRedirect(returnUrl);
+                }
                 return RedirectToAction("Index");
             }
             return RedirectToAction("Index");
@@ -171,6 +219,7 @@ namespace HelperLand.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             TempData["SuccessPopUpStatus"] = "Logout";
+            HttpContext.Session.Remove("User");
             return RedirectToAction("Index");
         }
 
@@ -185,18 +234,54 @@ namespace HelperLand.Controllers
                     TempData["InvalidCreds"] = "Invalid Email Address Forgot Pass";
                     return RedirectToAction("Index");
                 }
+                var resetObj = new ChangePasswordData { Email = model.forgotPassModel.Email, Hash = Guid.NewGuid().ToString()};
+                var serializedResetObj = JsonSerializer.Serialize(resetObj);
+                var protectedObj = protector.Encrypt(serializedResetObj);
+                var resetUrl = Url.Action("changePassword", "Home", new { token = protectedObj }, Request.Scheme);
+                var temp = JsonSerializer.Deserialize<ChangePasswordData>(serializedResetObj);
                 var user = context.Users.Where(s => s.Email == model.forgotPassModel.Email).First();
-                return RedirectToAction("changePassword", model.forgotPassModel);
+                var subject = "Reset Password";
+                var message = "<div>" +
+                                    "<h3>Hello " + user.FirstName + ",</h3>" +
+                                    "<div>" +
+                                          "You have submitted a password change request. <br>" +
+                                          "If it wasn't you please disregard this email and make sure you can still login to your account. " +
+                                          "If it was you, then <a href='" + resetUrl + "' title='Reset Password'>Click Here</a> to change your password." +
+                                    "</div><br>" +
+                                    "<div>Regards,</div>" +
+                                    "<div><h4>Helperland Team</h4></div>" +
+                               "</div>";
+                try
+                {
+                    Message emailMesssage = new Message(new string[] {model.forgotPassModel.Email}, subject, message);
+                    emailSender.SendEmail(emailMesssage);
+                    TempData["SuccessPopUpStatus"] = "PasswordResetLinkSent";
+                    return RedirectToAction("Index", "Home");
+                }
+                catch(Exception)
+                {
+                    TempData["Error"] = "Something went wrong!";
+                    return RedirectToAction("Index", "Home");
+                }
             }
             return RedirectToAction("Index");
         }
 
         [HttpGet]
-        public IActionResult changePassword(ForgotPasswordViewModel model)
+        public IActionResult changePassword(string token)
         {
-            string referrer = Request.Headers["Referer"].ToString();
-            if(referrer.Length == 0) return View("AccessDenied");
-            return View();
+            try
+            {
+                var exapndedObj = protector.Decrypt(token);
+                var deserializedObj = JsonSerializer.Deserialize<ChangePasswordData>(exapndedObj);
+                ViewBag.Email = deserializedObj.Email;
+                return View();
+            }
+            catch (Exception)
+            {
+                TempData["Error"] = "Something went wrong!";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpPost]
@@ -211,16 +296,19 @@ namespace HelperLand.Controllers
                 var user = context.Users.Where(s => s.Email == model.Email).First();
                 user.Password = protector.Encrypt(model.Password);
                 context.SaveChanges();
+
                 LoginViewModel loginModel = new LoginViewModel
                 {
                     Email = model.Email,
                     Password = model.Password,
                     RememberMe = false,
                 };
+
                 CombinedViewModel finalModel = new CombinedViewModel
                 {
                     LoginModel = loginModel,
                 };
+
                 TempData["SuccessPopUpStatus"] = "ChangePassword";
                 await Login(finalModel);
                 return RedirectToAction("Index");
@@ -282,10 +370,55 @@ namespace HelperLand.Controllers
             }
             return View();
         }
+        
+        [HttpPost]
+        public IActionResult contact(ContactViewModel model)
+        {
+            if(ModelState.IsValid)
+            {
+                ContactU newContact = new ContactU
+                {
+                    Name = model.FirstName + " " + model.LastName,
+                    Email = model.Email,
+                    Subject = model.Type,
+                    PhoneNumber = model.Mobile,
+                    Message = model.Message,
+                    CreatedOn = DateTime.Now,
+                };
 
+                if(model.FilePath != null)
+                {
+                    newContact.UploadFileName = model.FilePath.FileName;
+                    string path = Path.Combine(env.WebRootPath, "Uploads");
+                    path = Path.Combine(path, Guid.NewGuid().ToString() + "_" + model.FilePath.FileName);
+                    newContact.FileName = path;
+                    FileStream fileStream = new FileStream(path, FileMode.Create);
+                    model.FilePath.CopyTo(fileStream);
+                }
+
+                if(User.Identity.IsAuthenticated)
+                {
+                    var loggedinuserdetails = HttpContext.Session.Get<User>("User");
+                    newContact.CreatedBy = loggedinuserdetails.UserId;
+                }
+
+                context.ContactUs.Add(newContact);
+                context.SaveChanges();
+                return RedirectToAction("contact");
+            }
+            return View();
+        }
+
+        // Utility Functions
         bool EmailPresent(string email)
         {
             return context.Users.Any(s => s.Email == email);
         }
+    }
+
+    public class ChangePasswordData
+    {
+        public string Email { get; set; }
+        public string Hash { get; set; }
     }
 }

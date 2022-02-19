@@ -67,8 +67,8 @@
                     <div class="col-sm-7 col-md-8 col-sm-12">
                         <ul class="nav nav-tabs nav-justified book-service-tab" role="tablist">
                             <li class="nav-item step-1">
-                                <a class="nav-link active" id="setupService-tab" data-toggle="tab" href="#setupService"
-                                    role="tab" aria-controls="setupService" aria-selected="true">
+                                <a class="nav-link active myactive" id="setupService-tab" data-toggle="tab"
+                                    href="#setupService" role="tab" aria-controls="setupService" aria-selected="true">
                                     <span>
                                         <span class="tab-icon"></span>
                                         <span class="d-none d-md-block">Setup Service</span>
@@ -363,7 +363,56 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <button class="blue-outline-btn"> + Add New Address </button>
+                                    <button class="blue-outline-btn" id="addAddress"> + Add New Address </button>
+                                </div>
+
+                                <div class="add-address-wrapper d-none">
+                                    <form>
+                                        <div class="form-row">
+                                            <div class="form-group col-sm-6">
+                                                <label for="streetname">Street name</label>
+                                                <input type="text" class="form-control" id="streetname"
+                                                    placeholder="Street name">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="housenumber">House number</label>
+                                                <input type="text" class="form-control" id="housenumber"
+                                                    placeholder="House number">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-sm-6">
+                                                <label for="postalcode">Postal code</label>
+                                                <input type="text" class="form-control" id="postalcode"
+                                                    placeholder="Postal code" value="53225" disabled>
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="city">City</label>
+                                                <select id="city" class="form-control">
+                                                    <option selected>Bonn</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-sm-6">
+                                                <label for="mobilenumber-wrapper">Phone number</label>
+                                                <div class="input-group" id="mobilenumber-wrapper">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="number-pref">+49</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="mobilenumber"
+                                                        placeholder="Phone number" aria-describedby="number-pref">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row btn-wrapper">
+                                            <button class="normal-blue-btn">Save</button>
+                                            <button class="normal-outline-blue-btn outline-grey-btn">Cancel</button>
+                                        </div>
+                                    </form>
                                 </div>
 
                                 <div class="form-group">
@@ -452,7 +501,7 @@
                                     </div>
 
                                     <div class="row mb-2">
-                                        <div class="text-left col-8">Insider cabinets (extra)</div>
+                                        <div class="text-left col-8">Inside cabinets (extra)</div>
                                         <div class="text-right col-4">30 Mins</div>
                                     </div>
 
@@ -564,7 +613,6 @@
 
                             <a href="./faq.html" class="more-help blue-link">For more help</a>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -633,11 +681,194 @@
             </div>
         </div>
     </footer>
+
+    <a href="" type="button" class="payment-mobile-modal-link d-block d-md-none" data-toggle="modal"
+        data-target="#payment-summary-modal">Payment Summary $50.4</a>
+    <div class="modal fade stretched-modal d-md-none" id="payment-summary-modal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content payment-summary-wrapper">
+                <div class="payment-summary-header">
+                    <h3>Payment Summary
+                        <span>
+                            <button type="button" class="close" data-dismiss="modal"><span><img
+                                        src="./assets/close-white.png" alt="close" /></span></button>
+                        </span>
+                    </h3>
+                </div>
+
+                <div class="payment-summary-body">
+                    <div class="section">
+                        <div class="row mb-2">
+                            <div class="col-12">01/01/2018 @ 4:00 pm</div>
+                            <div class="col-12">1 bed, 1 bath.</div>
+                        </div>
+
+                        <div class="font-weight-bold">Duration</div>
+
+                        <div class="row">
+                            <div class="text-left col-8">Basic</div>
+                            <div class="text-right col-4">3 Hrs</div>
+                        </div>
+
+                        <div class="row mb-2">
+                            <div class="text-left col-8">Inside cabinets (extra)</div>
+                            <div class="text-right col-4">30 Mins</div>
+                        </div>
+
+                        <hr />
+                        <div class="row pt-2">
+                            <div class="text-left font-weight-bold col-8">Total Service Time</div>
+                            <div class="text-right font-weight-bold col-4">3.5 Hrs</div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="section">
+                        <div class="row">
+                            <div class="text-left col-8">Per cleaning</div>
+                            <div class="text-right font-weight-bold col-4">$87</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="text-left col-8">Discount</div>
+                            <div class="text-right font-weight-bold col-4">- $27</div>
+                        </div>
+                    </div>
+
+                    <hr />
+
+                    <div class="section">
+                        <div class="row total-payment align-items-end">
+                            <div class="text-left col-8">Total Payment</div>
+                            <div class="text-right font-weight-bold col-4">$63</div>
+                        </div>
+
+                        <div class="row align-items-end">
+                            <div class="text-left col-8">Effective Price</div>
+                            <div class="text-right font-weight-bold col-4 s-20">$50.4</div>
+                        </div>
+
+                        <div class="row">
+                            <small class="col-12"><span class="asterisk">*</span>You will save 20% according
+                                to §35a EStG.</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="payment-summary-footer">
+                    <span><img src="./assets/smiley.png" alt="Smiley">See what is always included</span>
+                </div>
+
+                <div class="book-service-questions-wrapper">
+                    <h3 class="text-center">Questions?</h3>
+                    <div class="question">
+                        <a class="question-title" data-toggle="collapse" href="#questionmobile1" role="button"
+                            aria-expanded="false" aria-controls="questionmobile1">
+                            <img src="./assets/right-arrow-dark.png" alt="Down Arrow">
+                            <span>
+                                What's included in a cleaning?
+                            </span>
+                        </a>
+
+                        <div class="collapse" id="questionmobile1">
+                            <div class="question-description">
+                                Bedroom, Living Room & Common Areas, Bathrooms, Kitchen, Extras
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <a class="question-title" data-toggle="collapse" href="#questionmobile2" role="button"
+                            aria-expanded="false" aria-controls="questionmobile2">
+                            <img src="./assets/right-arrow-dark.png" alt="Down Arrow">
+                            <span>
+                                Which Helperland professional will come to my place?
+                            </span>
+                        </a>
+
+                        <div class="collapse" id="questionmobile2">
+                            <div class="question-description">
+                                Helperland has a vast network of experienced, top-rated cleaners. Based on the
+                                time and date of your request, we work to
+                                assign the best professional available.Like working with a specific pro? Add
+                                them to your Pro Team from the mobile app
+                                and they'll be requested first for all future bookings.You will receive an email
+                                with details about your professional
+                                prior to your appointment.
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question">
+                        <a class="question-title" data-toggle="collapse" href="#questionmobile3" role="button"
+                            aria-expanded="false" aria-controls="questionmobile3">
+                            <img src="./assets/right-arrow-dark.png" alt="Down Arrow">
+                            <span>
+                                Can I skip or reschedule bookings?
+                            </span>
+                        </a>
+
+                        <div class="collapse" id="questionmobile3">
+                            <div class="question-description">
+                                You can reschedule any booking for free at least 24 hours in advance of the
+                                scheduled start time. If you need to skip a
+                                booking within the minimum commitment, we’ll credit the value of the booking to
+                                your account. You can use this credit on
+                                future cleanings and other Helperland services.
+                            </div>
+                        </div>
+                    </div>
+
+                    <a href="./faq.html" class="more-help blue-link">For more help</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
     <!-- Bootstrap Scripts -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
     <!-- Bootstrap Scripts -->
+    <script>
+        $(document).ready(function () {
+            const totaltabs = $('ul.book-service-tab li').length;
+            $('ul.book-service-tab li').on('click', function (e) {
+                var currenttab = e.currentTarget.attributes["class"].value;
+                var last = parseInt(currenttab[currenttab.length - 1]);
+                currenttab = currenttab.slice(0, -1);
+                currenttab = currenttab.split(" ").map(word => `.${word}`).join("");
+                // console.log(currenttab);
+                for (let i = 1; i <= totaltabs; i++) {
+                    var activetab = currenttab + i + " a.nav-link";
+                    if (i <= last) {
+                        $(activetab).addClass('myactive');
+                        $(activetab).css("pointer-events", "visible");
+                    }
+                    else {
+                        $(activetab).removeClass('myactive');
+                        $(currenttab + i).css("pointer-events", "none");
+                        $(activetab).css("pointer-events", "none");
+                    }
+                }
+            });
+
+            $('#addAddress').on('click', function () {
+                $(this).addClass('d-none');
+                $('.add-address-wrapper').removeClass('d-none');
+            });
+
+            $('#new-address-save-btn').on('click', function () {
+                $('.add-address-wrapper').addClass('d-none');
+                $('#addAddress').removeClass('d-none');
+            });
+        });
+
+        $(document).ready(function () {
+            // $('.nav-item.step-2 a.nav-link').click();
+        });
+    </script>
 </body>
 
 </html>

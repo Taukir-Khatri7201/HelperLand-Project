@@ -1,4 +1,4 @@
-﻿namespace DatabaseFirstApproachPractice.Security
+﻿namespace HelperLand.Security
 {
     public interface ICustomDataProtector
     {

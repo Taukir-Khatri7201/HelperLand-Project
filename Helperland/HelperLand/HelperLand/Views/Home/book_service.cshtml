@@ -1,0 +1,1124 @@
+@model BookServiceCombinedViewModel
+@using System.Web.Helpers
+@using Newtonsoft.Json
+
+@{
+    ViewBag.Title = "Book Now";
+    ViewBag.SecondaryNav = true;
+    var todaysDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+    var todaysDateArr = todaysDate.Split('-');
+    Array.Reverse(todaysDateArr);
+    var defaultDate = string.Join("/", todaysDateArr);
+}
+
+@*@section Styles {
+    <link href="~/css/jquery-steps-style.css" rel="stylesheet">
+}*@
+        <section class="common-banner book-service-banner d-none d-md-block"></section>
+
+        <!-- Book Service Section -->
+        <section class="book-service-wrapper">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-10 offset-md-1">
+                        <h2 class="common-star-header">Set up your cleaning service</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="row row-col-5">
+                    <div class="col-sm-7 col-md-8 col-sm-12">
+                        <ul class="nav nav-tabs nav-justified book-service-tab" role="tablist">
+                            <li class="nav-item step-1">
+                                <a class="nav-link active myactive" id="tab-step-1" data-toggle="tab"
+                                    href="#setupService" role="tab" aria-controls="setupService" aria-selected="true">
+                                    <span>
+                                        <span class="tab-icon"></span>
+                                        <span class="d-none d-md-block">Setup Service</span>
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item step-2">
+                                <a class="nav-link" id="tab-step-2" data-toggle="tab" href="#scheduleAndPlan"
+                                    role="tab" aria-controls="scheduleAndPlan" aria-selected="true">
+                                    <span>
+                                        <span class="tab-icon"></span>
+                                        <span class="d-none d-md-block">Schedule & Plan</span>
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item step-3">
+                                <a class="nav-link" id="tab-step-3" data-toggle="tab" href="#yourDetails"
+                                    role="tab" aria-controls="yourDetails" aria-selected="true">
+                                    <span>
+                                        <span class="tab-icon"></span>
+                                        <span class="d-none d-md-block">Your Details</span>
+                                    </span>
+                                </a>
+                            </li>
+
+                            <li class="nav-item step-4">
+                                <a class="nav-link" id="tab-step-4" data-toggle="tab" href="#makePayment"
+                                    role="tab" aria-controls="makePayment" aria-selected="true">
+                                    <span>
+                                        <span class="tab-icon"></span>
+                                        <span class="d-none d-md-block">Make Payment</span>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="setupService" role="tabpanel"
+                                aria-labelledby="tab-step-1">
+                                <div class="d-block d-md-none">
+                                    <h3 class="header-16 s-20">Setup Service</h3>
+                                    <hr class="container-top-outline m-0 mb-3" />
+                                </div>
+
+                                <div class="row row-col-5">
+                                    <div class="col-12">
+                                        <form>
+                                            <h3 class="header-16">Enter your Postal Code</h3>
+                                            <div class="row row-col-5">
+                                                <div class="col-sm-7 col-md-5">
+                                                    <input asp-for="@Model.postalcode.code" class="form-control" placeholder="Postal Code">
+                                                    <span asp-validation-for="@Model.postalcode.code" class="validation-text" id="postalcode-validation"></span>
+                                                </div>
+                                                <div class="col-sm-5 col-md-7 mt-sm-0 mt-3 text-sm-left text-right">
+                                                    <button class="btn normal-submit-btn m-auto">Check Availability</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="scheduleAndPlan" role="tabpanel"
+                                aria-labelledby="tab-step-2">
+
+                                <div class="d-block d-md-none">
+                                    <h3 class="header-16 s-20">Schedule & Plan</h3>
+                                    <hr class="container-top-outline m-0 mb-3" />
+                                </div>
+
+                                <form>
+                                    <div class="row row-col5">
+                                        <div class="col-12">
+                                            <div class="row row-col-5">
+                                                <div class="col-lg-6">
+                                                    <h3 class="header-16">When you need the cleaner?</h3>
+                                                    <div class="row row-col-5">
+                                                        <div class="col-lg-6 col-6">
+                                                            <input asp-for="@Model.scheduleAndPlan.ServiceStartDate" class="form-control"
+                                                                placeholder="DD/MM/YYYY" min="@todaysDate" value="@todaysDate">
+                                                        </div>
+
+                                                        <div class="col-lg-4 col-6">
+                                                            <select asp-for="@Model.scheduleAndPlan.StartTime" class="form-control">
+                                                                <option value="8" selected>8:00</option>
+                                                                <option value="8.5">8:30</option>
+                                                                <option value="9">9:00</option>
+                                                                <option value="9.5">9:30</option>
+                                                                <option value="10">10:00</option>
+                                                                <option value="10.5">10:30</option>
+                                                                <option value="11">11:00</option>
+                                                                <option value="11.5">11:30</option>
+                                                                <option value="12">12:00</option>
+                                                                <option value="12.5">12:30</option>
+                                                                <option value="13">13:00</option>
+                                                                <option value="13.5">13:30</option>
+                                                                <option value="14">14:00</option>
+                                                                <option value="14.5">14:30</option>
+                                                                <option value="15">15:00</option>
+                                                                <option value="15.5">15:30</option>
+                                                                <option value="16">16:00</option>
+                                                                <option value="16.5">16:30</option>
+                                                                <option value="17">17:00</option>
+                                                                <option value="17.5">17:30</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-6 mt-lg-0 mt-3">
+                                                    <h3 class="header-16">How long do you need your cleaner to stay?</h3>
+                                                    <div class="row row-col-5">
+                                                        <div class="col-md-4">
+                                                            <select asp-for="@Model.scheduleAndPlan.ServiceHrs" class="form-control">
+                                                                <option value="3" selected>3.0 Hrs</option>
+                                                                <option value="3.5">3.5 Hrs</option>
+                                                                <option value="4">4.0 Hrs</option>
+                                                                <option value="4.5">4.5 Hrs</option>
+                                                                <option value="5">5.0 Hrs</option>
+                                                                <option value="5.5">5.5 Hrs</option>
+                                                                <option value="6">6.0 Hrs</option>
+                                                                <option value="6.5">6.5 Hrs</option>
+                                                                <option value="7">7.0 Hrs</option>
+                                                                <option value="7.5">7.5 Hrs</option>
+                                                                <option value="8">8.0 Hrs</option>
+                                                                <option value="8.5">8.5 Hrs</option>
+                                                                <option value="9">9.0 Hrs</option>
+                                                                <option value="9.5">9.5 Hrs</option>
+                                                                <option value="10">10.0 Hrs</option>
+                                                                <option value="10.5">10.5 Hrs</option>
+                                                                <option value="11">11.0 Hrs</option>
+                                                                <option value="11.5">11.5 Hrs</option>
+                                                                <option value="12">12.0 Hrs</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <span class="row">
+                                                        <span asp-validation-for="@Model.scheduleAndPlan.ServiceHrs" class="validation-text col-12"></span>
+                                                    </span>
+
+                                                </div>
+                                            </div>
+                                            
+                                            <span class="row mt-2">
+                                                <span asp-validation-for="@Model.scheduleAndPlan.ServiceStartDate" class="validation-text col-12"></span>
+                                                <span asp-validation-for="@Model.scheduleAndPlan.StartTime" class="validation-text col-12" data-valmsg-replace="false"></span>
+                                            </span>
+
+                                            <hr class="container-top-outline" />
+
+                                            <!-- Extra Services -->
+                                            <div>
+                                                <h3 class="header-16">Extra Services</h3>
+                                                <div class="row justify-content-lg-between setup-extra-services">
+                                                    <div class="col-lg col-sm-4 col-6 text-center">
+                                                        <label for="insideCabinets">
+                                                            <input type="checkbox" id="insideCabinets">
+                                                            <span class="image-container">
+                                                                <span class="service-image-wrapper">
+                                                                    <img src="~/assets/cabinets.png" alt="Inside Cabinets">
+                                                                </span>
+                                                            </span>
+                                                            <p class="service-title">Inside Cabinets</p>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="col-lg col-sm-4 col-6 text-center">
+                                                        <label for="insideFridge">
+                                                            <input type="checkbox" id="insideFridge">
+                                                            <span class="image-container">
+                                                                <span class="service-image-wrapper">
+                                                                    <img src="~/assets/fridge.png" alt="Inside Cabinets">
+                                                                </span>
+                                                            </span>
+                                                            <p class="service-title">Inside Fridge</p>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="col-lg col-sm-4 col-6 text-center">
+                                                        <label for="insideOven">
+                                                            <input type="checkbox" id="insideOven">
+                                                            <span class="image-container">
+                                                                <span class="service-image-wrapper">
+                                                                    <img src="~/assets/oven.png" alt="Inside Cabinets">
+                                                                </span>
+                                                            </span>
+                                                            <p class="service-title">Inside Oven</p>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="col-lg col-sm-4 col-6 text-center">
+                                                        <label for="laundaryWash">
+                                                            <input type="checkbox" id="laundaryWash">
+                                                            <span class="image-container">
+                                                                <span class="service-image-wrapper">
+                                                                    <img src="~/assets/laundry.png" alt="Inside Cabinets">
+                                                                </span>
+                                                            </span>
+                                                            <p class="service-title">Laundary Wash & Dry</p>
+                                                        </label>
+                                                    </div>
+
+                                                    <div class="col-lg col-sm-4 col-6 text-center">
+                                                        <label for="interiorWindows">
+                                                            <input type="checkbox" id="interiorWindows">
+                                                            <span class="image-container">
+                                                                <span class="service-image-wrapper">
+                                                                    <img src="~/assets/windows.png" alt="Inside Cabinets">
+                                                                </span>
+                                                            </span>
+                                                            <p class="service-title">Interior Windows</p>
+                                                        </label>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                            <hr class="container-top-outline" />
+
+                                            <div class="form-group">
+                                                <h3 class="header-16">Comments</h3>
+                                                <textarea asp-for="@Model.scheduleAndPlan.Comments" class="form-control" formcontrolname="message" maxlength="1000"
+                                                    rows="3" placeholder="Comments"></textarea>
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <div class="blue-form-check">
+                                                    <input asp-for="@Model.scheduleAndPlan.HavePets" type="checkbox" class="form-check-input">
+                                                    <label class="form-check-label" asp-for="@Model.scheduleAndPlan.HavePets">I have pets at home</label>
+                                                </div>
+                                            </div>
+
+                                            <hr class="container-top-outline" />
+
+                                            <div>
+                                                <div class="text-right">
+                                                    <button class="btn schedule-submit-btn"> Continue </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+
+                            </div>
+
+                            <div class="tab-pane fade" id="yourDetails" role="tabpanel"
+                                aria-labelledby="tab-step-3">
+                                <div class="d-block d-md-none">
+                                    <h3 class="header-16 s-20">Your Details</h3>
+                                    <hr class="container-top-outline m-0 mb-3" />
+                                </div>
+
+                                <h3 class="header-16">
+                                    Enter your contact details, so we can serve you in better way!
+                                </h3>
+
+                                <div class="service-address-wrapper d-flex align-items-center">
+                                    <input type="radio" id="firstAddress" name="userAddress">
+                                    <label for="firstAddress">
+                                        <div><b>Address:</b> Test1 65, Bonn 53225</div>
+                                        <div><b>Phone number:</b> 9988556644</div>
+                                    </label>
+                                </div>
+
+                                <div class="service-address-wrapper d-flex align-items-center">
+                                    <input type="radio" id="secondAddress" name="userAddress">
+                                    <label for="secondAddress">
+                                        <div><b>Address:</b> Test1 65, Bonn 53225</div>
+                                        <div><b>Phone number:</b> 9988556644</div>
+                                    </label>
+                                </div>
+
+                                <div class="service-address-wrapper d-flex align-items-center">
+                                    <input type="radio" id="thirdAddress" name="userAddress">
+                                    <label for="thirdAddress">
+                                        <div><b>Address:</b> Test1 65, Bonn 53225</div>
+                                        <div><b>Phone number:</b> 9988556644</div>
+                                    </label>
+                                </div>
+
+                                <div class="form-group">
+                                    <button class="blue-outline-btn" id="addAddress"> + Add New Address </button>
+                                </div>
+
+                                <div class="add-address-wrapper d-none">
+                                    <form>
+                                        <div class="form-row">
+                                            <div class="form-group col-sm-6">
+                                                <label for="streetname">Street name</label>
+                                                <input type="text" class="form-control" id="streetname"
+                                                    placeholder="Street name">
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="housenumber">House number</label>
+                                                <input type="text" class="form-control" id="housenumber"
+                                                    placeholder="House number">
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-sm-6">
+                                                <label for="postalcode">Postal code</label>
+                                                <input type="text" class="form-control" id="postalcode"
+                                                    placeholder="Postal code" value="53225" disabled>
+                                            </div>
+                                            <div class="form-group col-sm-6">
+                                                <label for="city">City</label>
+                                                <select id="city" class="form-control">
+                                                    <option selected>Bonn</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row">
+                                            <div class="form-group col-sm-6">
+                                                <label for="mobilenumber-wrapper">Phone number</label>
+                                                <div class="input-group" id="mobilenumber-wrapper">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text" id="number-pref">+49</span>
+                                                    </div>
+                                                    <input type="text" class="form-control" id="mobilenumber"
+                                                        placeholder="Phone number" aria-describedby="number-pref">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-row btn-wrapper">
+                                            <button class="normal-blue-btn">Save</button>
+                                            <button class="normal-outline-blue-btn outline-grey-btn">Cancel</button>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <hr class="container-top-outline" />
+
+                                <div>
+                                    <div class="text-right">
+                                        <button class="btn schedule-submit-btn"> Continue </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane fade" id="makePayment" role="tabpanel"
+                                aria-labelledby="tab-step-4">
+                                <div class="d-block d-md-none">
+                                    <h3 class="header-16 s-20">Make Payment</h3>
+                                    <hr class="container-top-outline m-0 mb-3" />
+                                </div>
+
+                                <h3 class="header-16">Pay securely with Helperland payment gateway!</h3>
+                                <div>Promo code (optional)</div>
+                                <div class="row row-col-5">
+                                    <div class="col-8 col-md-5">
+                                        <input type="text" class="form-control" placeholder="Promo code (optional)">
+                                    </div>
+                                    <div class="col-4 col-md-3 col-lg-2">
+                                        <button class="btn promo-code-btn m-auto">Apply</button>
+                                    </div>
+                                </div>
+
+                                <hr class="container-top-outline" />
+
+                                <div class="form-group">
+                                    <div class="blue-form-check">
+                                        <input type="checkbox" class="form-check-input" id="finalTermsCheck">
+                                        <label class="form-check-label" for="finalTermsCheck">
+                                            I accepted <a href="" class="blue-link">terms and conditions</a>, the
+                                            <a href="" class="blue-link">cancellation policy</a> and the <a href=""
+                                                class="blue-link">privacy policy</a>. I confirm that Helperland starts
+                                            to
+                                            execute the contract before the expiry of the withdrawal period and I lose
+                                            my right of withdrawal as a consumer with
+                                            full performance of the contract.
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <hr class="container-top-outline" />
+
+                                <div>
+                                    <div class="text-right">
+                                        <button class="btn schedule-submit-btn"> Complete Booking </button>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="col-sm-5 col-md-4 d-none d-md-block">
+                        <div class="payment-summary-wrapper">
+                            <div class="payment-summary-header">
+                                <h3>Payment Summary</h3>
+                            </div>
+
+                            <div class="payment-summary-body">
+                                <div class="section">
+                                    <div class="row mb-2">
+                                        <div class="col-12"><span id="startDateSummary">@defaultDate</span> @@ <span id="startTimeSummary">8:00 am</span></div>
+                                    </div>
+
+                                    <div class="font-weight-bold">Duration</div>
+
+                                    <div class="row">
+                                        <div class="text-left col-8">Basic</div>
+                                        <div class="text-right col-4 basic-hrs">3 Hrs</div>
+                                    </div>
+
+                                    <div class="row d-none extras">
+                                        <div class="text-left col-5">Extras</div>
+                                    </div>
+
+                                    <div class="row d-none extra-1">
+                                        <div class="text-left col-8">Inside cabinets</div>
+                                        <div class="text-right col-4">30 Mins</div>
+                                    </div>
+
+                                    <div class="row d-none extra-2">
+                                        <div class="text-left col-8">Inside fridge</div>
+                                        <div class="text-right col-4">30 Mins</div>
+                                    </div>
+
+                                    <div class="row d-none extra-3">
+                                        <div class="text-left col-8">Inside oven</div>
+                                        <div class="text-right col-4">30 Mins</div>
+                                    </div>
+
+                                    <div class="row d-none extra-4">
+                                        <div class="text-left col-8">Laundary wash & dry</div>
+                                        <div class="text-right col-4">30 Mins</div>
+                                    </div>
+
+                                    <div class="row d-none extra-5">
+                                        <div class="text-left col-8">Interior windows</div>
+                                        <div class="text-right col-4">30 Mins</div>
+                                    </div>
+
+                                    <hr class="mt-2"/>
+
+                                    <div class="row pt-2">
+                                        <div class="text-left font-weight-bold col-8">Total Service Time</div>
+                                        <div class="text-right font-weight-bold col-4" id="total-service-time">3.5 Hrs</div>
+                                    </div>
+                                </div>
+
+                                <hr />
+
+                                <div class="section">
+                                    <div class="row">
+                                        <div class="text-left col-8">Per cleaning</div>
+                                        <div class="text-right font-weight-bold col-4 total-amount">$87</div>
+                                    </div>
+                                </div>
+
+                                <hr />
+
+                                <div class="section">
+                                    <div class="row total-payment align-items-end">
+                                        <div class="text-left col-8">Total Payment</div>
+                                        <div class="text-right font-weight-bold col-4 total-amount d-flex justify-content-end">$63</div>
+                                    </div>
+
+                                    <div class="row align-items-end">
+                                        <div class="text-left col-8">Effective Price</div>
+                                        <div class="text-right font-weight-bold col-4 s-20 effective-amount">$50.4</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <small class="col-12"><span class="asterisk">*</span>You will save 20% according
+                                            to §35a EStG.</small>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="payment-summary-footer">
+                                <span><img src="~/assets/smiley.png" alt="Smiley">See what is always included</span>
+                            </div>
+                        </div>
+
+                        <div class="book-service-questions-wrapper">
+                            <h3 class="text-center">Questions?</h3>
+                            <div class="question">
+                                <a class="question-title" data-toggle="collapse" href="#question1" role="button"
+                                    aria-expanded="false" aria-controls="question1">
+                                    <img src="~/assets/right-arrow-dark.png" alt="Down Arrow">
+                                    <span>
+                                        What's included in a cleaning?
+                                    </span>
+                                </a>
+
+                                <div class="collapse" id="question1">
+                                    <div class="question-description">
+                                        Bedroom, Living Room & Common Areas, Bathrooms, Kitchen, Extras
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="question">
+                                <a class="question-title" data-toggle="collapse" href="#question2" role="button"
+                                    aria-expanded="false" aria-controls="question2">
+                                    <img src="~/assets/right-arrow-dark.png" alt="Down Arrow">
+                                    <span>
+                                        Which Helperland professional will come to my place?
+                                    </span>
+                                </a>
+
+                                <div class="collapse" id="question2">
+                                    <div class="question-description">
+                                        Helperland has a vast network of experienced, top-rated cleaners. Based on the
+                                        time and date of your request, we work to
+                                        assign the best professional available.Like working with a specific pro? Add
+                                        them to your Pro Team from the mobile app
+                                        and they'll be requested first for all future bookings.You will receive an email
+                                        with details about your professional
+                                        prior to your appointment.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="question">
+                                <a class="question-title" data-toggle="collapse" href="#question3" role="button"
+                                    aria-expanded="false" aria-controls="question3">
+                                    <img src="~/assets/right-arrow-dark.png" alt="Down Arrow">
+                                    <span>
+                                        Can I skip or reschedule bookings?
+                                    </span>
+                                </a>
+
+                                <div class="collapse" id="question3">
+                                    <div class="question-description">
+                                        You can reschedule any booking for free at least 24 hours in advance of the
+                                        scheduled start time. If you need to skip a
+                                        booking within the minimum commitment, we’ll credit the value of the booking to
+                                        your account. You can use this credit on
+                                        future cleanings and other Helperland services.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <a href="./faq.html" class="more-help blue-link">For more help</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- News Letter Section -->
+        <section class="news-letter bg-white">
+            <div class="container text-center">
+                <h2>GET OUR NEWSLETTER</h2>
+                <div class="form-row d-flex justify-content-center align-items-center">
+                    <div class="form-group">
+                        <label for="email" style="display: none;">YOUR EMAIL</label>
+                        <input type="text" placeholder="YOUR EMAIL" id="email" class="form-control">
+                    </div>
+                    <div class="btn-wrapper">
+                        <button class="red-btn">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+  
+        <a href="" type="button" class="payment-mobile-modal-link d-block d-md-none" data-toggle="modal"
+            data-target="#payment-summary-modal">Payment Summary <span class="effective-amount">$50.4</span></a>
+        <div class="modal fade stretched-modal d-md-none" id="payment-summary-modal">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content payment-summary-wrapper">
+                    <div class="payment-summary-header">
+                        <h3>Payment Summary
+                            <span>
+                                <button type="button" class="close" data-dismiss="modal"><span><img
+                                            src="~/assets/close-white.png" alt="close" /></span></button>
+                            </span>
+                        </h3>
+                    </div>
+
+                    <div class="payment-summary-body">
+                        <div class="section">
+                            <div class="row mb-2">
+                                <div class="col-12"><span id="startDateSummary">@defaultDate</span> @@ <span id="startTimeSummary">8:00 am</span></div>
+                            </div>
+
+                            <div class="font-weight-bold">Duration</div>
+
+                            <div class="row">
+                                <div class="text-left col-8">Basic</div>
+                                <div class="text-right col-4 basic-hrs">3 Hrs</div>
+                            </div>
+
+                            <div class="row d-none extras">
+                                <div class="text-left col-5">Extras</div>
+                            </div>
+
+                            <div class="row d-none extra-1">
+                                <div class="text-left col-8">Inside cabinets</div>
+                                <div class="text-right col-4">30 Mins</div>
+                            </div>
+
+                            <div class="row d-none extra-2">
+                                <div class="text-left col-8">Inside fridge</div>
+                                <div class="text-right col-4">30 Mins</div>
+                            </div>
+
+                            <div class="row d-none extra-3">
+                                <div class="text-left col-8">Inside oven</div>
+                                <div class="text-right col-4">30 Mins</div>
+                            </div>
+
+                            <div class="row d-none extra-4">
+                                <div class="text-left col-8">Laundary wash & dry</div>
+                                <div class="text-right col-4">30 Mins</div>
+                            </div>
+
+                            <div class="row d-none extra-5">
+                                <div class="text-left col-8">Interior windows</div>
+                                <div class="text-right col-4">30 Mins</div>
+                            </div>
+
+                            <hr class="mt-2"/>
+
+                            <div class="row pt-2">
+                                <div class="text-left font-weight-bold col-8">Total Service Time</div>
+                                <div class="text-right font-weight-bold col-4" id="total-service-time">3.5 Hrs</div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <div class="section">
+                            <div class="row">
+                                <div class="text-left col-8">Per cleaning</div>
+                                <div class="text-right font-weight-bold col-4 total-amount">$87</div>
+                            </div>
+                        </div>
+
+                        <hr />
+
+                        <div class="section">
+                            <div class="row total-payment align-items-end">
+                                <div class="text-left col-8">Total Payment</div>
+                                <div class="text-right font-weight-bold col-4 total-amount d-flex justify-content-end">$63</div>
+                            </div>
+
+                            <div class="row align-items-end">
+                                <div class="text-left col-8">Effective Price</div>
+                                <div class="text-right font-weight-bold col-4 s-20 effective-amount">$50.4</div>
+                            </div>
+
+                            <div class="row">
+                                <small class="col-12"><span class="asterisk">*</span>You will save 20% according
+                                    to §35a EStG.</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="payment-summary-footer">
+                        <span><img src="~/assets/smiley.png" alt="Smiley">See what is always included</span>
+                    </div>
+
+                    <div class="book-service-questions-wrapper">
+                        <h3 class="text-center">Questions?</h3>
+                        <div class="question">
+                            <a class="question-title" data-toggle="collapse" href="#questionmobile1" role="button"
+                                aria-expanded="false" aria-controls="questionmobile1">
+                                <img src="~/assets/right-arrow-dark.png" alt="Down Arrow">
+                                <span>
+                                    What's included in a cleaning?
+                                </span>
+                            </a>
+
+                            <div class="collapse" id="questionmobile1">
+                                <div class="question-description">
+                                    Bedroom, Living Room & Common Areas, Bathrooms, Kitchen, Extras
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <a class="question-title" data-toggle="collapse" href="#questionmobile2" role="button"
+                                aria-expanded="false" aria-controls="questionmobile2">
+                                <img src="~/assets/right-arrow-dark.png" alt="Down Arrow">
+                                <span>
+                                    Which Helperland professional will come to my place?
+                                </span>
+                            </a>
+
+                            <div class="collapse" id="questionmobile2">
+                                <div class="question-description">
+                                    Helperland has a vast network of experienced, top-rated cleaners. Based on the
+                                    time and date of your request, we work to
+                                    assign the best professional available.Like working with a specific pro? Add
+                                    them to your Pro Team from the mobile app
+                                    and they'll be requested first for all future bookings.You will receive an email
+                                    with details about your professional
+                                    prior to your appointment.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="question">
+                            <a class="question-title" data-toggle="collapse" href="#questionmobile3" role="button"
+                                aria-expanded="false" aria-controls="questionmobile3">
+                                <img src="~/assets/right-arrow-dark.png" alt="Down Arrow">
+                                <span>
+                                    Can I skip or reschedule bookings?
+                                </span>
+                            </a>
+
+                            <div class="collapse" id="questionmobile3">
+                                <div class="question-description">
+                                    You can reschedule any booking for free at least 24 hours in advance of the
+                                    scheduled start time. If you need to skip a
+                                    booking within the minimum commitment, we’ll credit the value of the booking to
+                                    your account. You can use this credit on
+                                    future cleanings and other Helperland services.
+                                </div>
+                            </div>
+                        </div>
+
+                        <a href="./faq.html" class="more-help blue-link">For more help</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @section Scripts {
+            <script>
+                $(document).ready(function () {
+                    
+                    // ---------------- Utility Functions (Start) ----------------
+                    function disableallafter(k) {
+                        for (let i = k+1; i <= 4; i++) {
+                            var currenttab = ".nav-item.step-" + i;
+                            var activetab = currenttab + " a.nav-link";
+                            $(activetab).removeClass('myactive active show');
+                            $(currenttab).css("pointer-events", "none");
+                            $(activetab).css("pointer-events", "none");
+                            $(activetab).attr("aria-selected", false);
+
+                            // content of the tab
+                            var tabcontent = `.tab-content div[aria-labelledby="tab-step-${i}"]`;
+                            $(tabcontent).removeClass('active show');
+                        }
+                    }
+
+                    function enableallbefore(k) {
+                        for(let i=1;i<=k;i++) {
+                            var currenttab = ".nav-item.step-";
+                            var activetab = currenttab + i + " a.nav-link";
+                            $(activetab).removeClass('active show');
+                            $(activetab).addClass('myactive');
+                            $(activetab).css("pointer-events", "all");
+                            $(activetab).attr("aria-selected", false);
+
+                            // content of the tab
+                            var tabcontent = `.tab-content div[aria-labelledby="tab-step-${i}"]`;
+                            $(tabcontent).removeClass('active show');
+
+                            if(i==k) {
+                                $(currenttab + (i+1) + " a.nav-link").css("pointer-events", "none");
+                                $(currenttab + (i+1) + " a.nav-link").addClass('myactive active show');
+                                $(`.tab-content div[aria-labelledby="tab-step-${(i+1)}"]`).addClass('active show');
+                            }
+                        }
+                    }
+
+                    function getEffectiveValue(total, discountpercent=20) {
+                        let res = total - (total * discountpercent / 100);
+                        res = Number(res).toFixed(2);
+                        return res;
+                    }
+
+                    function paymentUpdates(extra, model) {
+                        var basicHrsEleId = '#@Html.IdFor(m => m.scheduleAndPlan.ServiceHrs)';
+                        if(extra.hasClass('d-none')) {
+                            model.totalamount += 9;
+                            model.totalservicetime += 0.5;
+                            model.extraservicetime += 0.5;
+                            extra.removeClass('d-none');
+                            model.basichrs += 0.5;
+                        } else {
+                            model.totalamount -= 9;
+                            model.totalservicetime -= 0.5;
+                            model.extraservicetime -= 0.5;
+                            model.basichrs -= 0.5;
+                            extra.addClass('d-none');
+                        }
+                        if(paymentModel.extraservicetime == 0) {
+                            $('.extras').addClass('d-none');
+                        } else {
+                            $('.extras').removeClass('d-none');
+                        }
+                        if(paymentModel.startTime + paymentModel.totalservicetime > 21) {
+                            $('span[data-valmsg-for="@Html.NameFor(m=>m.scheduleAndPlan.StartTime)"]')
+                                .text("Total Service Time Exceeding The Max Service Time for the day which is 9:00 pm");
+                        } else {
+                            $('span[data-valmsg-for="@Html.NameFor(m=>m.scheduleAndPlan.StartTime)"]')
+                                .text("");
+                            basicHrsEleId += ' option[value="' + model.totalservicetime + '"]';
+                            $(basicHrsEleId).prop('selected', true);
+                        }
+                        $('.total-amount').text("$" + model.totalamount);
+                        $('.effective-amount').text("$" + getEffectiveValue(model.totalamount));
+                        $('#total-service-time').text(model.totalservicetime + " Hrs");
+                        $('.basic-hrs').text(model.basichrs + " Hrs");
+                    }
+                    // ---------------- Utility Functions (End) ----------------
+                    
+                    disableallafter(1);
+
+                    // Setup Service Form Submit Handling
+                    $('#setupService button').on('click', function(e) {
+                        e.preventDefault();
+                        
+                        var _form = $('#setupService form');
+                        var isvalid = _form.valid();
+
+                        var model = {    
+                            code: $('#@Html.IdFor(m=>m.postalcode.code)').val(), 
+                        }
+
+                        if(isvalid) {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("PostalCodeCheck", "Home")',
+                                data: model,
+                                dataType: "json",
+                                cache:false,
+                                success: function(res) {
+                                    if(res==false) {
+                                        $('span[data-valmsg-for="@Html.NameFor(m=>m.postalcode.code)"]').text("Postal code you have entered is not valid");
+                                        $('span[data-valmsg-for="@Html.NameFor(m=>m.postalcode.code)"]').delay(5000).hide(0);
+                                    } else {
+                                        disableallafter(1);
+                                        enableallbefore(1);
+                                    }
+                                },
+                                error: function(e) {
+                                    console.log("Error: " + e);
+                                },
+                            });
+                        }
+                    });
+
+                    var paymentModel = {
+                                           "startTime": 8,
+                                           "totalamount": 54,
+                                           "totalservicetime": 3,
+                                           "extraservicetime": 0,
+                                           "basichrs": 3,
+                                       };
+
+                    // Setting up default values
+                    $('.total-amount').text("$" +  paymentModel.totalamount);
+                    $('.effective-amount').text("$" + getEffectiveValue(paymentModel.totalamount));
+                    $('#total-service-time').text(paymentModel.totalservicetime + " Hrs");
+                    $('.basic-hrs').text(paymentModel.basichrs + " Hrs");
+
+                    // Start Date handling
+                    $('#@Html.IdFor(m => m.scheduleAndPlan.ServiceStartDate)').on('change', function() {
+                        var selectedval = $(this).val();
+                        var selectedvalarray = selectedval.split('-');
+                        selectedvalarray.reverse();
+                        selectedval = selectedvalarray.join('/');
+                        $('#startDateSummary').text(selectedval);
+                    });
+
+                    // Start time handling
+                    $('#@Html.IdFor(m => m.scheduleAndPlan.StartTime)').on('change', function() {
+                        var selectedvalue = $(this).val();
+                        selectedvalue = parseFloat(selectedvalue);
+                        paymentModel.startTime = selectedvalue;
+                        if(paymentModel.startTime + paymentModel.totalservicetime > 21) {
+                            $('span[data-valmsg-for="@Html.NameFor(m=>m.scheduleAndPlan.StartTime)"]')
+                                .text("Total Service Time Exceeding The Max Service Time for the day which is 9:00 pm");
+                        } else {
+                            $('span[data-valmsg-for="@Html.NameFor(m=>m.scheduleAndPlan.StartTime)"]')
+                                .text("");
+                        }
+                        let startTimeSummary = "";
+                        let flag = 0;
+                        if(selectedvalue >= 12) {
+                            if(selectedvalue >= 13) selectedvalue -= 12;
+                            flag = 1;
+                        }
+                        startTimeSummary += Math.floor(selectedvalue) + ":";
+                        startTimeSummary += (Math.floor(selectedvalue) == Math.ceil(selectedvalue) ? "00 " : "30 ");
+                        startTimeSummary += (flag==1 ? "pm" : "am");                        
+                        $('#startTimeSummary').text(startTimeSummary);
+                    });
+
+                    // How long Handling
+                    $('#@Html.IdFor(m => m.scheduleAndPlan.ServiceHrs)').on('change', function() {
+                        var selectedvalue = $(this).val();
+                        selectedvalue = parseFloat(selectedvalue);
+                        if(selectedvalue < (paymentModel.totalservicetime)) {
+                            $('.setup-extra-services input[type="checkbox"]').prop('checked', false);
+                            paymentModel.basichrs = selectedvalue;
+                            paymentModel.totalservicetime = selectedvalue;
+                            for(let i=1;i<6;i++) {
+                                var extratoberemoved = ".extra-" + i;
+                                if($(extratoberemoved).hasClass('d-none')) {
+
+                                } else {
+                                    $(extratoberemoved).addClass('d-none');
+                                }
+                            }
+                            paymentModel.extraservicetime = 0;
+                            $('.extras').addClass('d-none');
+                        } else {
+                            paymentModel.basichrs = selectedvalue - paymentModel.extraservicetime;
+                            paymentModel.totalservicetime = selectedvalue;
+                        }
+                        if(paymentModel.startTime + paymentModel.totalservicetime > 21) {
+                            $('span[data-valmsg-for="@Html.NameFor(m=>m.scheduleAndPlan.StartTime)"]')
+                                .text("Total Service Time Exceeding The Max Service Time for the day which is 9:00 pm");
+                        } else {
+                            $('span[data-valmsg-for="@Html.NameFor(m=>m.scheduleAndPlan.StartTime)"]')
+                                .text("");
+                        }
+                        paymentModel.totalamount = 54 + (paymentModel.totalservicetime - 3) * 9;
+                        $('.total-amount').text("$" + paymentModel.totalamount);
+                        $('.effective-amount').text("$" + getEffectiveValue(paymentModel.totalamount));
+                        $('#total-service-time').text(paymentModel.totalservicetime + " Hrs");
+                        $('.basic-hrs').text(paymentModel.basichrs + " Hrs");
+                    });
+
+                    // Extra Services Handling
+                    $('#insideCabinets').on('change', function() {
+                        var extra = $('.payment-summary-body .extra-1');
+                        paymentUpdates(extra, paymentModel);
+                    });
+
+                    $('#insideFridge').on('change', function() {
+                        var extra = $('.payment-summary-body .extra-2');
+                        paymentUpdates(extra, paymentModel);
+                    });
+
+                    $('#insideOven').on('change', function() {
+                        var extra = $('.payment-summary-body .extra-3');
+                        paymentUpdates(extra, paymentModel);
+                    });
+
+                    $('#laundaryWash').on('change', function() {
+                        var extra = $('.payment-summary-body .extra-4');
+                        paymentUpdates(extra, paymentModel);
+                    });
+
+                    $('#interiorWindows').on('change', function() {
+                        var extra = $('.payment-summary-body .extra-5');
+                        paymentUpdates(extra, paymentModel);
+                    });
+
+                    // Schedule And Plan Form Submit Handling
+                    $('#scheduleAndPlan button').on('click', function(e) {
+                        e.preventDefault();
+
+                        //console.log('@User.Identity.IsAuthenticated' == "False");
+                        
+                        var _form = $('#scheduleAndPlan form');
+                        var isvalid = _form.valid();
+                        var ExtraServicesModel = {
+                                                 "InsideCabinets" : $('#insideCabinets').is(':checked'),
+                                                 "InsideFridge" : $('#insideFridge').is(':checked'),
+                                                 "InsideOven" : $('#insideOven').is(':checked'),
+                                                 "LaundaryWash" : $('#laundaryWash').is(':checked'),
+                                                 "InteriorWindows" : $('#interiorWindows').is(':checked'),
+                                             };
+                        $('span[data-valmsg-for]').each(function() {
+                            isvalid &= $(this).is(':empty');
+                        });
+                        
+                        var model = {    
+                            ServiceStartDate: new Date($('#@Html.IdFor(m=>m.scheduleAndPlan.ServiceStartDate)').val() + "T00:00:00").toJSON(), 
+                            StartTime: $('#@Html.IdFor(m=>m.scheduleAndPlan.StartTime)').val(),
+                            ServiceHrs: paymentModel.totalservicetime,
+                            ExtraServices: ExtraServicesModel,
+                            Comments: $('#@Html.IdFor(m=>m.scheduleAndPlan.Comments)').val(),
+                            HavePets: $('#@Html.IdFor(m=>m.scheduleAndPlan.HavePets)').is(":checked"),
+                            Total: getEffectiveValue(paymentModel.totalamount),
+                        }
+
+                        //console.log(model);
+
+                        if(isvalid) {
+                            $.ajax({
+                                type: 'POST',
+                                url: '@Url.Action("ScheduleService", "Home")',
+                                data: model,
+                                dataType: "json",
+                                cache:false,
+                                success: function(res) {
+                                    console.log(res);
+                                    if(res==false) {
+                                        @*$('span[data-valmsg-for="@Html.NameFor(m=>m.postalcode.code)"]').text("Postal code you have entered is not valid");
+                                        $('span[data-valmsg-for="@Html.NameFor(m=>m.postalcode.code)"]').delay(5000).hide(0);*@
+                                    } else {
+                                        disableallafter(2);
+                                        enableallbefore(2);
+                                    }
+                                },
+                                error: function(e) {
+                                    console.log("Error: " + e);
+                                },
+                            });
+                        }
+                    });
+
+                    $('#addAddress').on('click', function () {
+                        $(this).addClass('d-none');
+                        $('.add-address-wrapper').removeClass('d-none');
+                    });
+
+                    $('#new-address-save-btn').on('click', function () {
+                        $('.add-address-wrapper').addClass('d-none');
+                        $('#addAddress').removeClass('d-none');
+                    });
+
+                });
+
+                @*$(document).ready(function () {
+                    $('#setupService button').on('click', function() {
+                        var model = '@Json.Serialize(Model)';
+                        let finalModel;
+                        if(model != null) {
+                            finalModel = '@Html.Raw(Json.Serialize(Model.postalcode))';
+                            console.log(finalModel);
+                        }
+                        console.log(model);
+                        console.log(finalModel);
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("PostalCodeCheck", "Home")',
+                            data: {code: },
+                            success: function(res) {
+                                if(res==false) {
+                                    $('#postalcode-validation').text("Postal code you have entered is not valid");
+                                    $("#postalcode-validation").show().delay(3000).hide();
+                                }
+                                console.log("Found");
+                            },
+                            error: function(e) {
+                                console.log("Error: " + e);
+                            },
+                        });
+
+                        //let f=false;
+                        //for(let i=2;i<=4;i++) {
+                        //    let temp = ".navlink.step-" + i;
+                        //    f |= $(temp).hasClass('myactive');
+                        //}
+                        //if(f) {
+
+                        //} else {
+                        //    var model = {code: $('#postalcode_code').val};
+                        //    console.log(model);
+                        //}
+                        $.post("/Home/PostalCodeCheck", @Model.postalcode, function(data) {
+                            var postalcodecheck = "@ViewData["PostalCodeCheck"]";
+                            console.log(postalcodecheck); 
+                        });
+                    });
+                    //const totaltabs = $('ul.book-service-tab li').length;
+                    //$('ul.book-service-tab li').on('click', function (e) {
+                    //    var currenttab = e.currentTarget.attributes["class"].value;
+                    //    var last = parseInt(currenttab[currenttab.length - 1]);
+                    //    currenttab = currenttab.slice(0, -1);
+                    //    currenttab = currenttab.split(" ").map(word => `.${word}`).join("");
+                    //    // console.log(currenttab);
+                    //    for (let i = 1; i <= totaltabs; i++) {
+                    //        var activetab = currenttab + i + " a.nav-link";
+                    //        if (i <= last) {
+                    //            $(activetab).addClass('myactive');
+                    //            $(activetab).css("pointer-events", "visible");
+                    //        }
+                    //        else {
+                    //            $(activetab).removeClass('myactive');
+                    //            $(currenttab + i).css("pointer-events", "none");
+                    //            $(activetab).css("pointer-events", "none");
+                    //        }
+                    //    }
+                    //});
+                });*@
+            </script>
+        }

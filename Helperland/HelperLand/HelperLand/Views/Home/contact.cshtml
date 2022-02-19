@@ -1,6 +1,11 @@
-﻿@{
+﻿@model ContactViewModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor HttpContextAccessor
+
+@{
     ViewBag.Title = "Contact Us";
     ViewBag.SecondaryNav = true;
+    var loggedinuser = HttpContextAccessor.HttpContext.Session.Get<User>("User");
+    if (loggedinuser == null) loggedinuser = new User();
 }
 
         <section class="common-banner contact-banner d-none d-md-block"></section>
@@ -47,13 +52,15 @@
                 <h2 class="contact-form-header">Get in touch with us</h2>
 
                 <div class="contact-form-container">
-                    <form>
+                    <form method="post" enctype="multipart/form-data">
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <input type="text" class="form-control" id="firstname" placeholder="First name">
+                                <input asp-for="FirstName" class="form-control" placeholder="First name" value="@loggedinuser.FirstName">
+                                <span asp-validation-for="FirstName" class="validation-text"></span>
                             </div>
                             <div class="form-group col-md-6">
-                                <input type="text" class="form-control" id="lastname" placeholder="Last name">
+                                <input asp-for="LastName" class="form-control" placeholder="Last name" value="@loggedinuser.LastName">
+                                <span asp-validation-for="LastName" class="validation-text"></span>
                             </div>
                         </div>
 
@@ -63,42 +70,63 @@
                                     <div class="input-group-prepend">
                                         <span class="input-group-text" id="number-pref">+49</span>
                                     </div>
-                                    <input type="text" class="form-control" id="mobilenumber"
-                                        placeholder="Mobile number" aria-describedby="number-pref" required>
-                                    <div class="invalid-feedback">
-                                        Please choose a username.
-                                    </div>
+                                    <input asp-for="Mobile" class="form-control" placeholder="Mobile number" aria-describedby="number-pref"
+                                        value="@loggedinuser.Mobile">
                                 </div>
+                                <span asp-validation-for="Mobile" class="validation-text"></span>
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <input type="email" class="form-control" id="email" placeholder="Email" required>
-                                <div class="valid-feedback">
-                                    Looks good!
-                                </div>
+                                <input asp-for="Email" class="form-control" placeholder="Email" value="@loggedinuser.Email">
+                                <span asp-validation-for="Email" class="validation-text"></span>
                             </div>
                         </div>
 
                         <div class="form-row">
                             <div class="form-group col">
-                                <select id="subject" class="form-control">
-                                    <option value="" disabled selected>Subject</option>
-                                    <option>General</option>
+                                <select asp-for="Type" class="form-control">
+                                    <option selected>General</option>
                                     <option>Inquiry</option>
                                     <option>Renewal</option>
                                     <option>Revocation</option>
                                 </select>
+                                <span asp-validation-for="Type" class="validation-text"></span>
                             </div>
                         </div>
+
                         <div class="form-row">
                             <div class="form-group col">
-                                <textarea class="form-control" formcontrolname="message" maxlength="1000" rows="5"
+                                <textarea asp-for="Message" class="form-control" maxlength="1000" rows="5"
                                     placeholder="Message"></textarea>
+                                <span asp-validation-for="Message" class="validation-text"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-row file-upload-wrapper">
+                            <h3 class="form-group col-12 header-16 mb-1">Attachment</h3>
+                            <div class="form-group col-3">
+                                <input asp-for="FilePath" />
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="blue-form-check ml-2">
+                                    <input type="checkbox" id="privacyCheck" class="form-check-input">
+                                    <label class="form-check-label" for="privacyCheck">
+                                        Our current ones apply <a href="" title="privacy policy"
+                                            class="blue-link">privacy policy</a>. I hereby agree that my data entered
+                                        into the contact form will be stored
+                                        electronically and processed and used for the purpose of establishing contact.
+                                        The consent can be withdrawn at any time
+                                        pursuant to Art. 7 (3) GDPR by informal notification (eg by e-mail).
+                                    </label>
+                                </div>
                             </div>
                         </div>
 
                         <div class="form-row justify-content-center">
-                            <button type="submit" class="form-submit-btn">Submit</button>
+                            <button type="submit" class="form-submit-btn disabled-btn" id="submit-btn" disabled>Submit</button>
                         </div>
                     </form>
                 </div>
@@ -128,3 +156,15 @@
                 </div>
             </div>
         </section>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#privacyCheck').click(function() {
+                var checkbox = document.getElementById("privacyCheck");
+                var submitBtn = document.getElementById("submit-btn");
+                submitBtn.disabled = !(checkbox.checked);
+            });
+        });
+    </script>
+}

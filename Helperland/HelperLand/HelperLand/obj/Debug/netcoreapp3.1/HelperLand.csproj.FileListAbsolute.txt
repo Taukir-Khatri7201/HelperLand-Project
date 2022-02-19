@@ -80,5 +80,12 @@ E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\Help
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\bin\Debug\netcoreapp3.1\libman.json
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Home\changePassword.cshtml.g.cs
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Home\become_service_provider.cshtml.g.cs
-E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\HelperLand.csproj.AssemblyReference.cache
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Shared\AccessDenied.cshtml.g.cs
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Home\book_service.cshtml.g.cs
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\bin\Debug\netcoreapp3.1\System.Web.Helpers.dll
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\BookService\book_service.cshtml.g.cs
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\HelperLand.csproj.AssemblyReference.cache
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\bin\Debug\netcoreapp3.1\MailKit.dll
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\bin\Debug\netcoreapp3.1\MimeKit.dll
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\bin\Debug\netcoreapp3.1\NETCore.MailKit.dll
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll

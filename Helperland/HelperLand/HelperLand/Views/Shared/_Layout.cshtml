@@ -1,5 +1,16 @@
 ﻿@model CombinedViewModel
+@inject ICustomDataProtector protector;
 
+@{
+    var returnUrl = ViewBag.LoginRequired;
+    var userCreds = Context.Request.Cookies["UserCredentials"];
+    var deserializedUserCreds = new LoginViewModel();
+    if(userCreds != null) {
+        deserializedUserCreds = JsonSerializer.Deserialize<LoginViewModel>(userCreds);
+        deserializedUserCreds.Password = protector.Decrypt(deserializedUserCreds.Password);
+        var temp = userCreds;
+    }
+}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -11,6 +22,10 @@
     <link rel="icon" type="image/png" href="~/assets/titlebar_logo.png">
     <title>@ViewBag.Title | Helperland</title>
     <link href="~/css/custom.css" rel="stylesheet">
+    @if (IsSectionDefined("Styles"))
+    {
+        @RenderSection("Styles", required:true)
+    }
 </head>
 
 <body>
@@ -18,7 +33,7 @@
         <header class="banner-part">
             <div class="header-container">
                 <nav class="navbar navbar-dark navbar-expand-lg fixed-top @(ViewBag.SecondaryNav ? "secondary-navbar" : "")" id="navbar">
-                    <a class="navbar-brand" asp-action="index"><img src="~/assets/@(ViewBag.SecondaryNav ? "logo-small.png" : "logo-large.png")" id="brand-img"></a>
+                    <a class="navbar-brand" asp-action="index" asp-controller="Home"><img src="~/assets/@(ViewBag.SecondaryNav ? "logo-small.png" : "logo-large.png")" id="brand-img"></a>
                     
                     <button class="navbar-toggler" type="button" data-toggle="collapse"
                         data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -51,7 +66,7 @@
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#">My Dashboard</a>
                                 <a class="dropdown-item" href="#">My Settings</a>
-                                <a class="dropdown-item" asp-action="Logout">Logout</a>
+                                <a class="dropdown-item" asp-action="Logout" asp-controller="Home">Logout</a>
                             </div>
                         </div>
                     }
@@ -59,10 +74,10 @@
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul class="navbar-nav d-flex align-items-lg-center align-items-end ml-lg-auto">
                             <li class="nav-item btn-with-outline @(ViewBag.SecondaryNav ? "small-blue-btn" : "")">
-                                <a class="nav-link" href="#">Book a Cleaner</a>
+                                <a class="nav-link" asp-action="index" asp-controller="BookService">Book a Cleaner</a>
                             </li>
                             <li class="nav-item btn-hover @(ViewBag.Title=="Prices"? "active": "")">
-                                <a class="nav-link" asp-action="prices">Prices</a>
+                                <a class="nav-link" asp-action="prices" asp-controller="Home">Prices</a>
                             </li>
                             <li class="nav-item btn-hover">
                                 <a class="nav-link" href="#">Our Guarantee</a>
@@ -71,7 +86,7 @@
                                 <a class="nav-link" href="#">Blog</a>
                             </li>
                             <li class="nav-item btn-hover @(ViewBag.Title=="Contact Us" ? "active": "")">
-                                <a class="nav-link" asp-action="contact">Contact</a>
+                                <a class="nav-link" asp-action="contact" asp-controller="Home">Contact</a>
                             </li>
                             @if(User.Identity.IsAuthenticated) 
                             {
@@ -97,7 +112,7 @@
                                         <div class="dropdown-divider"></div>
                                         <a class="dropdown-item" href="#">My Dashboard</a>
                                         <a class="dropdown-item" href="#">My Settings</a>
-                                        <a class="dropdown-item" asp-action="Logout">Logout</a>
+                                        <a class="dropdown-item" asp-action="Logout" asp-controller="Home">Logout</a>
                                     </div>
                                 </li>
                             } 
@@ -107,7 +122,7 @@
                                     <a href="" type="button" class="nav-link" data-toggle="modal" data-target="#loginmodal">Login</a>
                                 </li>
                                 <li class="nav-item btn-with-outline @(ViewBag.SecondaryNav ? "small-blue-btn" : "")">
-                                    <a class="nav-link" asp-action="become_service_provider">Become a Helper</a>
+                                    <a class="nav-link" asp-action="become_service_provider" asp-controller="Home">Become a Helper</a>
                                 </li>
                             }
                         </ul>
@@ -117,9 +132,9 @@
         </header>
            
         <div class="modal fade" id="loginmodal" tabindex="-1" role="dialog" aria-labelledby="loginmodalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered mw-360" role="document">
                 <div class="modal-content">
-                    <div class="modal-body">
+                    <div class="modal-body p-25">
                         <div class="login-modal-header">
                             Login to your account
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -137,14 +152,14 @@
                                     </button>
                                 </div>
                             }
-                            <form asp-action="Login" method="post">
+                            <form asp-action="Login" asp-controller="Home" method="post" asp-route-returnUrl="@returnUrl">
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="Email" asp-for="LoginModel.Email">
+                                    <input class="form-control" placeholder="Email" asp-for="LoginModel.Email" value="@deserializedUserCreds.Email">
                                     <span><img class="login-modal-input-image" src="~/assets/user_form.png" /></span>
                                     <span asp-validation-for="LoginModel.Email" class="validation-text"></span>
                                 </div>
                                 <div class="form-group">
-                                    <input class="form-control" placeholder="Password" asp-for="LoginModel.Password">
+                                    <input class="form-control" placeholder="Password" asp-for="LoginModel.Password" value="@deserializedUserCreds.Password">
                                     <span asp-validation-for="LoginModel.Password" class="validation-text"></span>
                                     <img class="login-modal-input-image" src="~/assets/pass_form.png" />
                                 </div>
@@ -158,7 +173,7 @@
 
                         <div class="login-modal-footer text-center">
                             <div><a href="" class="blue-link" data-dismiss="modal" data-toggle="modal" data-target="#forgotpassmodal">Forgot password?</a></div>
-                            <div>Don't have and account? <a asp-action="userRegistration" class="blue-link">Create an account</a></div>
+                            <div>Don't have and account? <a asp-action="userRegistration" asp-controller="Home" class="blue-link">Create an account</a></div>
                         </div>
                     </div>
                 </div>
@@ -166,9 +181,9 @@
         </div>
 
         <div class="modal fade" id="forgotpassmodal" tabindex="-1" role="dialog" aria-labelledby="forgotpassTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered mw-360" role="document">
                 <div class="modal-content">
-                    <div class="modal-body">
+                    <div class="modal-body p-25">
                         <div class="login-modal-header">
                             Forgot Password
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -186,7 +201,7 @@
                                     </button>
                                 </div>
                             }
-                            <form asp-action="ForgotPassword" method="post">
+                            <form asp-action="ForgotPassword" asp-controller="Home" method="post">
                                 <div class="form-group">
                                     <input class="form-control" placeholder="Email" asp-for="forgotPassModel.Email">
                                     <span><img class="login-modal-input-image" src="~/assets/user_form.png" /></span>
@@ -205,16 +220,18 @@
         </div>
 
         <div class="modal fade" id="SuccessModal" tabindex="-1" role="dialog" aria-labelledby="SuccessTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-dialog modal-dialog-centered mw-360" role="document">
                 <div class="modal-content">
-                    <div class="modal-body text-center success-modal">
+                    <div class="modal-body text-center success-modal p-25">
                         <span>
-                            <img src="~/assets/correct-white-medium.png" alt="Success">
+                            <img src="~/assets/correct-white-medium.png" alt="Success" id="success-msg-img">
                         </span>
                         
                         <div class="success-modal-message" id="success-msg">
                             You have successfully logged out
                         </div>
+
+                        <div class="success-modal-additional-msg" id="success-additional-msg"></div>
 
                         <div>
                             <button type="button" class="normal-submit-btn w-auto" data-dismiss="modal" aria-label="Close">
@@ -235,22 +252,22 @@
         <div class="footer-container">
             <div class="row justify-content-center align-items-center">
                 <div class="col-lg-2">
-                    <a asp-action="index" title="Helperland"><img src="~/assets/footer-logo.png"
+                    <a asp-action="index" asp-controller="Home" title="Helperland"><img src="~/assets/footer-logo.png"
                             alt="Helperland Logo"></a>
                 </div>
                 <div class="col-lg-8 text-center">
                     <ul class="footer-navigation d-sm-flex flex-wrap justify-content-center align-items-center">
                         <li>
-                            <a asp-action="index" title="Home">Home</a>
+                            <a asp-action="index" asp-controller="Home" title="Home">Home</a>
                         </li>
                         <li>
-                            <a asp-action="about" title="About">About</a>
+                            <a asp-action="about" asp-controller="Home" title="About">About</a>
                         </li>
                         <li>
                             <a href="#" title="Testimonials">Testimonials</a>
                         </li>
                         <li>
-                            <a asp-action="faq" title="FAQs">FAQs</a>
+                            <a asp-action="faq" asp-controller="Home" title="FAQs">FAQs</a>
                         </li>
                         <li>
                             <a href="#" title="Insurance Policy">Insurance Policy</a>
@@ -294,6 +311,15 @@
             </div>
         </div>
     }
+
+    <div class="loader">
+        <div class="loader-inner">
+            <div class="spinner">
+                <div></div>
+            </div>
+        </div>
+    </div>
+
     <!-- Bootstrap Scripts -->
     <script src="~/lib/jquery/jquery.js"></script>
     <script src="~/lib/jquery-validation/jquery.validate.js"></script>   

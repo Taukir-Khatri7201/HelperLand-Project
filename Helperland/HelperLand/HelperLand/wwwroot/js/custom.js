@@ -1,4 +1,10 @@
-$(document).ready(function() {
+$(window).on('load', function () {
+	$('.loader').addClass("d-none");
+});
+
+$(document).ready(function () {
+
+
 	$(document).scroll(function () {
 		var $nav = $(".fixed-top");
 		if (!$nav.hasClass("admin-navbar") && !$nav.hasClass("secondary-navbar")) {

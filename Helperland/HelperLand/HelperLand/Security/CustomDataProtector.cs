@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.DataProtection;
+using System;
+using System.Security.Cryptography;
 
-namespace DatabaseFirstApproachPractice.Security
+namespace HelperLand.Security
 {
     public class CustomDataProtector : ICustomDataProtector
     {
@@ -18,7 +20,14 @@ namespace DatabaseFirstApproachPractice.Security
 
         public string Decrypt(string cipherText)
         {
-            return _protector.Unprotect(cipherText);
+            try
+            {
+                return _protector.Unprotect(cipherText);
+            } 
+            catch(Exception)
+            {
+                throw;
+            }
         }
     }
 }
