@@ -81,6 +81,12 @@ namespace HelperLand.Controllers
         [HttpPost]
         public async Task<IActionResult> MakePayment(BookServiceCombinedViewModel model)
         {
+            var day = model.scheduleAndPlan.ServiceStartDate.Day;
+            var month = model.scheduleAndPlan.ServiceStartDate.Month;
+            var year = model.scheduleAndPlan.ServiceStartDate.Year;
+            var startHr = (int)model.startTime;
+            var halfHr = (startHr < model.startTime ? 30 : 0);
+            var finalDateTime = new DateTime(year, month, day, startHr, halfHr, 0);
             loggedUser = HttpContext.Session.Get<User>("User");
             ServiceRequest req = new ServiceRequest()
             {
@@ -89,11 +95,11 @@ namespace HelperLand.Controllers
                 ModifiedDate = DateTime.Now,
                 PaymentDue = false,
                 UserId = loggedUser.UserId,
-                ServiceStartDate = model.scheduleAndPlan.ServiceStartDate,
+                ServiceStartDate = finalDateTime,
                 ZipCode = model.postalcode.code,
                 ServiceHours = model.totalservicetime,
                 ExtraHours = model.extraservicetime,
-                SubTotal = model.totalamount,
+                SubTotal = (decimal)model.totalamount,
                 Discount = (decimal)(model.totalamount - model.scheduleAndPlan.Total),
                 TotalCost = (decimal)(model.scheduleAndPlan.Total),
                 Comments = model.scheduleAndPlan.Comments,

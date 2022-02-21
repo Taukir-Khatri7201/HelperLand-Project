@@ -89,3 +89,5 @@ E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\Help
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\bin\Debug\netcoreapp3.1\MimeKit.dll
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\bin\Debug\netcoreapp3.1\NETCore.MailKit.dll
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\bin\Debug\netcoreapp3.1\BouncyCastle.Crypto.dll
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Customer\ServiceRequests.cshtml.g.cs
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Customer\_LeftNavigation.cshtml.g.cs

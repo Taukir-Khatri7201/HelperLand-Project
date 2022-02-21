@@ -1,0 +1,220 @@
+﻿@{
+    ViewBag.SecondaryNav = true;
+}
+
+<section class="logged-user-container">
+    <h1>Welcome, <span>Smith!</span></h1>
+</section>
+
+<section class="dashboard-section">
+    <div class="container-fluid d-lg-flex">
+        @Html.Partial("_LeftNavigation", new { ActiveTab = 1})
+
+        <div class="right-side-wrapper flex-grow-1">
+            <div class="right-side-header">
+                <h2 class="float-left header-22">Current Service Requests</h2>
+                <a class="float-right btn rounded-pill secondary-blue-btn text-white" href="#"
+                    title="New Service Request">Add New Service Request</a>
+            </div>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th><a href="#" title="Service Id">Service Id <img src="~/assets/sort.png"
+                                    alt="Sort"></a></th>
+                        <th><a href="#" title="Service date">Service Date <img src="~/assets/sort.png"
+                                    alt="Sort"></a></th>
+                        <th><a href="#" title="Service Provider">Service Provider <img src="~/assets/sort.png"
+                                    alt="Sort"></a></th>
+                        <th><a href="#" title="Payment">Payment <img src="~/assets/sort.png" alt="Sort"></a>
+                        </th>
+                        <th><a href="#" title="Actions">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr>
+                        <td>323436</td>
+
+                        <td>
+                            <div class="table-cell-content">
+                                <div class="table-cell-info-container make-bold">
+                                    <img src="~/assets/calendar2.png"> 09/04/2018
+                                </div>
+                                <div class="table-cell-info-container">
+                                    <img src="~/assets/clock.png"> 12:00 - 18:00
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="table-cell-content d-flex">
+                                <div class="service-provider-left">
+                                    <img src="~/assets/cap.png" alt="Service Provider">
+                                </div>
+                                <div class="service-provider-right">
+                                    <div>Lyum Watson</div>
+
+                                    <div class="service-provider-right-rating">
+                                        <img src="~/assets/star1.png" alt="Filled Rating">
+                                        <img src="~/assets/star1.png" alt="Filled Rating">
+                                        <img src="~/assets/star1.png" alt="Filled Rating">
+                                        <img src="~/assets/star1.png" alt="Filled Rating">
+                                        <img src="~/assets/star2.png" alt="Empty Rating">
+                                        <div>4</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="payment">
+                            <div class="service-payment">&euro;63</div>
+                        </td>
+
+                        <td>
+                            <span>
+                                <a class="btn rounded-pill secondary-blue-btn text-white" href="#"
+                                    title="Reschedule">Reschedule</a>
+                                <a class="btn rounded-pill btn-orange" href="#"
+                                    title="Cancel">Cancel</a>                                
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>323436</td>
+
+                        <td>
+                            <div class="table-cell-content">
+                                <div class="table-cell-info-container make-bold">
+                                    <img src="~/assets/calendar2.png"> 09/04/2018
+                                </div>
+                                <div class="table-cell-info-container">
+                                    <img src="~/assets/clock.png"> 12:00 - 18:00
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="table-cell-content d-flex">
+                                <div class="service-provider-left">
+                                    <img src="~/assets/cap.png" alt="Service Provider">
+                                </div>
+                                <div class="service-provider-right">
+                                    <div>Lyum Watson</div>
+
+                                    <div class="service-provider-right-rating">
+                                        <img src="~/assets/star1.png" alt="Filled Rating">
+                                        <img src="~/assets/star1.png" alt="Filled Rating">
+                                        <img src="~/assets/star1.png" alt="Filled Rating">
+                                        <img src="~/assets/star1.png" alt="Filled Rating">
+                                        <img src="~/assets/star2.png" alt="Empty Rating">
+                                        <div>4</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="payment">
+                            <div class="service-payment">&euro;63</div>
+                        </td>
+
+                        <td>
+                            <span>
+                                <a class="btn rounded-pill secondary-blue-btn text-white" href="#"
+                                    title="Reschedule">Reschedule</a>
+                                <a class="btn rounded-pill btn-orange" href="#"
+                                    title="Cancel">Cancel</a>                                
+                            </span>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td>323436</td>
+
+                        <td>
+                            <div class="table-cell-content">
+                                <div class="table-cell-info-container make-bold">
+                                    <img src="~/assets/calendar2.png"> 09/04/2018
+                                </div>
+                                <div class="table-cell-info-container">
+                                    <img src="~/assets/clock.png"> 12:00 - 18:00
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="table-cell-content d-flex">
+                                <div class="service-provider-left">
+                                    <img src="~/assets/cap.png" alt="Service Provider">
+                                </div>
+                                <div class="service-provider-right">
+                                    <div>Lyum Watson</div>
+
+                                    <div class="service-provider-right-rating">
+                                        <img src="~/assets/star1.png" alt="Filled Rating">
+                                        <img src="~/assets/star1.png" alt="Filled Rating">
+                                        <img src="~/assets/star1.png" alt="Filled Rating">
+                                        <img src="~/assets/star1.png" alt="Filled Rating">
+                                        <img src="~/assets/star2.png" alt="Empty Rating">
+                                        <div>4</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="payment">
+                            <div class="service-payment">&euro;63</div>
+                        </td>
+
+                        <td>
+                            <span>
+                                <a class="btn rounded-pill secondary-blue-btn text-white" href="#"
+                                    title="Reschedule">Reschedule</a>
+                                <a class="btn rounded-pill btn-orange" href="#"
+                                    title="Cancel">Cancel</a>                                
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="pagination-and-filter-wrapper d-sm-flex align-items-center justify-content-between">
+                <div class="filter-wrapper">
+                    <span>Show</span>
+                    <select class="form-control">
+                        <option value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    <span> entries</span>
+                    <span>Total Record : 55</span>
+                </div>
+                <ul>
+                    <li>
+                        <a href="#"><img src="~/assets/first-page.png" alt="First Page"></a>
+                    </li>
+                    <li>
+                        <a href="#"><img src="~/assets/previous.png" alt="Previous Page"></a>
+                    </li>
+                    <li class="active">
+                        <a href="#">1</a>
+                    </li>
+                    <li>
+                        <a href="#">2</a>
+                    </li>
+                    <li>
+                        <a href="#">3</a>
+                    </li>
+                    <li>
+                        <a href="#"><img src="~/assets/previous.png" alt="Previous Page" class="rotate-180"></a>
+                    </li>
+                    <li>
+                        <a href="#"><img src="~/assets/first-page.png" alt="First Page" class="rotate-180"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
