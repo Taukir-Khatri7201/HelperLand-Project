@@ -1,0 +1,785 @@
+﻿@model CombinedViewModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor
+
+@{
+    Layout = "_Layout";
+    ViewBag.SecondaryNav = true;
+    ViewBag.Title = "Settings";
+    var loggedUser = httpContextAccessor.HttpContext.Session.Get<User>("User");
+    if (loggedUser == null) loggedUser = new User();
+    var flag = (loggedUser.DateOfBirth != null);
+    if(loggedUser.DateOfBirth == null) loggedUser.DateOfBirth = new DateTime();
+    var allAddresses = Model.userAddresses;
+}
+
+<section class="logged-user-container">
+    <h1>Welcome, <span>@loggedUser.FirstName</span>!</h1>
+</section>
+
+<section class="dashboard-section">
+    <div class="container-fluid d-lg-flex">
+        @Html.Partial("_LeftNavigation", new { ActiveTab = 0 })
+
+        <div class="right-side-wrapper flex-grow-1">
+            <div class="my-account">
+                <div class="nav nav-tabs nav-justified" id="settings-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="details-tab" title="My Details" data-toggle="tab" href="#myDetails" role="tab" aria-controls="myDetails" aria-selected="true">
+                        <span class="d-none d-md-block">My Details</span>
+                        <span class="d-inline-block d-md-none icon details"></span>
+                    </a>
+                    <a class="nav-item nav-link" id="address-tab" title="My Addresses" data-toggle="tab" href="#myAddresses" role="tab" aria-controls="myAddresses" aria-selected="false">
+                        <span class="d-none d-md-block">My Addresses</span>
+                        <span class="d-inline-block d-md-none icon address"></span>
+                    </a>
+                    <a class="nav-item nav-link" id="password-tab" title="Change Password" data-toggle="tab" href="#changePass" role="tab" aria-controls="changePass" aria-selected="false">
+                        <span class="d-none d-md-block">Change Password</span>
+                        <span class="d-inline-block d-md-none icon password"></span>
+                    </a>
+                </div>
+
+                <div class="tab-content" id="nav-tabContent">
+                    @*MyDetails tab*@
+                    <div class="tab-pane fade show active" id="myDetails" role="tabpanel" aria-labelledby="details-tab">
+                        <div class="d-block d-md-none">
+                            <div class="header-16">My Details</div>
+                            <hr />
+                        </div>
+
+                        <div class="alert alert-success alert-dismissible fade d-none" role="alert">
+                            User details updated successfully.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="alert alert-danger alert-dismissible fade d-none" role="alert">
+                            Something went wrong.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <form>
+                            <div class="row">
+                                <input type="hidden" asp-for="@Model.details.UserId" value="@loggedUser.UserId" />
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="@Model.details.FirstName" class="custom-form-label">First name</label>
+                                    <input type="text" class="form-control" asp-for="@Model.details.FirstName" placeholder="First Name">
+                                    <span asp-validation-for="@Model.details.FirstName" class="validation-text"></span>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="@Model.details.LastName" class="custom-form-label">Last name</label>
+                                    <input type="text" class="form-control" asp-for="@Model.details.LastName" placeholder="Last Name">
+                                    <span asp-validation-for="@Model.details.LastName" class="validation-text"></span>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="@Model.details.Email" class="custom-form-label">E-mail address</label>
+                                    <input type="email" class="form-control" asp-for="@Model.details.Email" placeholder="Email address" disabled>
+                                    <span asp-validation-for="@Model.details.Email" class="validation-text"></span>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="@Model.details.Mobile" class="custom-form-label">Phone number</label>
+                                    <div class="input-group" id="mobilenumber-wrapper">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="number-pref">+49</span>
+                                        </div>
+                                        <input type="text" class="form-control" asp-for="@Model.details.Mobile"
+                                               placeholder="Phone number" aria-describedby="number-pref">
+                                    </div>
+                                    <span asp-validation-for="@Model.details.Mobile" class="validation-text"></span>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="dob-wrapper" class="custom-form-label">Date of Birth</label>
+                                    <div id="dob-wrapper" class="dob-wrapper">
+                                        <div>
+                                            <select class="form-control" id="dobDay">
+                                                <option value="10" selected>10</option>
+                                                <option value="20">20</option>
+                                                <option value="30">30</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <select class="form-control" id="dobMonth">
+                                                <option value="0" selected>January</option>
+                                                <option value="1">February</option>
+                                                <option value="2">March</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <select class="form-control" id="dobYear">
+                                                <option value="2001" selected>2001</option>
+                                                <option value="2002">2002</option>
+                                                <option value="2003">2003</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <hr />
+
+                            <div class="mb-4">
+                                <label asp-for="@Model.details.Language" class="custom-form-label">My Preferred Language</label>
+                                <select asp-for="@Model.details.Language" class="form-control w-auto preferred-language">
+                                    <option value="1" selected>English</option>
+                                    <option value="2">Germen</option>
+                                </select>
+                            </div>
+
+                            <button type="button" class="btn rounded-pill blue-btn-25">Save</button>
+                        </form>
+                    </div>
+
+                    @*MyAddresses tab*@
+                    <div class="tab-pane fade" id="myAddresses" role="tabpanel" aria-labelledby="address-tab">
+                        <div class="d-block d-md-none">
+                            <div class="header-16">My Addresses</div>
+                            <hr />
+                        </div>
+
+                        <div class="alert alert-success alert-dismissible fade d-none" role="alert">
+                            <span class="alert-msg"></span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="alert alert-danger alert-dismissible fade d-none" role="alert">
+                            Something went wrong.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <table class="table table-respnsive-xs mb-4" id="addresses-wrapper">
+                            <thead>
+                                <tr>
+                                    <th class="text-center w-25">
+                                        <a href="#" title="Service Id">
+                                            <span>Invoicing</span>
+                                        </a>
+                                    </th>
+
+                                    <th>
+                                        <a href="#" title="Service date">
+                                            <span>Addresses</span>
+                                        </a>
+                                    </th>
+
+                                    <th class="text-center w-25">
+                                        <a href="#" title="Service Provider">
+                                            <span>Action</span>
+                                        </a>
+                                    </th>
+                                </tr>
+                            </thead>
+
+                            <tbody></tbody>
+                        </table>
+
+                        <div class="address-footer">
+                            <button class="btn rounded-pill blue-btn-25" data-toggle="modal" data-target="#addressModal">Add New Address</button>
+                            <div class="float-right">
+                                <span><span id="currentCnt">5</span> of <span id="totalCnt">14</span></span>
+                                <span><button class="normal-outline-blue-btn outline-grey-btn ml-2">Show More</button></span>
+                            </div>
+                        </div>
+
+                        @*Address Modal*@
+                        <div class="modal fade" id="addressModal" tabindex="-1" role="dialog" aria-labelledby="addressModalTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg mw-600" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body p-25">
+                                        <div class="login-modal-header mb-3">
+                                            <span class="login-modal-header-title">Add New Address</span>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true"><img src="~/assets/close.png" alt="Close" /></span>
+                                            </button>
+                                        </div>
+
+                                        <div class="login-modal-form">
+                                            <form>
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-6">
+                                                        <label asp-for="@Model.address.Street" class="custom-form-label">Street name</label>
+                                                        <input class="form-control" asp-for="@Model.address.Street" placeholder="Street name">
+                                                        <span asp-validation-for="@Model.address.Street" class="validation-text"></span>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label asp-for="@Model.address.HouseNumber" class="custom-form-label">House number</label>
+                                                        <input class="form-control" asp-for="@Model.address.HouseNumber" placeholder="House number">
+                                                        <span asp-validation-for="@Model.address.HouseNumber" class="validation-text"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-6">
+                                                        <label asp-for="@Model.address.PostalCode" class="custom-form-label">Postal code</label>
+                                                        <input class="form-control" asp-for="@Model.address.PostalCode" placeholder="Postal code">
+                                                        <span asp-validation-for="@Model.address.PostalCode" class="validation-text"></span>
+                                                    </div>
+                                                    <div class="form-group col-sm-6">
+                                                        <label asp-for="@Model.address.City" class="custom-form-label">City</label>
+                                                        <input  asp-for="@Model.address.City" class="form-control" placeholder="City">
+                                                        <span asp-validation-for="@Model.address.City" class="validation-text"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-row">
+                                                    <div class="form-group col-sm-6">
+                                                        <label for="mobilenumber-wrapper" class="custom-form-label">Phone number</label>
+                                                        <div class="input-group" id="mobilenumber-wrapper">
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text" id="number-pref">+49</span>
+                                                            </div>
+                                                            <input class="form-control" asp-for="@Model.address.Mobile"
+                                                                   placeholder="Phone number" aria-describedby="number-pref">
+                                                        </div>
+                                                        <span asp-validation-for="@Model.address.Mobile" class="validation-text"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-row btn-wrapper">
+                                                    <button type="button" class="normal-blue-btn w-100">Edit</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @*Warning Modal*@
+                        <div class="modal fade" id="warningModal" tabindex="-1" role="dialog" aria-labelledby="warningModalTitle" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered modal-lg mw-360" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body p-25">
+                                        <div class="login-modal-header mb-3">
+                                            <span class="warning-title">Delete Address</span>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true"><img src="~/assets/close.png" alt="Close" /></span>
+                                            </button>
+                                        </div>
+
+                                        <div class="login-modal-form">
+                                            <div class="form-row mb-2 delete-success">
+                                                Are you sure you want to delete this address?
+                                            </div>
+
+                                            <div class="form-row btn-wrapper delete-success">
+                                                <button type="button" class="btn rounded-pill blue-btn-25">Delete</button>
+                                            </div>
+
+                                            <div class="form-row d-none delete-error validation-text">
+                                                To delete this address kindly change your default address to another address
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*ChangePassword tab*@
+                    <div class="tab-pane fade" id="changePass" role="tabpanel" aria-labelledby="password-tab">
+                        <div class="d-block d-md-none">
+                            <div class="header-16">Change Password</div>
+                            <hr />
+                        </div>
+
+                        <div class="alert alert-success alert-dismissible fade d-none" role="alert">
+                            <span class="alert-msg">Password updated successfully.</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="alert alert-danger alert-dismissible fade d-none" role="alert">
+                            <span class="alert-msg">Something went wrong.</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <form>
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label class="custom-form-label" asp-for="@Model.changePassword.OldPassword">Old Password</label>
+                                    <input type="password" placeholder="Old Password" asp-for="@Model.changePassword.OldPassword" class="form-control" />
+                                    <span asp-validation-for="@Model.changePassword.OldPassword" class="validation-text"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label class="custom-form-label" asp-for="@Model.changePassword.Password">New Password</label>
+                                    <input type="password" placeholder="New Password" asp-for="@Model.changePassword.Password" class="form-control" />
+                                    <span asp-validation-for="@Model.changePassword.Password" class="validation-text"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label class="custom-form-label" asp-for="@Model.changePassword.ConfirmPassword">Confirm Password</label>
+                                    <input type="password" placeholder="Confirm Password" asp-for="@Model.changePassword.ConfirmPassword" class="form-control" />
+                                    <span asp-validation-for="@Model.changePassword.ConfirmPassword" class="validation-text"></span>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn rounded-pill blue-btn-25" title="Save">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+<script>
+    $(document).ready(function() {
+        generateDOBOptions();
+        $('#@Html.IdFor(m => m.details.FirstName)').val('@loggedUser.FirstName');
+        $('#@Html.IdFor(m => m.details.LastName)').val('@loggedUser.LastName');
+        $('#@Html.IdFor(m => m.details.Email)').val('@loggedUser.Email');
+        $('#@Html.IdFor(m => m.details.Mobile)').val('@loggedUser.Mobile');
+        let prefLangStr ='@loggedUser.LanguageId';
+        let prefLang = 1;
+        if(prefLangStr.length > 0) prefLang = parseInt(prefLangStr);
+        $(`#@Html.IdFor(m => m.details.Language) option[value="${prefLang}"]`).prop('selected', true);
+
+        if('@flag' == 'True')
+        {
+            $('#dobDay option[value="@loggedUser.DateOfBirth.Value.Day"]').prop('selected', true);
+            $('#dobMonth option[value="@loggedUser.DateOfBirth.Value.Month"]').prop('selected', true);
+            $('#dobYear option[value="@loggedUser.DateOfBirth.Value.Year"]').prop('selected', true);
+        }
+
+        let allAddressesObj = JSON.parse('@Html.Raw(Json.Serialize(allAddresses))');
+        let totalAddresses = allAddressesObj.length;
+        let allAddressesStr = "";
+        let selectedAddressId = -1;
+        let totalVisible = Math.min(5, totalAddresses);
+        let defaultAddress = -1;
+        let deletingAddress = -1;
+
+        let addressModalModes = {
+            Edit: 1,
+            Add: 2,
+        };
+
+        let currentAddressModalMode = addressModalModes.Edit;
+
+        showFirstFive();
+
+        // Show More clicked
+        $('.address-footer button.outline-grey-btn').on('click', function() {
+            if(totalVisible < totalAddresses) {
+                let prev = totalVisible;
+                totalVisible += 5;
+                totalVisible = Math.min(totalVisible, totalAddresses);
+                $('#currentCnt').text(totalVisible);
+                for(let i=prev;i<totalVisible;i++) {
+                    allAddressesStr += generateAddressElement(i, allAddressesObj[i]);
+                }
+                $('#addresses-wrapper tbody').html(allAddressesStr);
+            }
+        });
+
+        // Edit Address
+        $('body').on('click', '#addresses-wrapper tbody .action-buttons a[id^="Edit_"]', function() {
+            let addressId = parseInt($(this)[0].id.split("_")[1]) - 1;
+            setAddressModalValues(addressId);
+        });
+
+        // Add Address
+        $('body').on('click', '.address-footer button', function() {
+            setAddressModalValues(-1);
+        });
+
+        // AddressModal button clicked
+        $('#addressModal button.normal-blue-btn').on('click', function(e) {
+            e.preventDefault();
+            const ok = $('#addressModal form').valid();
+            if(ok) {
+                if(currentAddressModalMode == addressModalModes.Edit) {
+                    let model = {
+                        AddressId: allAddressesObj[selectedAddressId].addressId,
+                        Street: $('#@Html.IdFor(m => m.address.Street)').val(),
+                        HouseNumber: $('#@Html.IdFor(m => m.address.HouseNumber)').val(),
+                        PostalCode: $('#@Html.IdFor(m => m.address.PostalCode)').val(),
+                        City: $('#@Html.IdFor(m => m.address.City)').val(),
+                        Mobile: $('#@Html.IdFor(m => m.address.Mobile)').val(),
+                    };
+                    
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("EditAddress", "Customer")',
+                        dataType: "json",
+                        data: model,
+                        cache:false,
+                        beforeSend: function() {
+                            $(".loader").removeClass("d-none");
+                        },
+                        success: function(res) {
+                            $(".loader").addClass("d-none");
+                            if(res.Status == true) {
+                                allAddressesObj[selectedAddressId].street = model.Street;
+                                allAddressesObj[selectedAddressId].houseNumber = model.HouseNumber;
+                                allAddressesObj[selectedAddressId].postalCode = model.PostalCode;
+                                allAddressesObj[selectedAddressId].city = model.City;
+                                allAddressesObj[selectedAddressId].mobile = model.Mobile;
+                                showFirstFive();
+                                $('#myAddresses .alert-success .alert-msg').text('Address modified successfully.');
+                                $('#myAddresses .alert-success').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                                $(this).removeClass('show').addClass('d-none');
+                                });
+                            } else {
+                                $('#myAddresses .alert-danger').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                                $(this).removeClass('show').addClass('d-none');
+                                });
+                            }
+                        },
+                        error: function(e) {
+                            $(".loader").addClass("d-none");
+                            console.log("Error: " + e);
+                        },
+                    });
+                } else {
+                    let model = {
+                        Street: $('#@Html.IdFor(m => m.address.Street)').val(),
+                        HouseNumber: $('#@Html.IdFor(m => m.address.HouseNumber)').val(),
+                        PostalCode: $('#@Html.IdFor(m => m.address.PostalCode)').val(),
+                        City: $('#@Html.IdFor(m => m.address.City)').val(),
+                        Mobile: $('#@Html.IdFor(m => m.address.Mobile)').val(),
+                    };
+                    //debugger;
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("AddAddress", "BookService")',
+                        dataType: "json",
+                        data: model,
+                        cache:false,
+                        beforeSend: function() {
+                            $(".loader").removeClass("d-none");
+                        },
+                        success: function(res) {
+                            $(".loader").addClass("d-none");
+                            if(res.Status == true) {
+                                debugger;
+                                var addedAddress = {
+                                    street: model.Street,
+                                    houseNumber: model.HouseNumber,
+                                    postalCode: model.PostalCode,
+                                    city: model.City,
+                                    mobile: model.Mobile,
+                                };
+                                allAddressesObj.unshift(addedAddress);
+                                showFirstFive();
+                                $('#myAddresses .alert-success .alert-msg').text('Address added successfully.');
+                                $('#myAddresses .alert-success').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                                $(this).removeClass('show').addClass('d-none');
+                                });
+                            } else {
+                                $('#myAddresses .alert-danger').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                                $(this).removeClass('show').addClass('d-none');
+                                });
+                            }
+                        },
+                        error: function(e) {
+                            $(".loader").addClass("d-none");
+                            console.log("Error: " + e);
+                        },
+                    });
+                }
+                $('#addressModal').modal('hide');
+            }
+        });
+
+        // My Details Form Handling
+        $('#myDetails button.blue-btn-25').on('click', function(e) {
+            e.preventDefault();
+            var ok = $('#myDetails form').valid();
+
+            if(ok) {
+                let dayVal = parseInt($('#dobDay option:checked').val());
+                let monthVal = parseInt($('#dobMonth option:checked').val());
+                let yearVal = parseInt($('#dobYear option:checked').val());
+
+                var model = {
+                    UserId: parseInt($('#@Html.IdFor(m => m.details.UserId)').val()),
+                    FirstName: $('#@Html.IdFor(m => m.details.FirstName)').val(),
+                    LastName: $('#@Html.IdFor(m => m.details.LastName)').val(),
+                    Mobile: $('#@Html.IdFor(m => m.details.Mobile)').val(),
+                    Day: dayVal,
+                    Month: monthVal,
+                    Year: yearVal,
+                    Language: $('#@Html.IdFor(m => m.details.Language) option:checked').val(),
+                };
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UpdateDetails", "Customer")',
+                    dataType: "json",
+                    data: model,
+                    cache:false,
+                    beforeSend: function() {
+                        $(".loader").removeClass("d-none");
+                    },
+                    success: function(res) {
+                        $(".loader").addClass("d-none");
+                        console.log("Res: ", res);
+                        if(res.Status == true) {
+                            $('.logged-user-container span').text(model.FirstName);
+                            $('.dropdown-header div').text(model.FirstName + " " + model.LastName);
+                            $('#myDetails .alert-success').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                            $(this).removeClass('show').addClass('d-none');
+                            });
+                        } else {
+                            $('#myDetails .alert-danger').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                            $(this).removeClass('show').addClass('d-none');
+                            });
+                        }
+                    },
+                    error: function(e) {
+                        $(".loader").addClass("d-none");
+                        console.log("Error: " + e);
+                    },
+                });
+            }
+        });
+
+        // Default Address change
+        $('tbody').on('change', 'input[id^="Address_"]', function() {
+            defaultAddress = parseInt($(this)[0].id.split("_")[1]) - 1;
+            var model = {
+                AddressId: allAddressesObj[defaultAddress].addressId,
+                IsDefault: true,
+            };
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("UpdateDefaultAddress", "Customer")',
+                dataType: "json",
+                data: model,
+                cache:false,
+                beforeSend: function() {
+                    $(".loader").removeClass("d-none");
+                },
+                success: function(res) {
+                    $(".loader").addClass("d-none");
+                    if(res.Status == true) {
+                        $('#myAddresses .alert-success .alert-msg').text('Default address changed successfully.');
+                        $('#myAddresses .alert-success').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                        $(this).removeClass('show').addClass('d-none');
+                        });
+                    } else {
+                        $('#myAddresses .alert-success .alert-msg').text('Something went wrong.');
+                        $('#myAddresses .alert-danger').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                        $(this).removeClass('show').addClass('d-none');
+                        });
+                    }
+                },
+                error: function(e) {
+                    $(".loader").addClass("d-none");
+                    console.log("Error: " + e);
+                },
+            });
+        });
+
+        // Warning Modal
+        $('body').on('click', '#addresses-wrapper tbody .action-buttons a[id^="Delete_"]', function() {
+            let addressId = parseInt($(this)[0].id.split("_")[1]) - 1;
+            if(addressId == defaultAddress) {
+                $('#warningModal .login-modal-header .warning-title').text("Warning");
+                $('#warningModal .login-modal-form .delete-success').addClass('d-none');
+                $('#warningModal .login-modal-form .delete-error').removeClass('d-none');
+            } else {
+                deletingAddress = addressId;
+                $('#warningModal .login-modal-header .warning-title').text("Delete Address");
+                $('#warningModal .login-modal-form .delete-success').removeClass('d-none');
+                $('#warningModal .login-modal-form .delete-error').addClass('d-none');
+            }
+        });
+        
+        // Delete Address Handling
+        $('#warningModal .login-modal-form .delete-success button').on('click', function() {
+            var model = {
+                AddressId: allAddressesObj[deletingAddress].addressId,
+            }
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("ChangePassword", "Customer")',
+                dataType: "json",
+                data: model,
+                cache:false,
+                beforeSend: function() {
+                    $(".loader").removeClass("d-none");
+                },
+                success: function(res) {
+                    $(".loader").addClass("d-none");
+                    if(res.Status == true) {
+                        allAddressesObj = allAddressesObj.filter(x => x.addressId != deletingAddress);
+                        $('#myAddresses .alert-success .alert-msg').text('Address removed successfully.');
+                        $('#myAddresses .alert-success').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                        $(this).removeClass('show').addClass('d-none');
+                        });
+                        showFirstFive();
+                    } else {
+                        $('#myAddresses .alert-success .alert-msg').text('Something went wrong.');
+                        $('#myAddresses .alert-danger').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                        $(this).removeClass('show').addClass('d-none');
+                        });
+                    }
+                    $('#warningModal').modal('toggle');
+                },
+                error: function(e) {
+                    $(".loader").addClass("d-none");
+                    console.log("Error: " + e);
+                },
+            });
+        });
+
+        // Change password
+        $('#changePass button.blue-btn-25').on('click', function(e) {
+            e.preventDefault();
+            var ok = $('#changePass form').valid();
+            if(ok) {
+                var model = {
+                    OldPassword: $('#@Html.IdFor(m => m.changePassword.OldPassword)').val(),
+                    Password: $('#@Html.IdFor(m => m.changePassword.Password)').val(),
+                    ConfirmPassword: $('#@Html.IdFor(m => m.changePassword.ConfirmPassword)').val(),
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ChangePassword", "Customer")',
+                    dataType: "json",
+                    data: model,
+                    cache:false,
+                    beforeSend: function() {
+                        $(".loader").removeClass("d-none");
+                    },
+                    success: function(res) {
+                        $(".loader").addClass("d-none");
+                        debugger;
+                        if(res.Status == true) {
+                            $('#changePass .alert-success .alert-msg').text(res.Msg);
+                            $('#changePass .alert-success').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                            $(this).removeClass('show').addClass('d-none');
+                            });
+                        } else {
+                            $('#changePass .alert-danger .alert-msg').text(res.Msg);
+                            $('#changePass .alert-danger').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                            $(this).removeClass('show').addClass('d-none');
+                            });
+                        }
+                    },
+                    error: function(e) {
+                        debugger;
+                        $(".loader").addClass("d-none");
+                        console.log("Error: " + e);
+                    },
+                });
+            }
+        });
+
+        // ------------ Utility Functions ------------ //
+        function generateDOBOptions() {
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            let dayElements = "";
+            let monthElements = "";
+            let yearElements = "";
+
+            for(let i=1;i<=100;i++) {
+                if(i==1) {
+                    dayElements += `<option value="${i}" selected>${i}</option>`;
+                    monthElements += `<option value="${i}" selected>${months[i-1]}</option>`;
+                    yearElements += `<option value="${i+1906}" selected>${i+1906}</option>`;
+                } else {
+                    yearElements += `<option value="${i+1906}">${i+1906}</option>`;
+                    if(i <= 31) {
+                        dayElements += `<option value="${i}">${i}</option>`;
+                    }
+                    if(i <= 12) {
+                        monthElements += `<option value="${i}">${months[i-1]}</option>`;
+                    }
+                }
+            }
+            
+            $('#dobDay').html(dayElements);
+            $('#dobMonth').html(monthElements);
+            $('#dobYear').html(yearElements);
+        }
+
+        function generateAddressElement(i, e) {
+            let selectedStr = "";
+            selectedAddressId = i;
+            if(allAddressesObj[i].isDefault) {
+                selectedStr = "checked";
+                defaultAddress = i;
+            }
+            return `<tr>
+                        <td class="service-address-wrapper border-right-0 text-center">
+                            <input type="radio" id="Address_${i+1}" name="userAddress" ${selectedStr}>
+                        </td>
+
+                        <td>
+                            <label for="Address_${i+1}">
+                                <div><b>Address:</b> ${allAddressesObj[i].street} ${allAddressesObj[i].houseNumber}, 
+                                                        ${allAddressesObj[i].city} ${allAddressesObj[i].postalCode}</div>
+                                <div><b>Phone number:</b> ${allAddressesObj[i].mobile}</div>
+                            </label>
+                        </td>
+
+                        <td class="text-center action-buttons">
+                            <a href="" data-dismiss="modal" data-toggle="modal" data-target="#addressModal" title="Edit" id="Edit_${i+1}"><img src="/assets/edit-icon.png" alt="" /></a>
+                            <a href="" data-dismiss="modal" data-toggle="modal" data-target="#warningModal" title="Delete" id="Delete_${i+1}"><img src="/assets/delete-icon.png" alt="" /></a>
+                        </td>
+                   </tr>`;
+        }
+
+        function setAddressModalValues(addressId) {
+            $('#addressModal span.validation-text').each(function() {
+                $(this).text("");
+            });
+
+            selectedAddressId = addressId;
+            if(addressId==-1) {
+                currentAddressModalMode = addressModalModes.Add;
+                $('#addressModal .login-modal-header .login-modal-header-title').text("Add New Address");
+                $('#@Html.IdFor(m => m.address.Street)').val("");
+                $('#@Html.IdFor(m => m.address.HouseNumber)').val("");
+                $('#@Html.IdFor(m => m.address.PostalCode)').val("");
+                $('#@Html.IdFor(m => m.address.City)').val("");
+                $('#@Html.IdFor(m => m.address.Mobile)').val("");
+                $('#addressModal button.normal-blue-btn').text('Add');
+            } else {
+                currentAddressModalMode = addressModalModes.Edit;
+                $('#addressModal .login-modal-header .login-modal-header-title').text("Edit Address");
+                $('#@Html.IdFor(m => m.address.Street)').val(allAddressesObj[addressId].street);
+                $('#@Html.IdFor(m => m.address.HouseNumber)').val(allAddressesObj[addressId].houseNumber);
+                $('#@Html.IdFor(m => m.address.PostalCode)').val(allAddressesObj[addressId].postalCode);
+                $('#@Html.IdFor(m => m.address.City)').val(allAddressesObj[addressId].city);
+                $('#@Html.IdFor(m => m.address.Mobile)').val(allAddressesObj[addressId].mobile);
+                $('#addressModal button.normal-blue-btn').text('Edit');
+            }
+        }
+
+        function showFirstFive() {
+            allAddressesStr = "";
+            totalAddresses = allAddressesObj.length;
+            totalVisible = Math.min(5, totalAddresses);
+            for(let i=0;i<totalVisible;i++) {
+                allAddressesStr += generateAddressElement(i, allAddressesObj[i]);
+            }
+            $('#addresses-wrapper tbody').html(allAddressesStr);
+            $('#currentCnt').text(totalVisible);
+            $('#totalCnt').text(totalAddresses);
+        }
+    });
+</script>
+}

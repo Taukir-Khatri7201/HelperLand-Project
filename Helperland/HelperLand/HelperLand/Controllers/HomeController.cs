@@ -30,7 +30,7 @@ namespace HelperLand.Controllers
         private readonly IEmailSender emailSender;
 
         public HomeController(HelperlandDBContext context, ICustomDataProtector protector, 
-            IWebHostEnvironment env, IHttpContextAccessor contextAccessor, IEmailSender emailSender)
+            IWebHostEnvironment env, IHttpContextAccessor contextAccessor, IEmailSender emailSender) : base(contextAccessor)
         {
             this.context = context;
             this.protector = protector;
@@ -166,15 +166,15 @@ namespace HelperLand.Controllers
                     new Claim(ClaimTypes.Name, username),
                 };
                 string userrole = "";
-                if (user.UserTypeId == 1)
+                if (user.UserTypeId == (int)Roles.Customer)
                 {
-                    userrole = "User";
+                    userrole = "Customer";
                 }
-                else if (user.UserTypeId == 2)
+                else if (user.UserTypeId == (int)Roles.ServiceProvider)
                 {
                     userrole = "ServiceProvider";
                 }
-                else if (user.UserTypeId == 3)
+                else if (user.UserTypeId == (int)Roles.Admin)
                 {
                     userrole = "Admin";
                 }
@@ -199,16 +199,22 @@ namespace HelperLand.Controllers
                 AuthenticationProperties authProperties = new AuthenticationProperties() {
                     IsPersistent = model.LoginModel.RememberMe,
                     ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30),
+                    RedirectUri = Url.Action("Logout"),
                 };
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme,
                                                 new ClaimsPrincipal(claimsIdentity), authProperties);
                 HttpContext.Session.Set<User>("User", user);
+                loggedUser = user;
                 if(returnUrl.Length > 0)
                 {
                     ViewBag.LoginRequired = "";
                     return LocalRedirect(returnUrl);
                 }
-                return RedirectToAction("Index");
+                if(user.UserTypeId == (int)Roles.ServiceProvider)
+                {
+                    return RedirectToAction("NewServiceRequests", "ServiceProvider");
+                }
+                return RedirectToAction("ServiceRequests", "Customer");
             }
             return RedirectToAction("Index");
         }
@@ -220,6 +226,8 @@ namespace HelperLand.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             TempData["SuccessPopUpStatus"] = "Logout";
             HttpContext.Session.Remove("User");
+            loggedUser = new User();
+            HttpContext.Response.Cookies.Delete(".AspNetCore.Cookies");
             return RedirectToAction("Index");
         }
 
@@ -398,8 +406,7 @@ namespace HelperLand.Controllers
 
                 if(User.Identity.IsAuthenticated)
                 {
-                    var loggedinuserdetails = HttpContext.Session.Get<User>("User");
-                    newContact.CreatedBy = loggedinuserdetails.UserId;
+                    newContact.CreatedBy = loggedUser.UserId;
                 }
 
                 context.ContactUs.Add(newContact);
@@ -420,5 +427,10 @@ namespace HelperLand.Controllers
     {
         public string Email { get; set; }
         public string Hash { get; set; }
+    }
+    public enum Roles {
+        Customer = 1,
+        ServiceProvider,
+        Admin,
     }
 }

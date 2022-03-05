@@ -4,6 +4,7 @@ namespace HelperLand.ViewModels
 {
     public class AddressViewModel
     {
+        public int AddressId { get; set; }
         [Required(ErrorMessage = "Enter Street Name")]
         public string Street { get; set; }
         [Required(ErrorMessage = "Enter House Number")]
@@ -15,5 +16,6 @@ namespace HelperLand.ViewModels
         public string City { get; set; }
         [Required(ErrorMessage = "Enter Mobile Number")]
         public string Mobile { get; set; }
+        public bool IsDefault { get; set; }
     }
 }

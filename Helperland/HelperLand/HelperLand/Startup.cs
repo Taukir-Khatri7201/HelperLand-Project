@@ -12,6 +12,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using HelperLand.Utility;
+using HelperLand.Models;
 
 namespace HelperLand
 {
@@ -30,15 +31,32 @@ namespace HelperLand
             services.Configure<CookiePolicyOptions>(options =>
             {
                 options.CheckConsentNeeded = context => false;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
+                options.MinimumSameSitePolicy = SameSiteMode.Strict;
+                options.OnDeleteCookie = context =>
+                {
+                    context.Context.Request.HttpContext.Response.Redirect("/Home/Logout");
+                };
             });
             services.AddSession(options => {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
-                //options.Cookie.MaxAge = TimeSpan.FromSeconds(10);
+                options.Cookie.Name = "SessionCookie";
+                options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
             });
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
-                options.ExpireTimeSpan = TimeSpan.FromMinutes(10);
+                options.Cookie.Name = "AuthenticationCookie";
+                options.Cookie.MaxAge = TimeSpan.FromMinutes(30);
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                options.LoginPath = new PathString("/Home/Index");
+                options.LogoutPath = new PathString("/Home/Logout");
+                options.SlidingExpiration = true;
+                options.AccessDeniedPath = new PathString("/Shared/AccessDenied");
+            });
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "ConfigureApplicationCookie";
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(30);
+                options.Cookie.Name = "ApplicationCookie";
                 options.LoginPath = new PathString("/Home/Index");
                 options.LogoutPath = new PathString("/Home/Logout");
             });

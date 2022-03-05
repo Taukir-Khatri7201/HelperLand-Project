@@ -4,6 +4,8 @@ namespace HelperLand.ViewModels
 {
     public class ChangePasswordViewModel
     {
+        [DataType(DataType.Password)]
+        public string OldPassword { get; set; }
         public string Email { get; set; }
         [Required(ErrorMessage = "Enter Password")]
         [DataType(DataType.Password)]

@@ -18,9 +18,9 @@ namespace HelperLand.Controllers
     {
         private readonly HelperlandDBContext context;
         private readonly IEmailSender emailSender;
-        private User loggedUser;
 
-        public BookServiceController(HelperlandDBContext context, IEmailSender emailSender)
+        public BookServiceController(HelperlandDBContext context, IEmailSender emailSender, IHttpContextAccessor httpContextAccessor) :
+             base(httpContextAccessor)
         {
             this.context = context;
             this.emailSender = emailSender;
@@ -43,7 +43,6 @@ namespace HelperLand.Controllers
         {
             if (ModelState.IsValid)
             {
-                loggedUser = HttpContext.Session.Get<User>("User");
                 var addressRepo = context.UserAddresses
                                     .Where(m => m.UserId == loggedUser.UserId && m.PostalCode == model.Code)
                                     .Select(x => new { 
@@ -66,7 +65,6 @@ namespace HelperLand.Controllers
         {
             if(ModelState.IsValid)
             {
-                loggedUser = HttpContext.Session.Get<User>("User");
                 return Json(new { Status = true }, new System.Text.Json.JsonSerializerOptions()
                 {
                     PropertyNameCaseInsensitive = false
@@ -87,7 +85,6 @@ namespace HelperLand.Controllers
             var startHr = (int)model.startTime;
             var halfHr = (startHr < model.startTime ? 30 : 0);
             var finalDateTime = new DateTime(year, month, day, startHr, halfHr, 0);
-            loggedUser = HttpContext.Session.Get<User>("User");
             ServiceRequest req = new ServiceRequest()
             {
                 CreatedDate = DateTime.Now,
@@ -180,11 +177,10 @@ namespace HelperLand.Controllers
         }
 
         [HttpPost]
-        public bool AddAdress(AddressViewModel model)
+        public IActionResult AddAddress(AddressViewModel model)
         {
             if(ModelState.IsValid)
             {
-                loggedUser = HttpContext.Session.Get<User>("User");
                 UserAddress newAddress = new UserAddress()
                 {
                     AddressLine1 = model.Street,
@@ -204,12 +200,24 @@ namespace HelperLand.Controllers
                                                         m.PostalCode == newAddress.PostalCode && 
                                                         m.Mobile == newAddress.Mobile &&
                                                         m.IsDeleted == false);
-                if (found) return false;
+                if (found)
+                {
+                    return Json(new { Status = false, Msg = "Address already available.", AdditionalMsg = "" }, new System.Text.Json.JsonSerializerOptions()
+                    {
+                        PropertyNameCaseInsensitive = false
+                    });
+                }
                 context.UserAddresses.Add(newAddress);
                 context.SaveChanges();
-                return true;
+                return Json(new { Status = true, Msg = "Done", AdditionalMsg = "" }, new System.Text.Json.JsonSerializerOptions()
+                {
+                    PropertyNameCaseInsensitive = false
+                });
             }
-            return false;
+            return Json(new { Status = true, Msg = "Something went wrong", AdditionalMsg = "" }, new System.Text.Json.JsonSerializerOptions()
+            {
+                PropertyNameCaseInsensitive = false
+            });
         }
     }
 
@@ -219,9 +227,9 @@ namespace HelperLand.Controllers
         Paid,
         Accepted,
         Cancelled,
-        Completed
+        Completed,
+        Refunded,
     }
-
     enum ExtraServices
     {
         Cabinets=1,

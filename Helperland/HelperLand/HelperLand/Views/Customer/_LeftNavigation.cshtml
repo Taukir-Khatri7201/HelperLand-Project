@@ -1,9 +1,9 @@
 ﻿<div class="left-navigation-wrapper">
     <ul>
-        <li class='@(Model.ActiveTab==1 ? "active" : "")'><a href="#" title="Dashboard">Dashboard</a></li>
-        <li class='@(Model.ActiveTab==2 ? "active" : "")'><a href="#" title="Service History">Service History</a></li>
+        <li class='@(Model.ActiveTab==1 ? "active" : "")'><a asp-action="ServiceRequests" asp-controller="Customer" title="Dashboard">Dashboard</a></li>
+        <li class='@(Model.ActiveTab==2 ? "active" : "")'><a asp-action="ServiceHistory" asp-controller="Customer" title="Service History">Service History</a></li>
         <li class='@(Model.ActiveTab==3 ? "active" : "")'><a href="#" title="Service Schedule">Service Schedule</a></li>
-        <li class='@(Model.ActiveTab==4 ? "active" : "")'><a href="#" title="Favourite Pros">Favourite Pros</a></li>
+        <li class='@(Model.ActiveTab==4 ? "active" : "")'><a asp-action="FavouritePros" asp-controller="Customer" title="Favourite Pros">Favourite Pros</a></li>
         <li class='@(Model.ActiveTab==5 ? "active" : "")'><a href="#" title="Invoices">Invoices</a></li>
         <li class='@(Model.ActiveTab==6 ? "active" : "")'><a href="#" title="Notifications">Notifications</a></li>
     </ul>

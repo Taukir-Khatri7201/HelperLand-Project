@@ -291,6 +291,13 @@
                                 Enter your contact details, so we can serve you in better way!
                             </h3>
 
+                            <div class="alert alert-danger alert-dismissible d-none" role="alert" id="addressAlert">
+                                Please Select an address
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+
                             <div id="all-address-wrapper"></div>
 
                             <div class="form-group">
@@ -1117,7 +1124,6 @@
 
             // Save the new address
             $('#new-address-save-btn').on('click', function () {
-                debugger;
                 $('.add-address-wrapper').addClass('d-none');
                 $('#addAddress').removeClass('d-none');
                 var isvalid = 1;
@@ -1137,7 +1143,7 @@
                 if(isvalid != 0) {
                     $.ajax({
                         type: 'POST',
-                        url: '@Url.Action("AddAdress", "BookService")',
+                        url: '@Url.Action("AddAddress", "BookService")',
                         dataType: "json",
                         data: newAddress,
                         cache:false,
@@ -1146,7 +1152,7 @@
                         },
                         success: function(res) {
                             $(".loader").addClass("d-none");
-                            if(res == true) {
+                            if(res.Status == true) {
                                 allAddresses.push(newAddress);
                                 showAllAddress(allAddresses);
                             }
@@ -1175,36 +1181,45 @@
                 var isvalid = _form.valid();
                         
                 var selectedAddress = $('#all-address-wrapper input[type="radio"]:checked');
-                selectedAddressId = parseInt(selectedAddress[0].id.split("_")[1]) - 1;
-                var model = allAddresses[selectedAddressId];
+                if(selectedAddress.length == 0) {
+                    $('#addressAlert').removeClass('d-none');
+                    document.getElementsByClassName("book-service-tab")[0].scrollIntoView({ behavior: "smooth" });
+                    setTimeout(function() {
+                        $('#addressAlert').addClass('d-none');
+                    }, 5000);
+                } else {
+                    selectedAddressId = parseInt(selectedAddress[0].id.split("_")[1]) - 1;
+                    var model = allAddresses[selectedAddressId];
 
-                if(isvalid) {
-                    $.ajax({
-                        type: 'POST',
-                        url: '@Url.Action("ServiceAddress", "BookService")',
-                        dataType: "json",
-                        data: model,
-                        cache:false,
-                        beforeSend: function() {
-                            $(".loader").removeClass("d-none");
-                        },
-                        success: function(res) {
-                            $(".loader").addClass("d-none");
-                            if(res.Status==false) {
-                                @*$('span[data-valmsg-for="@Html.NameFor(m=>m.postalcode.code)"]').text("Postal code you have entered is not valid");
-                                $('span[data-valmsg-for="@Html.NameFor(m=>m.postalcode.code)"]').delay(5000).hide(0);*@
-                            } else {
-                                disableallafter(3);
-                                enableallbefore(3);
-                                $.extend(true, finalModel, {address : model});
-                                console.log(finalModel);
-                            }
-                        },
-                        error: function(e) {
-                            $(".loader").addClass("d-none");
-                            console.log("Error: " + e);
-                        },
-                    });
+                    if(isvalid) {
+                        $('.alert').removeClass('d-block show').addClass('d-none');
+                        $.ajax({
+                            type: 'POST',
+                            url: '@Url.Action("ServiceAddress", "BookService")',
+                            dataType: "json",
+                            data: model,
+                            cache:false,
+                            beforeSend: function() {
+                                $(".loader").removeClass("d-none");
+                            },
+                            success: function(res) {
+                                $(".loader").addClass("d-none");
+                                if(res.Status==false) {
+                                    @*$('span[data-valmsg-for="@Html.NameFor(m=>m.postalcode.code)"]').text("Postal code you have entered is not valid");
+                                    $('span[data-valmsg-for="@Html.NameFor(m=>m.postalcode.code)"]').delay(5000).hide(0);*@
+                                } else {
+                                    disableallafter(3);
+                                    enableallbefore(3);
+                                    $.extend(true, finalModel, {address : model});
+                                    console.log(finalModel);
+                                }
+                            },
+                            error: function(e) {
+                                $(".loader").addClass("d-none");
+                                console.log("Error: " + e);
+                            },
+                        });
+                    }
                 }
             });
 
@@ -1226,7 +1241,7 @@
                             let secondaryMsg = "Service Request Id: " + res.ServiceId;
                             setSuccessMsg(mainMsg, secondaryMsg);
                             $('#SuccessModal button').on('click', function() {
-                                location.href = '@Url.Action("Index", "Home")';
+                                location.href = '@Url.Action("ServiceRequests", "Customer")';
                             });
                         } else {
                             var mainMsg = "Something went wrong!";
