@@ -1,0 +1,457 @@
+﻿@model CombinedViewModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor
+
+@{
+    Layout = "_Layout";
+    ViewBag.SecondaryNav = true;
+    ViewBag.Title = "Settings";
+    var loggedUser = httpContextAccessor.HttpContext.Session.Get<User>("User");
+    if (loggedUser == null) loggedUser = new User();
+    var flag = (loggedUser.DateOfBirth != null);
+    if(loggedUser.DateOfBirth == null) loggedUser.DateOfBirth = new DateTime();
+    if(string.IsNullOrEmpty(loggedUser.UserProfilePicture))
+    {
+        loggedUser.UserProfilePicture = "/assets/avtar-male.png";
+    }
+    if(loggedUser.Gender == null) 
+    {
+        loggedUser.Gender = 1;
+    }
+    var address = Model.userAddresses;
+}
+
+<section class="logged-user-container">
+    <h1>Welcome, <span>@loggedUser.FirstName</span>!</h1>
+</section>
+
+<section class="dashboard-section">
+    <div class="container-fluid d-lg-flex">
+        @Html.Partial("_LeftNavigation", new { ActiveTab = 0 })
+
+        <div class="right-side-wrapper flex-grow-1">
+            <div class="my-account">
+                <div class="nav nav-tabs nav-justified" id="settings-tab" role="tablist">
+                    <a class="nav-item nav-link active" id="details-tab" title="My Details" data-toggle="tab" href="#myDetails" role="tab" aria-controls="myDetails" aria-selected="true">
+                        <span class="d-none d-md-block">My Details</span>
+                        <span class="d-inline-block d-md-none icon details"></span>
+                    </a>
+                    <a class="nav-item nav-link" id="password-tab" title="Change Password" data-toggle="tab" href="#changePass" role="tab" aria-controls="changePass" aria-selected="false">
+                        <span class="d-none d-md-block">Change Password</span>
+                        <span class="d-inline-block d-md-none icon password"></span>
+                    </a>
+                </div>
+
+                <div class="tab-content" id="nav-tabContent">
+                    @*MyDetails tab*@
+                    <div class="tab-pane fade show active" id="myDetails" role="tabpanel" aria-labelledby="details-tab">
+                        <div class="d-block d-md-none">
+                            <div class="header-16">My Details</div>
+                            <hr />
+                        </div>
+
+                        <div class="alert alert-success fade d-none" role="alert">
+                            User details updated successfully.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="alert alert-danger fade d-none" role="alert">
+                            Something went wrong.
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="d-flex">
+                            <div class="header-22 mr-2">Account Status: </div>
+                            @if(loggedUser.Status != 2)
+                            {
+                                <span class="header-22 text-success">Active</span>
+                            }
+                            else
+                            {
+                                <span class="header-22 text-danger">Deactive</span>
+                            }
+                        </div>
+
+                        <div class="d-flex justify-content-between sp-setting-basic-details">
+                            <div class="header-18">Basic Details <hr /></div>
+                            <div>
+                                <img src="@loggedUser.UserProfilePicture" alt="User Profile" class="user-profile-pic" />
+                            </div>
+                        </div>
+
+                        <form>
+                            <div class="row">
+                                <input type="hidden" asp-for="@Model.details.UserId" value="@loggedUser.UserId" />
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="@Model.details.FirstName" class="custom-form-label">First name</label>
+                                    <input type="text" class="form-control" asp-for="@Model.details.FirstName" placeholder="First Name">
+                                    <span asp-validation-for="@Model.details.FirstName" class="validation-text"></span>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="@Model.details.LastName" class="custom-form-label">Last name</label>
+                                    <input type="text" class="form-control" asp-for="@Model.details.LastName" placeholder="Last Name">
+                                    <span asp-validation-for="@Model.details.LastName" class="validation-text"></span>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="@Model.details.Email" class="custom-form-label">E-mail address</label>
+                                    <input type="email" class="form-control" asp-for="@Model.details.Email" placeholder="Email address" disabled>
+                                    <span asp-validation-for="@Model.details.Email" class="validation-text"></span>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="@Model.details.Mobile" class="custom-form-label">Phone number</label>
+                                    <div class="input-group" id="mobilenumber-wrapper">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="number-pref">+49</span>
+                                        </div>
+                                        <input type="text" class="form-control" asp-for="@Model.details.Mobile"
+                                               placeholder="Phone number" aria-describedby="number-pref">
+                                    </div>
+                                    <span asp-validation-for="@Model.details.Mobile" class="validation-text"></span>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label for="dob-wrapper" class="custom-form-label">Date of Birth</label>
+                                    <div id="dob-wrapper" class="dob-wrapper">
+                                        <div>
+                                            <select class="form-control" id="dobDay">
+                                                <option value="10" selected>10</option>
+                                                <option value="20">20</option>
+                                                <option value="30">30</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <select class="form-control" id="dobMonth">
+                                                <option value="0" selected>January</option>
+                                                <option value="1">February</option>
+                                                <option value="2">March</option>
+                                            </select>
+                                        </div>
+
+                                        <div>
+                                            <select class="form-control" id="dobYear">
+                                                <option value="2001" selected>2001</option>
+                                                <option value="2002">2002</option>
+                                                <option value="2003">2003</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="@Model.details.Nationality" class="custom-form-label">Nationality</label>
+                                    <select class="form-control" asp-for="@Model.details.Nationality">
+                                        <option value="1" selected>Germen</option>
+                                        <option value="2">Indian</option>
+                                    </select>
+                                </div>
+
+                                <div class="col-md-4 mb-2">
+                                    <label for="gender-wrapper" class="custom-form-label">Gender</label>
+                                    <div id="gender-wrapper" class="service-address-wrapper">
+                                        <input type="radio" value="1" name="gender" id="male" checked>
+                                        <label for="male">Male</label>
+                                        <input type="radio" value="2" name="gender" id="female">
+                                        <label for="female">Female</label>
+                                        <input type="radio" value="3" name="gender" id="other">
+                                        <label for="other">Rather not to say</label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="header-16">Select avtar</h3>
+                            <div class="col-12 float-left mb-3 pl-0">
+                                <div class="settings-avatar">
+                                    <img src="~/assets/avatar-car.png">
+                                </div>
+
+                                <div class="settings-avatar">
+                                    <img src="~/assets/avatar-female.png">
+                                </div>
+
+                                <div class="settings-avatar">
+                                    <img src="~/assets/avatar-hat.png">
+                                </div>
+
+                                <div class="settings-avatar">
+                                    <img src="~/assets/avatar-iron.png">
+                                </div>
+
+                                <div class="settings-avatar">
+                                    <img src="~/assets/avatar-male.png">
+                                </div>
+
+                                <div class="settings-avatar">
+                                    <img src="~/assets/avatar-ship.png">
+                                </div>
+                            </div>
+
+                            <div class="header-18">My address <hr /></div>
+
+                            <div class="row">
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="@Model.address.Street" class="custom-form-label">First name</label>
+                                    <input type="text" class="form-control" asp-for="@Model.address.Street" placeholder="Street name">
+                                    <span asp-validation-for="@Model.address.Street" class="validation-text"></span>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="@Model.address.HouseNumber" class="custom-form-label">House number</label>
+                                    <input type="text" class="form-control" asp-for="@Model.address.HouseNumber" placeholder="House number">
+                                    <span asp-validation-for="@Model.address.HouseNumber" class="validation-text"></span>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="@Model.address.PostalCode" class="custom-form-label">Postal code</label>
+                                    <input type="text" class="form-control" asp-for="@Model.address.PostalCode" placeholder="Postal code">
+                                    <span asp-validation-for="@Model.address.PostalCode" class="validation-text"></span>
+                                </div>
+
+                                <div class="col-md-4 mb-3">
+                                    <label asp-for="@Model.address.City" class="custom-form-label">City</label>
+                                    <input type="text" class="form-control" asp-for="@Model.address.City" placeholder="City">
+                                    <span asp-validation-for="@Model.address.City" class="validation-text"></span>
+
+                                    <hr class="mb-0" />
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn rounded-pill blue-btn-25">Save</button>
+                        </form>
+                    </div>
+
+                    @*ChangePassword tab*@
+                    <div class="tab-pane fade" id="changePass" role="tabpanel" aria-labelledby="password-tab">
+                        <div class="d-block d-md-none">
+                            <div class="header-16">Change Password</div>
+                            <hr />
+                        </div>
+
+                        <div class="alert alert-success fade d-none" role="alert">
+                            <span class="alert-msg">Password updated successfully.</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <div class="alert alert-danger fade d-none" role="alert">
+                            <span class="alert-msg">Something went wrong.</span>
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <form>
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label class="custom-form-label" asp-for="@Model.changePassword.OldPassword">Old Password</label>
+                                    <input type="password" placeholder="Old Password" asp-for="@Model.changePassword.OldPassword" class="form-control" />
+                                    <span asp-validation-for="@Model.changePassword.OldPassword" class="validation-text"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label class="custom-form-label" asp-for="@Model.changePassword.Password">New Password</label>
+                                    <input type="password" placeholder="New Password" asp-for="@Model.changePassword.Password" class="form-control" />
+                                    <span asp-validation-for="@Model.changePassword.Password" class="validation-text"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-4">
+                                    <label class="custom-form-label" asp-for="@Model.changePassword.ConfirmPassword">Confirm Password</label>
+                                    <input type="password" placeholder="Confirm Password" asp-for="@Model.changePassword.ConfirmPassword" class="form-control" />
+                                    <span asp-validation-for="@Model.changePassword.ConfirmPassword" class="validation-text"></span>
+                                </div>
+                            </div>
+
+                            <button type="button" class="btn rounded-pill blue-btn-25" title="Save">Save</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+<script>
+    $(document).ready(function() {
+        generateDOBOptions();
+        $('#@Html.IdFor(m => m.details.FirstName)').val('@loggedUser.FirstName');
+        $('#@Html.IdFor(m => m.details.LastName)').val('@loggedUser.LastName');
+        $('#@Html.IdFor(m => m.details.Email)').val('@loggedUser.Email');
+        $('#@Html.IdFor(m => m.details.Mobile)').val('@loggedUser.Mobile');
+        $('#@Html.IdFor(m => m.address.Street)').val('@Model.userAddresses[0].Street');
+        $('#@Html.IdFor(m => m.address.HouseNumber)').val('@Model.userAddresses[0].HouseNumber');
+        $('#@Html.IdFor(m => m.address.PostalCode)').val('@Model.userAddresses[0].PostalCode');
+        $('#@Html.IdFor(m => m.address.City)').val('@Model.userAddresses[0].City');
+        $('.settings-avatar img[src="@loggedUser.UserProfilePicture"]').addClass('active');
+        $('#gender-wrapper input[type="radio"][value="@loggedUser.Gender"]').prop("checked", true);
+        let prefNationalityStr = '@loggedUser.NationalityId';
+        let prefNationality = 1;
+        if(prefNationalityStr.length > 0) prefNationality = parseInt(prefNationalityStr); 
+        $(`#@Html.IdFor(m => m.details.Nationality) option[value="${prefNationality}"]`).prop('selected', true);
+
+        if('@flag' == 'True')
+        {
+            $('#dobDay option[value="@loggedUser.DateOfBirth.Value.Day"]').prop('selected', true);
+            $('#dobMonth option[value="@loggedUser.DateOfBirth.Value.Month"]').prop('selected', true);
+            $('#dobYear option[value="@loggedUser.DateOfBirth.Value.Year"]').prop('selected', true);
+        }
+        let selectedAvtar = "@loggedUser.UserProfilePicture";
+        // Avtar change
+        $('.settings-avatar').on('click', function() {
+            $('.settings-avatar img').each(function() {
+                $(this).removeClass('active');
+            });
+            $(this).children('img').addClass('active');
+            selectedAvtar = $(this).children('img').attr('src');
+            $('.user-profile-pic').attr('src', selectedAvtar);
+        });
+
+        let addressesObj = JSON.parse('@Html.Raw(Json.Serialize(address))');
+
+        // My Details Form Handling
+        $('#myDetails button.blue-btn-25').on('click', function(e) {
+            e.preventDefault();
+            var ok = $('#myDetails form').valid();
+
+            if(ok) {
+                let dayVal = parseInt($('#dobDay option:checked').val());
+                let monthVal = parseInt($('#dobMonth option:checked').val());
+                let yearVal = parseInt($('#dobYear option:checked').val());
+                let nationality = parseInt($('#@Html.IdFor(m => m.details.Nationality) option:checked').val());
+                let gender = parseInt($('#gender-wrapper input[type="radio"]:checked').val());
+
+                var addressModel = {
+                    Street: $('#@Html.IdFor(m => m.address.Street)').val(),
+                    HouseNumber: $('#@Html.IdFor(m => m.address.HouseNumber)').val(),
+                    PostalCode: $('#@Html.IdFor(m => m.address.PostalCode)').val(),
+                    City: $('#@Html.IdFor(m => m.address.City)').val(),
+                    Mobile: $('#@Html.IdFor(m => m.details.Mobile)').val(),
+                }
+
+                var model = {
+                    UserId: parseInt('@loggedUser.UserId'),
+                    FirstName: $('#@Html.IdFor(m => m.details.FirstName)').val(),
+                    LastName: $('#@Html.IdFor(m => m.details.LastName)').val(),
+                    Mobile: $('#@Html.IdFor(m => m.details.Mobile)').val(),
+                    Day: dayVal,
+                    Month: monthVal,
+                    Year: yearVal,
+                    Nationality: nationality,
+                    Gender: gender,
+                    UserAvatar: selectedAvtar,
+                    Address: addressModel,
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UpdateDetails", "ServiceProvider")',
+                    dataType: "json",
+                    data: model,
+                    cache:false,
+                    beforeSend: function() {
+                        $(".loader").removeClass("d-none");
+                    },
+                    success: function(res) {
+                        $(".loader").addClass("d-none");
+                        if(res.Status == true) {
+                            $('.logged-user-container span').text(model.FirstName);
+                            $('.dropdown-header div').text(model.FirstName + " " + model.LastName);
+                            $('#myDetails .alert-success').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                            $(this).removeClass('show').addClass('d-none');
+                            });
+                        } else {
+                            $('#myDetails .alert-danger').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                            $(this).removeClass('show').addClass('d-none');
+                            });
+                        }
+                    },
+                    error: function(e) {
+                        $(".loader").addClass("d-none");
+                        console.log("Error: " + e);
+                    },
+                });
+            }
+        });
+
+        // Change password
+        $('#changePass button.blue-btn-25').on('click', function(e) {
+            e.preventDefault();
+            var ok = $('#changePass form').valid();
+            if(ok) {
+                var model = {
+                    OldPassword: $('#@Html.IdFor(m => m.changePassword.OldPassword)').val(),
+                    Password: $('#@Html.IdFor(m => m.changePassword.Password)').val(),
+                    ConfirmPassword: $('#@Html.IdFor(m => m.changePassword.ConfirmPassword)').val(),
+                }
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ChangePassword", "ServiceProvider")',
+                    dataType: "json",
+                    data: model,
+                    cache:false,
+                    beforeSend: function() {
+                        $(".loader").removeClass("d-none");
+                    },
+                    success: function(res) {
+                        $(".loader").addClass("d-none");
+                        if(res.Status == true) {
+                            $('#changePass .alert-success .alert-msg').text(res.Msg);
+                            $('#changePass .alert-success').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                            $(this).removeClass('show').addClass('d-none');
+                            });
+                        } else {
+                            $('#changePass .alert-danger .alert-msg').text(res.Msg);
+                            $('#changePass .alert-danger').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                            $(this).removeClass('show').addClass('d-none');
+                            });
+                        }
+                    },
+                    error: function(e) {
+                        $(".loader").addClass("d-none");
+                        console.log("Error: " + e);
+                    },
+                });
+            }
+        });
+
+        // ------------ Utility Functions ------------ //
+        function generateDOBOptions() {
+            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            let dayElements = "";
+            let monthElements = "";
+            let yearElements = "";
+
+            for(let i=1;i<=100;i++) {
+                if(i==1) {
+                    dayElements += `<option value="${i}" selected>${i}</option>`;
+                    monthElements += `<option value="${i}" selected>${months[i-1]}</option>`;
+                    yearElements += `<option value="${i+1906}" selected>${i+1906}</option>`;
+                } else {
+                    yearElements += `<option value="${i+1906}">${i+1906}</option>`;
+                    if(i <= 31) {
+                        dayElements += `<option value="${i}">${i}</option>`;
+                    }
+                    if(i <= 12) {
+                        monthElements += `<option value="${i}">${months[i-1]}</option>`;
+                    }
+                }
+            }
+            
+            $('#dobDay').html(dayElements);
+            $('#dobMonth').html(monthElements);
+            $('#dobYear').html(yearElements);
+        }
+    });
+</script>
+}

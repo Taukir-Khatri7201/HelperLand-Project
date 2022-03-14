@@ -1,0 +1,377 @@
+﻿@model CombinedViewModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor
+
+@{
+    Layout = "_Layout";
+    ViewBag.SecondaryNav = true;
+    ViewBag.Title = "New Service Requests";
+    var loggedUser = httpContextAccessor.HttpContext.Session.Get<User>("User");
+    if (loggedUser == null) loggedUser = new User();
+    var flag = (loggedUser.DateOfBirth != null);
+    if(loggedUser.DateOfBirth == null) loggedUser.DateOfBirth = new DateTime();
+    var allRequests = Model.serviceRequests.Requests;
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/star-rating.css" />
+}
+
+<section class="logged-user-container">
+    <h1>Welcome, <span>@loggedUser.FirstName!</span></h1>
+</section>
+
+<section class="dashboard-section">
+    <div class="container-fluid d-lg-flex">
+        @Html.Partial("_LeftNavigation", new { ActiveTab = 3 })
+
+        <div class="right-side-wrapper flex-grow-1">
+            <div class="alert alert-success alert-dismissible fade d-none" role="alert">
+                <span class="alert-msg"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="alert alert-danger alert-dismissible fade d-none" role="alert">
+                <span class="alert-msg"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <table class="table" id="requestsTable">
+                <thead>
+                    <tr>
+                        <th><a href="#" title="Service Id">Service Id <img src="~/assets/sort.png"
+                                    alt="Sort"></a></th>
+                        <th><a href="#" title="Service date">Service date <img src="~/assets/sort.png"
+                                    alt="Sort"></a></th>
+                        <th><a href="#" title="Customer Details">Customer Details <img src="~/assets/sort.png"
+                                    alt="Sort"></a></th>
+                        <th><a href="#" title="Payment">Payment <img src="~/assets/sort.png" alt="Sort"></a>
+                        </th>
+                        <th><a href="#" title="Distance">Distance </a>
+                        </th>
+                        <th><a href="#" title="Actions">Actions</a>
+                        </th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+                    @for(var i=0;i<allRequests.Count;i++)
+                    {
+                        <tr data-toggle="modal" data-target="#requestModal" id="request_@i">
+                            <td>@allRequests[i].ServiceId.ToString()</td>
+
+                            <td>
+                                <div class="table-cell-content">
+                                    <div class="table-cell-info-container make-bold">
+                                        <img src="~/assets/calendar2.png"> @allRequests[i].ServiceDate
+                                    </div>
+                                    <div class="table-cell-info-container">
+                                        <img src="~/assets/clock.png">
+                                        <span>
+                                            @allRequests[i].ServiceStartTime -
+                                            @allRequests[i].ServiceEndTime
+                                        </span>
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="table-cell-content">
+                                    <div>@allRequests[i].CustomerName</div>
+                                    <div>
+                                        <img src="~/assets/home1.png"> @allRequests[i].ServiceAddress
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>$@allRequests[i].TotalAmount.ToString()</td>
+
+                            <td>@allRequests[i].Distance km</td>
+
+                            <td>
+                                <button title="Complete" 
+                                    class="btn rounded-pill secondary-blue-btn text-white @(allRequests[i].IsCompleted ? "" : "d-none")" id="completeBtn_@i">Complete</button>
+                                <button title="Cancel" 
+                                    class="btn rounded-pill btn-orange text-white" id="cancelBtn_@i" data-dismiss="modal" data-toggle="modal" data-target="#cancelModal">Cancel</button>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="modal fade" id="requestModal" tabindex="-1" role="dialog" aria-labelledby="requestModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg service-request-modal" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-25">
+                    <div class="login-modal-header modal-title">
+                        Service Details
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><img src="~/assets/close.png" alt="Close" /></span>
+                        </button>
+                    </div>
+                        
+                    <div class="request-details">
+                        <div class="date-time-wrapper"><span id="requestDate"></span> <span id="requestTime"></span></div>
+                        <div><span><b>Duration: </b></span><span id="requestDuration"></span></div>
+
+                        <hr />
+
+                        <div><b>Service Id: </b><span id="requestServiceId"></span></div>
+                        <div><b>Extras: </b><span id="requestExtras"></span></div>
+                        <div><b>Total Payment: </b><span id="requestAmount" class="service-payment"></span></div>
+
+                        <hr />
+
+                        <div><b>Customer Name: </b><span id="requestCustomerName"></span></div>
+                        <div><b>Service Address: </b><span id="requestAddress"></span></div>
+                        <div><b>Distance: </b><span id="requestDistance"></span></div>
+
+                        <hr />
+
+                        <div class="comments-wrapper">
+                            <p><b>Comments</b></p>
+                            <div id="requestComments"></div>
+                            <div id="requestPetInfo"></div>
+                        </div>
+
+                        <hr />
+                    </div>
+
+                    <div class="login-modal-footer text-center text-md-left">
+                        <button class="btn rounded-pill btn-orange text-white" title="Cancel" 
+                                data-dismiss="modal" data-toggle="modal" data-target="#cancelModal">
+                            <img src="~/assets/close-icon-small.png" alt=""/>
+                            <span class="d-none d-md-inline-block">Cancel</span>
+                        </button>
+
+                        <button class="btn rounded-pill secondary-blue-btn text-white" title="Complete" data-dismiss="modal">
+                            <img src="~/assets/accept-button.png" alt="" height="34px"/>
+                            <span class="d-none d-md-inline-block">Complete</span>
+                        </button>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered mw-360" role="document">
+            <div class="modal-content">
+                <div class="modal-body p-25">
+                    <div class="login-modal-header mb-3">
+                        Cancel Service Request
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true"><img src="~/assets/close.png" alt="Close" /></span>
+                        </button>
+                    </div>
+                        
+                    <div class="login-modal-form">
+                        <input type="hidden" asp-for="@Model.cancelRequest.ServiceId" />
+                        <div class="form-group">
+                            <label asp-for="@Model.cancelRequest.Reason" class="form-label">Why you want to cancel the service request?</label>
+                            <textarea class="form-control" asp-for="@Model.cancelRequest.Reason" maxlength="500" rows="3"></textarea>
+                        </div>
+                        <button type="button" class="btn form-submit-btn w-100 mb-0" data-dismiss="modal" disabled>Cancel Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+
+@section Scripts {
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            let commonFilter = {
+                exportOptions: {
+                    columns: "thead th:not(.do-not-export)",
+                    format: {
+                        body: function(data, row, column, node) {
+                            let textData = node.innerText;
+                            if(column===1) {
+                                return textData.substr(0, 11);
+                            }
+                            if(column===2) {
+                                return textData.length===0 ? "" : textData.split('\n')[0]; 
+                            }
+                            if(column===3) {
+                                return textData.replace("$", "");
+                            }
+                            return textData;
+                        }
+                    }
+                }
+            };
+
+            var dataTable = $("#requestsTable").DataTable({
+                searching: false,
+                "bInfo" : false,
+                dom: '<"float-right">t<"text-left"<"text-left"l><"text-left"i>><"text-right"p>',
+                language: {
+                    paginate: {
+                        first:'<img src="/assets/first-page.png" alt="First Page">',
+                        previous: '<img src="/assets/previous.png" alt="Previous Page">' ,
+                        next: '<img src="/assets/previous.png" alt="Next Page" class="rotate-180">',
+                        last: '<img src="/assets/first-page.png" alt="Last Page" class="rotate-180"></a>'
+                    }
+                },
+                columnDefs: [
+                    { 'targets': [4,5], 'orderable': false },
+                ],
+                pagingType: "full_numbers",
+                order: [[ 0, "desc" ]],
+            });
+
+            $('.dataTables_length select').removeClass('custom-select custom-select-sm form-control-sm');
+            $('.dt-buttons button').removeClass('dt-button buttons-excel buttons-html5');
+            $('.dataTables_length label').append(' Total Record : ' + @allRequests.Count);
+            let selectedRequest = -1;
+            let allRequestsObj = JSON.parse('@Html.Raw(Json.Serialize(allRequests))');
+            $('#requestsTable tbody tr').on('click', function() {
+                let id = parseInt($(this)[0].id.split('_').pop());
+                selectedRequest = id;
+                $('#requestDate').text(allRequestsObj[id].serviceDate);
+                $('#requestTime').text(allRequestsObj[id].serviceStartTime + " - " + allRequestsObj[id].serviceEndTime);
+                $('#requestDuration').text(allRequestsObj[id].duration + " Hrs");
+                $('#requestServiceId').text(allRequestsObj[id].serviceId);
+                $('#requestExtras').text(allRequestsObj[id].extraServices);
+                $('#requestAmount').text('$' + allRequestsObj[id].totalAmount);
+                $('#requestCustomerName').text(allRequestsObj[id].customerName);
+                $('#requestAddress').text(allRequestsObj[id].serviceAddress);
+                $('#requestDistance').text(allRequestsObj[id].distance + " km");
+                $('#requestComments').text(allRequestsObj[id].comments==null ? "" : allRequestsObj[id].comments);
+                let pets = allRequestsObj[id].hasPets;
+                if(pets == true) {
+                    $('#requestPetInfo').html('<img src="/assets/success.png" alt="" /> I have pets at home');
+                } else {
+                    $('#requestPetInfo').html('<img src="/assets/not-included.png" alt="" /> I don\'t have pets at home');
+                }
+            });
+
+            $('#requestModal .login-modal-footer .secondary-blue-btn').on('click', function() {
+                requestCompleteHandler();
+            });
+
+            $('button[id^="cancelBtn_"]').on('click', function(e) {
+                e.preventDefault();
+                let id = parseInt($(this)[0].id.split('_').pop());
+                selectedRequest = id;
+                $('#cancelModal').modal("show");
+                e.stopPropagation();
+            });
+
+            $('#cancelModal .form-submit-btn').on('click', function() {
+                requestCancelHandler();
+            });
+
+            $('button[id^="completeBtn_"]').on('click', function(e) {
+                e.preventDefault();
+                let id = parseInt($(this)[0].id.split('_').pop());
+                selectedRequest = id;
+                e.stopPropagation();
+                requestCompleteHandler();
+            });
+
+            $('#@Html.IdFor(m => m.cancelRequest.Reason)').on('input', function() {
+                $('#cancelModal button').attr('disabled', $(this).val() === "" ? true: false);
+            });
+
+            function requestCancelHandler() {
+                var model = {
+                    ServiceProviderId: @loggedUser.UserId,
+                    ServiceId: allRequestsObj[selectedRequest].serviceId,
+                    ServiceRequestId: allRequestsObj[selectedRequest].serviceRequestId,
+                    Reason: $('#@Html.IdFor(m=>m.cancelRequest.Reason)').val(),
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CancelRequest", "ServiceProvider")',
+                    dataType: "json",
+                    data: model,
+                    cache:false,
+                    beforeSend: function() {
+                        $(".loader").removeClass("d-none");
+                    },
+                    success: function(res) {
+                        $(".loader").addClass("d-none");
+                        $('#SuccessModal').modal('show');
+                        $('#success-msg').text(res.Msg);
+                        $("#success-additional-msg").text(res.AdditionalMsg);
+                        if(res.AdditionalMsg != "") {
+                            $("#success-additional-msg").text(res.AdditionalMsg);
+                        }
+                        if(res.Status==false) {
+                            $('.success-modal span').css('background-color', '#e82e2e');
+                            $('#success-msg-img').prop('src', '/assets/close-white.png');
+                        } else {
+                            $('.success-modal span').css('background-color', '#67b644');
+                            $('#success-msg-img').prop('src', '/assets/correct-white-medium.png');
+                            $('#SuccessModal button').on('click', function() {
+                                location.reload(true);
+                            });
+                        }
+                    },
+                    error: function(e) {
+                        $(".loader").addClass("d-none");
+                        console.log("Error: " + e);
+                    },
+                });
+            }
+
+            function requestCompleteHandler() {
+                var model = {
+                    ServiceProviderId: @loggedUser.UserId,
+                    ServiceId: allRequestsObj[selectedRequest].serviceId,
+                    ServiceRequestId: allRequestsObj[selectedRequest].serviceRequestId,
+                    Reason: "nothing",
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CompleteRequest", "ServiceProvider")',
+                    dataType: "json",
+                    data: model,
+                    cache:false,
+                    beforeSend: function() {
+                        $(".loader").removeClass("d-none");
+                    },
+                    success: function(res) {
+                        $(".loader").addClass("d-none");
+                        if(res.Status==true) {
+                            location.reload(true);
+                        } else {
+                            $('.alert-danger .alert-msg').text(res.Msg);
+                            $('.alert-danger').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                            $(this).removeClass('show').addClass('d-none');
+                                location.reload(true);
+                            });
+                        }
+                    },
+                    error: function(e) {
+                        $(".loader").addClass("d-none");
+                        console.log("Error: " + e);
+                    },
+                });
+            }
+       });
+    </script>
+}

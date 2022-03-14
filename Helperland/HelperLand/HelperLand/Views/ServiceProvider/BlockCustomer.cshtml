@@ -1,0 +1,210 @@
+﻿@model CombinedViewModel
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor
+
+@{
+    Layout = "_Layout";
+    ViewBag.SecondaryNav = true;
+    ViewBag.Title = "Service History";
+    var loggedUser = httpContextAccessor.HttpContext.Session.Get<User>("User");
+    if (loggedUser == null) loggedUser = new User();
+    var flag = (loggedUser.DateOfBirth != null);
+    if(loggedUser.DateOfBirth == null) loggedUser.DateOfBirth = new DateTime();
+    var allCustomers = Model.specialUsers;
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/star-rating.css" />
+}
+
+<section class="logged-user-container">
+    <h1>Welcome, <span>@loggedUser.FirstName!</span></h1>
+</section>
+
+<section class="dashboard-section">
+    <div class="container-fluid d-lg-flex">
+        @Html.Partial("_LeftNavigation", new { ActiveTab = 7 })
+
+        <div class="right-side-wrapper flex-grow-1">
+            <div class="alert alert-success alert-dismissible fade d-none" role="alert">
+                <span class="alert-msg"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="alert alert-danger alert-dismissible fade d-none" role="alert">
+                <span class="alert-msg"></span>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <h3 class="header-22 d-block d-md-none">Block Customer</h3>
+
+            <table class="table special-user-table" id="blockCustomerTable">
+                <thead>
+                    <tr class="d-none">
+                        <th>Customer</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for(var i=0;i<allCustomers.Count; i+=3)
+                    {
+                        <tr>
+                            <td class="special-user-wrapper">
+                                <div class="row">
+                                    @for(var j=i;j<allCustomers.Count && j < i+3; j++)
+                                    {
+                                        <div class="col-md-4">
+                                            <div class="special-user">
+                                                <img src="@allCustomers[j].UserAvatar" alt="User Profile">
+                                                <div class="special-user-details">
+                                                    <span class="make-bold">@allCustomers[j].UserName</span>
+                                                </div>
+                                                @if(allCustomers[j].IsBlocked)
+                                                {
+                                                    <a class="btn rounded-pill secondary-blue-btn text-white" title="Unblock" id="unblock_@j">Unblock</a>
+                                                }
+                                                else
+                                                {
+                                                    <a class="btn rounded-pill btn-orange" title="Block" id="block_@j">Block</a>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            let commonFilter = {
+                exportOptions: {
+                    columns: "thead th:not(.do-not-export)",
+                    format: {
+                        body: function(data, row, column, node) {
+                            let textData = node.innerText;
+                            if(column===1) {
+                                return textData.substr(0, 11);
+                            }
+                            if(column===2) {
+                                return textData.length===0 ? "" : textData.split('\n').join(' | '); 
+                            }
+                            return textData;
+                        }
+                    }
+                }
+            };
+
+            var dataTable = $("#blockCustomerTable").DataTable({
+                searching: false,
+                "bInfo" : false,
+                dom: '<"float-right">t<"text-left"<"text-left"l><"text-left"i>><"text-right"p>',
+                language: {
+                    paginate: {
+                        first:'<img src="/assets/first-page.png" alt="First Page">',
+                        previous: '<img src="/assets/previous.png" alt="Previous Page">' ,
+                        next: '<img src="/assets/previous.png" alt="Next Page" class="rotate-180">',
+                        last: '<img src="/assets/first-page.png" alt="Last Page" class="rotate-180"></a>'
+                    }
+                },
+                pagingType: "full_numbers",
+                order: [[ 0, "desc" ]],
+            });
+
+            $('.dataTables_length select').removeClass('custom-select custom-select-sm form-control-sm');
+            $('.dt-buttons button').removeClass('dt-button buttons-excel buttons-html5');
+            $('.dataTables_length label').append(' Total Record : ' + @allCustomers.Count);
+
+            let allCustomersObj = JSON.parse('@Html.Raw(Json.Serialize(allCustomers))');
+
+            $('a[id^="block_"]').on('click', function() {
+                let id = parseInt($(this)[0].id.split('_').pop());
+
+                var model = {
+                    UserId: allCustomersObj[id].userId,
+                    IsBlocked: true,
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("BlockUnblockUser", "ServiceProvider")',
+                    dataType: "json",
+                    data: model,
+                    cache:false,
+                    beforeSend: function() {
+                        $(".loader").removeClass("d-none");
+                    },
+                    success: function(res) {
+                        $(".loader").addClass("d-none");
+                        if(res.Status==true) {
+                            location.reload(true);
+                        } else {
+                            $('.alert-danger .alert-msg').text('Something went wrong.');
+                            $('.alert-danger').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                            $(this).removeClass('show').addClass('d-none');
+                            });
+                        }
+                    },
+                    error: function(e) {
+                        $(".loader").addClass("d-none");
+                        console.log("Error: " + e);
+                    },
+                });
+            });
+
+            $('a[id^="unblock_"]').on('click', function() {
+                let id = parseInt($(this)[0].id.split('_').pop());
+
+                var model = {
+                    UserId: allCustomersObj[id].userId,
+                    IsBlocked: false,
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("BlockUnblockUser", "ServiceProvider")',
+                    dataType: "json",
+                    data: model,
+                    cache:false,
+                    beforeSend: function() {
+                        $(".loader").removeClass("d-none");
+                    },
+                    success: function(res) {
+                        $(".loader").addClass("d-none");
+                        if(res.Status==true) {
+                            location.reload(true);
+                        } else {
+                            $('.alert-danger .alert-msg').text('Something went wrong.');
+                            $('.alert-danger').removeClass('d-none').addClass('show').delay(5000).queue(function() {
+  	                            $(this).removeClass('show').addClass('d-none');
+                            });
+                        }
+                    },
+                    error: function(e) {
+                        $(".loader").addClass("d-none");
+                        console.log("Error: " + e);
+                    },
+                });
+            });
+        });
+    </script>
+}

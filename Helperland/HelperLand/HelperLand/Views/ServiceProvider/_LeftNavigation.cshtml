@@ -1,0 +1,13 @@
+﻿<div class="left-navigation-wrapper">
+    <ul>
+        <li class='@(Model.ActiveTab==1 ? "active" : "")'><a href="#" title="Dashboard">Dashboard</a></li>
+        <li class='@(Model.ActiveTab==2 ? "active" : "")'><a asp-action="NewServiceRequests" asp-controller="ServiceProvider" title="New Service Requests">New Service Requests</a></li>
+        <li class='@(Model.ActiveTab==3 ? "active" : "")'><a asp-action="UpcomingServices" asp-controller="ServiceProvider" title="Upcoming Services">Upcoming Services</a></li>
+        <li class='@(Model.ActiveTab==4 ? "active" : "")'><a href="#" title="Service Schedule">Service Schedule</a></li>
+        <li class='@(Model.ActiveTab==5 ? "active" : "")'><a asp-action="ServiceHistory" asp-controller="ServiceProvider" title="Service History">Service History</a></li>
+        <li class='@(Model.ActiveTab==6 ? "active" : "")'><a asp-action="MyRatings" asp-controller="ServiceProvider" title="My Ratings">My Ratings</a></li>
+        <li class='@(Model.ActiveTab==7 ? "active" : "")'><a asp-action="BlockCustomer" asp-controller="ServiceProvider" title="Block Customer">Block Customer</a></li>
+        <li class='@(Model.ActiveTab==8 ? "active" : "")'><a href="#" title="Invoices">Invoices</a></li>
+        <li class='@(Model.ActiveTab==9 ? "active" : "")'><a href="#" title="Notifications">Notifications</a></li>
+    </ul>
+</div>

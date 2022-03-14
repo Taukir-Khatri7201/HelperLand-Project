@@ -92,5 +92,12 @@ E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\Help
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Customer\ServiceHistory.cshtml.g.cs
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\HelperLand.csproj.AssemblyReference.cache
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Customer\my_settings.cshtml.g.cs
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\ServiceProvider\NewServiceRequests.cshtml.g.cs
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Customer\_LeftNavigation.cshtml.g.cs
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\ServiceProvider\_LeftNavigation.cshtml.g.cs
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\ServiceProvider\UpcomingServices.cshtml.g.cs
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\ServiceProvider\ServiceHistory.cshtml.g.cs
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\ServiceProvider\MyRatings.cshtml.g.cs
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\ServiceProvider\BlockCustomer.cshtml.g.cs
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Customer\FavouritePros.cshtml.g.cs
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\ServiceProvider\my_settings.cshtml.g.cs

@@ -1513,6 +1513,10 @@ li.nav-item.text-center.nav-notification {
     color: #646464;
 }
 
+.right-side-wrapper .right-side-header {
+    color: #646464 !important;
+}
+
 .make-bold {
     font-weight: 700 !important;
 }
@@ -2065,6 +2069,13 @@ li.nav-item.text-center.nav-notification {
 
 .header-16 {
     font-size: 16px !important;
+    color: #646464;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.header-18 {
+    font-size: 18px !important;
     color: #646464;
     font-weight: 700;
     margin-bottom: 10px;
@@ -2822,6 +2833,48 @@ textarea {
 
 .special-user-wrapper .special-user .special-user-details {
     margin-bottom: 20px;
+}
+
+.sp-setting-basic-details {
+    position: relative;
+}
+
+.sp-setting-basic-details .header-18 {
+    width: calc(100% - 100px);
+}
+
+.sp-setting-basic-details img {
+    position: absolute;
+    right: 0;
+    bottom: 10px;
+}
+
+#gender-wrapper {
+    border: none !important;
+    padding: 0;
+    margin-bottom: 0px;
+}
+
+#gender-wrapper label {
+    padding-left: 5px;
+    width: auto;
+    margin-right: 5px;
+}
+
+/* Settings - Avtar */
+.settings-avatar {
+    float: left !important;
+    cursor: pointer !important;
+    padding: 5px !important;
+}
+
+.settings-avatar img {
+    height: 85px;
+    border-radius: 85px;
+}
+
+.settings-avatar img.active {
+    border: 3px solid #1D7A8C;
 }
 
 @media (max-width: 1199px) {
