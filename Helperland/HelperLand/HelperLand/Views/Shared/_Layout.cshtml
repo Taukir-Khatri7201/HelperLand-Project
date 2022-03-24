@@ -13,7 +13,9 @@
     }
     var loggedUser = httpContextAccessor.HttpContext.Session.Get<User>("User");
     if (loggedUser == null) loggedUser = new User();
+    var isAdmin = (ViewBag.Admin != null && ViewBag.Admin == true);
 }
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -32,19 +34,31 @@
 </head>
 
 <body>
-    <div class="body-container">
+    <div class="body-container @(isAdmin ? "admin-wrapper" : "")">
         <header class="banner-part">
             <div class="header-container">
-                <nav class="navbar navbar-dark navbar-expand-lg fixed-top @(ViewBag.SecondaryNav ? "secondary-navbar" : "")" id="navbar">
-                    <a class="navbar-brand" asp-action="index" asp-controller="Home"><img src="~/assets/@(ViewBag.SecondaryNav ? "logo-small.png" : "logo-large.png")" id="brand-img"></a>
-                    
-                    <button class="navbar-toggler" type="button" data-toggle="collapse"
-                        data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+                <nav class="navbar navbar-dark navbar-expand-lg fixed-top 
+                        @(ViewBag.SecondaryNav ? "secondary-navbar" : "") 
+                        @(isAdmin ? "admin-navbar" : "")" id="navbar">
 
-                    @if(User.Identity.IsAuthenticated)
+                    @if(isAdmin) 
+                    {
+                        <span class="fas fa-bars d-block d-xl-none" id="toggler-icon"></span>
+                        <a class="navbar-brand" asp-action="index" asp-contoller="Home">helperland</a>
+                    }
+                    else 
+                    {
+                        <a class="navbar-brand" asp-action="index" asp-controller="Home">
+                                <img src="~/assets/@(ViewBag.SecondaryNav ? "logo-small.png" : "logo-large.png")" id="brand-img">
+                        </a>
+                        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                            data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                            aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
+                    }
+
+                    @if(User.Identity.IsAuthenticated && isAdmin == false)
                     {
                         <div class="d-block d-lg-none mobile-notification">
                             <a class="nav-link" href="#">
@@ -85,167 +99,182 @@
                             </div>
                         </div>
                     }
-
-                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                        <ul class="navbar-nav d-flex align-items-lg-center align-items-end ml-lg-auto">
-                            <li class="nav-item btn-with-outline @(ViewBag.SecondaryNav ? "small-blue-btn" : "")">
-                                <a class="nav-link" asp-action="index" asp-controller="BookService">Book a Cleaner</a>
-                            </li>
-                            <li class="nav-item btn-hover @(ViewBag.Title=="Prices"? "active": "")">
-                                <a class="nav-link" asp-action="prices" asp-controller="Home">Prices</a>
-                            </li>
-                            <li class="nav-item btn-hover">
-                                <a class="nav-link" href="#">Our Guarantee</a>
-                            </li>
-                            <li class="nav-item btn-hover">
-                                <a class="nav-link" href="#">Blog</a>
-                            </li>
-                            <li class="nav-item btn-hover @(ViewBag.Title=="Contact Us" ? "active": "")">
-                                <a class="nav-link" asp-action="contact" asp-controller="Home">Contact</a>
-                            </li>
-                            @if(User.Identity.IsAuthenticated) 
-                            {
-                                <li class="nav-item surround-with-border d-none d-lg-block">
-                                    <a class="nav-link" href="#">
-                                        <img src="~/assets/icon-notification.png">
-                                        <span class="badge badge-pill badge-danger custom-notification">2</span>
-                                    </a>
-                                </li>
-
-                                <li class="nav-item dropdown nav-profile-container d-none d-lg-block">
-                                    <a class="nav-link dropdown-toggle" href="#" id="profile-dropdown" data-toggle="dropdown"
-                                        aria-haspopup="true" aria-expanded="false">
-                                        <div class="d-flex align-items-center">
-                                            <img src="~/assets/user.png" alt="User Profile">
-                                            <img src="~/assets/sp-arrow-down.png" alt="Options">
-                                        </div>
-                                    </a>
-
-                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profile-dropdown">
-                                        <div class="dropdown-header">Welcome, <div>@loggedUser.FirstName @loggedUser.LastName</div>
-                                        </div>
-                                        <div class="dropdown-divider"></div>
-                                        @if(User.IsInRole("Customer"))
-                                        {
-                                            <a class="dropdown-item" asp-action="ServiceRequests" asp-controller="Customer">My Dashboard</a>
-                                            <a class="dropdown-item" asp-action="my_settings" asp-controller="Customer">My Settings</a>
-                                        }
-                                        else if(User.IsInRole("ServiceProvider")) 
-                                        {
-                                            <a class="dropdown-item" href="#">My Dashboard</a>
-                                            <a class="dropdown-item" asp-action="my_settings" asp-controller="ServiceProvider">My Settings</a>
-                                        }
-                                        else
-                                        {
-                                            <a class="dropdown-item" href="#">My Dashboard</a>
-                                            <a class="dropdown-item" href="#">My Settings</a>
-                                        }
-                                        <a class="dropdown-item" asp-action="Logout" asp-controller="Home">Logout</a>
-                                    </div>
-                                </li>
-                            } 
-                            else
-                            {
+                    @if(isAdmin) 
+                    {
+                        <div class="d-flex jutify-content-end align-items-center ml-auto admin-nav-right">
+                            <img src="~/assets/admin-user.png" alt="Admin Profile">
+                            <span class="d-none d-sm-block">@loggedUser.FirstName @loggedUser.LastName</span>
+                            <a asp-action="Logout" asp-controller="Home">
+                                <img src="~/assets/logout.png" alt="Logout" title="Logout">
+                            </a>
+                        </div>
+                    }
+                    else 
+                    {
+                        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                            <ul class="navbar-nav d-flex align-items-lg-center align-items-end ml-lg-auto">
                                 <li class="nav-item btn-with-outline @(ViewBag.SecondaryNav ? "small-blue-btn" : "")">
-                                    <a href="" type="button" class="nav-link" data-toggle="modal" data-target="#loginmodal">Login</a>
+                                    <a class="nav-link" asp-action="index" asp-controller="BookService">Book a Cleaner</a>
                                 </li>
-                                <li class="nav-item btn-with-outline @(ViewBag.SecondaryNav ? "small-blue-btn" : "")">
-                                    <a class="nav-link" asp-action="become_service_provider" asp-controller="Home">Become a Helper</a>
+                                <li class="nav-item btn-hover @(ViewBag.Title=="Prices"? "active": "")">
+                                    <a class="nav-link" asp-action="prices" asp-controller="Home">Prices</a>
                                 </li>
-                            }
-                        </ul>
-                    </div>
+                                <li class="nav-item btn-hover">
+                                    <a class="nav-link" href="#">Our Guarantee</a>
+                                </li>
+                                <li class="nav-item btn-hover">
+                                    <a class="nav-link" href="#">Blog</a>
+                                </li>
+                                <li class="nav-item btn-hover @(ViewBag.Title=="Contact Us" ? "active": "")">
+                                    <a class="nav-link" asp-action="contact" asp-controller="Home">Contact</a>
+                                </li>
+                                @if(User.Identity.IsAuthenticated) 
+                                {
+                                    <li class="nav-item surround-with-border d-none d-lg-block">
+                                        <a class="nav-link" href="#">
+                                            <img src="~/assets/icon-notification.png">
+                                            <span class="badge badge-pill badge-danger custom-notification">2</span>
+                                        </a>
+                                    </li>
+
+                                    <li class="nav-item dropdown nav-profile-container d-none d-lg-block">
+                                        <a class="nav-link dropdown-toggle" href="#" id="profile-dropdown" data-toggle="dropdown"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <div class="d-flex align-items-center">
+                                                <img src="~/assets/user.png" alt="User Profile">
+                                                <img src="~/assets/sp-arrow-down.png" alt="Options">
+                                            </div>
+                                        </a>
+
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="profile-dropdown">
+                                            <div class="dropdown-header">Welcome, <div>@loggedUser.FirstName @loggedUser.LastName</div>
+                                            </div>
+                                            <div class="dropdown-divider"></div>
+                                            @if(User.IsInRole("Customer"))
+                                            {
+                                                <a class="dropdown-item" asp-action="ServiceRequests" asp-controller="Customer">My Dashboard</a>
+                                                <a class="dropdown-item" asp-action="my_settings" asp-controller="Customer">My Settings</a>
+                                            }
+                                            else if(User.IsInRole("ServiceProvider")) 
+                                            {
+                                                <a class="dropdown-item" href="#">My Dashboard</a>
+                                                <a class="dropdown-item" asp-action="my_settings" asp-controller="ServiceProvider">My Settings</a>
+                                            }
+                                            else
+                                            {
+                                                <a class="dropdown-item" href="#">My Dashboard</a>
+                                                <a class="dropdown-item" href="#">My Settings</a>
+                                            }
+                                            <a class="dropdown-item" asp-action="Logout" asp-controller="Home">Logout</a>
+                                        </div>
+                                    </li>
+                                } 
+                                else
+                                {
+                                    <li class="nav-item btn-with-outline @(ViewBag.SecondaryNav ? "small-blue-btn" : "")">
+                                        <a href="" type="button" class="nav-link" data-toggle="modal" data-target="#loginmodal">Login</a>
+                                    </li>
+                                    <li class="nav-item btn-with-outline @(ViewBag.SecondaryNav ? "small-blue-btn" : "")">
+                                        <a class="nav-link" asp-action="become_service_provider" asp-controller="Home">Become a Helper</a>
+                                    </li>
+                                }
+                            </ul>
+                        </div>
+                    }
                 </nav>
             </div>
         </header>
-           
-        <div class="modal fade" id="loginmodal" tabindex="-1" role="dialog" aria-labelledby="loginmodalTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered mw-360" role="document">
-                <div class="modal-content">
-                    <div class="modal-body p-25">
-                        <div class="login-modal-header">
-                            Login to your account
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true"><img src="~/assets/close.png" alt="Close" /></span>
-                            </button>
-                        </div>
+        
+        @if(!User.Identity.IsAuthenticated) 
+        {
+            <div class="modal fade" id="loginmodal" tabindex="-1" role="dialog" aria-labelledby="loginmodalTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered mw-360" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body p-25">
+                            <div class="login-modal-header">
+                                Login to your account
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"><img src="~/assets/close.png" alt="Close" /></span>
+                                </button>
+                            </div>
                         
-                        <div class="login-modal-form">
-                            @if(ViewBag.InvalidCreds != null)
-                            {
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    Invalid Credentials!
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            }
-                            <form asp-action="Login" asp-controller="Home" method="post" asp-route-returnUrl="@returnUrl">
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="Email" asp-for="LoginModel.Email" value="@deserializedUserCreds.Email">
-                                    <span><img class="login-modal-input-image" src="~/assets/user_form.png" /></span>
-                                    <span asp-validation-for="LoginModel.Email" class="validation-text"></span>
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="Password" asp-for="LoginModel.Password" value="@deserializedUserCreds.Password">
-                                    <span asp-validation-for="LoginModel.Password" class="validation-text"></span>
-                                    <img class="login-modal-input-image" src="~/assets/pass_form.png" />
-                                </div>
-                                <div class="blue-form-check">
-                                    <input type="checkbox" class="form-check-input" asp-for="LoginModel.RememberMe">
-                                    <label class="form-check-label" asp-for="LoginModel.RememberMe">Remember me</label>
-                                </div>
-                                <button type="submit" class="btn form-submit-btn">Login</button>
-                            </form>
-                        </div>
+                            <div class="login-modal-form">
+                                @if(ViewBag.InvalidCreds != null)
+                                {
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        Invalid Credentials!
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                }
+                                <form asp-action="Login" asp-controller="Home" method="post" asp-route-returnUrl="@returnUrl">
+                                    <div class="form-group">
+                                        <input class="form-control" placeholder="Email" asp-for="LoginModel.Email" value="@deserializedUserCreds.Email">
+                                        <span><img class="login-modal-input-image" src="~/assets/user_form.png" /></span>
+                                        <span asp-validation-for="LoginModel.Email" class="validation-text"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <input class="form-control" placeholder="Password" asp-for="LoginModel.Password" value="@deserializedUserCreds.Password">
+                                        <span asp-validation-for="LoginModel.Password" class="validation-text"></span>
+                                        <img class="login-modal-input-image" src="~/assets/pass_form.png" />
+                                    </div>
+                                    <div class="blue-form-check">
+                                        <input type="checkbox" class="form-check-input" asp-for="LoginModel.RememberMe">
+                                        <label class="form-check-label" asp-for="LoginModel.RememberMe">Remember me</label>
+                                    </div>
+                                    <button type="submit" class="btn form-submit-btn">Login</button>
+                                </form>
+                            </div>
 
-                        <div class="login-modal-footer text-center">
-                            <div><a href="" class="blue-link" data-dismiss="modal" data-toggle="modal" data-target="#forgotpassmodal">Forgot password?</a></div>
-                            <div>Don't have and account? <a asp-action="userRegistration" asp-controller="Home" class="blue-link">Create an account</a></div>
+                            <div class="login-modal-footer text-center">
+                                <div><a href="" class="blue-link" data-dismiss="modal" data-toggle="modal" data-target="#forgotpassmodal">Forgot password?</a></div>
+                                <div>Don't have and account? <a asp-action="userRegistration" asp-controller="Home" class="blue-link">Create an account</a></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="modal fade" id="forgotpassmodal" tabindex="-1" role="dialog" aria-labelledby="forgotpassTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered mw-360" role="document">
-                <div class="modal-content">
-                    <div class="modal-body p-25">
-                        <div class="login-modal-header">
-                            Forgot Password
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true"><img src="~/assets/close.png" alt="Close" /></span>
-                            </button>
-                        </div>
+            <div class="modal fade" id="forgotpassmodal" tabindex="-1" role="dialog" aria-labelledby="forgotpassTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered mw-360" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body p-25">
+                            <div class="login-modal-header">
+                                Forgot Password
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true"><img src="~/assets/close.png" alt="Close" /></span>
+                                </button>
+                            </div>
                         
-                        <div class="login-modal-form">
-                            @if(ViewBag.InvalidCreds != null)
-                            {
-                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                    Email not found!
-                                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                            }
-                            <form asp-action="ForgotPassword" asp-controller="Home" method="post">
-                                <div class="form-group">
-                                    <input class="form-control" placeholder="Email" asp-for="forgotPassModel.Email">
-                                    <span><img class="login-modal-input-image" src="~/assets/user_form.png" /></span>
-                                    <span asp-validation-for="forgotPassModel.Email" class="validation-text"></span>
-                                </div>
-                                <button type="submit" class="btn form-submit-btn">Reset</button>
-                            </form>
-                        </div>
+                            <div class="login-modal-form">
+                                @if(ViewBag.InvalidCreds != null)
+                                {
+                                    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                        Email not found!
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                }
+                                <form asp-action="ForgotPassword" asp-controller="Home" method="post">
+                                    <div class="form-group">
+                                        <input class="form-control" placeholder="Email" asp-for="forgotPassModel.Email">
+                                        <span><img class="login-modal-input-image" src="~/assets/user_form.png" /></span>
+                                        <span asp-validation-for="forgotPassModel.Email" class="validation-text"></span>
+                                    </div>
+                                    <button type="submit" class="btn form-submit-btn">Reset</button>
+                                </form>
+                            </div>
 
-                        <div class="login-modal-footer text-center">
-                            <div><a href="" class="blue-link" data-dismiss="modal" data-toggle="modal" data-target="#loginmodal">Login now</a></div>
+                            <div class="login-modal-footer text-center">
+                                <div><a href="" class="blue-link" data-dismiss="modal" data-toggle="modal" data-target="#loginmodal">Login now</a></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
 
         <div class="modal fade" id="SuccessModal" tabindex="-1" role="dialog" aria-labelledby="SuccessTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered mw-360" role="document">
@@ -276,56 +305,59 @@
         </main>
     </div>
 
-    <footer>
-        <div class="footer-container">
-            <div class="row justify-content-center align-items-center">
-                <div class="col-lg-2">
-                    <a asp-action="index" asp-controller="Home" title="Helperland"><img src="~/assets/footer-logo.png"
-                            alt="Helperland Logo"></a>
+    @if(isAdmin == false) 
+    {
+        <footer>
+            <div class="footer-container">
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-lg-2">
+                        <a asp-action="index" asp-controller="Home" title="Helperland"><img src="~/assets/footer-logo.png"
+                                alt="Helperland Logo"></a>
+                    </div>
+                    <div class="col-lg-8 text-center">
+                        <ul class="footer-navigation d-sm-flex flex-wrap justify-content-center align-items-center">
+                            <li>
+                                <a asp-action="index" asp-controller="Home" title="Home">Home</a>
+                            </li>
+                            <li>
+                                <a asp-action="about" asp-controller="Home" title="About">About</a>
+                            </li>
+                            <li>
+                                <a href="#" title="Testimonials">Testimonials</a>
+                            </li>
+                            <li>
+                                <a asp-action="faq" asp-controller="Home" title="FAQs">FAQs</a>
+                            </li>
+                            <li>
+                                <a href="#" title="Insurance Policy">Insurance Policy</a>
+                            </li>
+                            <li>
+                                <a href="#" title="Impressum">Impressum</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-lg-2">
+                        <ul class="footer-links d-flex justify-content-end">
+                            <li>
+                                <a href="#" title="Facebook"><img src="~/assets/ic-facebook.png"></a>
+                            </li>
+                            <li>
+                                <a href="#" title="Instagram"><img src="~/assets/ic-instagram.png"></a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <div class="col-lg-8 text-center">
-                    <ul class="footer-navigation d-sm-flex flex-wrap justify-content-center align-items-center">
-                        <li>
-                            <a asp-action="index" asp-controller="Home" title="Home">Home</a>
-                        </li>
-                        <li>
-                            <a asp-action="about" asp-controller="Home" title="About">About</a>
-                        </li>
-                        <li>
-                            <a href="#" title="Testimonials">Testimonials</a>
-                        </li>
-                        <li>
-                            <a asp-action="faq" asp-controller="Home" title="FAQs">FAQs</a>
-                        </li>
-                        <li>
-                            <a href="#" title="Insurance Policy">Insurance Policy</a>
-                        </li>
-                        <li>
-                            <a href="#" title="Impressum">Impressum</a>
-                        </li>
-                    </ul>
-                </div>
-                <div class="col-lg-2">
-                    <ul class="footer-links d-flex justify-content-end">
-                        <li>
-                            <a href="#" title="Facebook"><img src="~/assets/ic-facebook.png"></a>
-                        </li>
-                        <li>
-                            <a href="#" title="Instagram"><img src="~/assets/ic-instagram.png"></a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
 
-            @if(ViewBag.HomePage == null)
-            {
-                <div class="footer-privacy text-center">
-                    ©2021 Helperland. All rights reserved. <a href="#" title="Terms and Conditions">Terms and Conditions</a>
-                    | <a href="#" title="Privacy Policy">Privacy Policy</a>
-                </div>
-            }
-        </div>
-    </footer>
+                @if(ViewBag.HomePage == null)
+                {
+                    <div class="footer-privacy text-center">
+                        ©2021 Helperland. All rights reserved. <a href="#" title="Terms and Conditions">Terms and Conditions</a>
+                        | <a href="#" title="Privacy Policy">Privacy Policy</a>
+                    </div>
+                }
+            </div>
+        </footer>
+    }
 
     @if (ViewBag.HomePage != null)
     {
@@ -353,7 +385,8 @@
     <script src="~/lib/jquery-validation/jquery.validate.js"></script>   
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
     <script src="~/lib/popper.js/umd/popper.js"></script>
-    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+    <script src="~/lib/popper.js/umd/popper-utils.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.js"></script>
     <!-- Bootstrap Scripts -->
     <script src="~/js/custom.js"></script>
     <script>

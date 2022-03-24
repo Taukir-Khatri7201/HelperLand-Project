@@ -17,5 +17,7 @@ namespace HelperLand.ViewModels
         public List<AddressViewModel> userAddresses { get; set; }
         public ChangePasswordViewModel changePassword { get; set; }
         public List<SpecialUserViewModel> specialUsers { get; set; }
+        public AdminRescheduleServiceViewModel adminRescheduleService { get; set; }
+        public List<UserDetailsViewModel> allUsers { get; set; }
     }
 }

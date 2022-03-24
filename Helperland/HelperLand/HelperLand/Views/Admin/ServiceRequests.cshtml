@@ -1,0 +1,722 @@
+﻿@model CombinedViewModel
+@using HelperLand.Controllers
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor
+
+@{
+    Layout = "_Layout";
+    ViewBag.SecondaryNav = true;
+    ViewBag.Admin = true;
+    ViewBag.Title = "Service Requests";
+    var todaysDate = DateTime.Now.AddDays(1).ToString("yyyy-MM-dd");
+    var todaysDateArr = todaysDate.Split('-');
+    Array.Reverse(todaysDateArr);
+    var defaultDate = string.Join("/", todaysDateArr);
+    var loggedUser = httpContextAccessor.HttpContext.Session.Get<User>("User");
+    if (loggedUser == null) loggedUser = new User();
+    var flag = (loggedUser.DateOfBirth != null);
+    if(loggedUser.DateOfBirth == null) loggedUser.DateOfBirth = new DateTime();
+    var allRequests = Model.serviceRequests.Requests;
+    var temp = allRequests;
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/star-rating.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+}
+
+<section class="admin-content">
+    <div class="d-lg-flex">
+        @Html.Partial("_LeftNavigation", new { ActiveTab = 1 })
+
+        <div class="right-side-wrapper admin-right-content admin-service-request flex-grow-1">
+            <div class="d-flex align-items-center justify-content-between">
+                <h2 class="header-22">Service Requests</h2>
+            </div>
+
+            <div class="admin-filter-wrapper">
+                <form>
+                    <div class="form-row justify-content-center">
+                        <div class="col-md col-sm-4 col-6">
+                            <input type="text" class="form-control" id="serviceId" placeholder="Service ID">
+                        </div>
+
+                        <div class="col-md col-sm-4 col-6">
+                            <select class="form-control" id="customer-filter">
+                                <option value="none" disabled selected>Customer</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md col-sm-4 col-6">
+                            <select class="form-control" id="sp-filter">
+                                <option value="none" disabled selected>Service Provider</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md col-sm-4 col-6">
+                            <select class="form-control" id="status-filter">
+                                <option value="none" disabled selected>Status</option>
+                                <option value="All">All</option>
+                                <option value="New">New</option>
+                                <option value="Pending">Pending</option>
+                                <option value="Completed">Completed</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md col-sm-4 col-6">
+                            <input type="date" id="fromDate" class="form-control" placeholder="DD/MM/YYYY">
+                        </div>
+
+                        <div class="col-md col-sm-4 col-6">
+                            <input type="date" id="toDate" class="form-control" placeholder="DD/MM/YYYY">
+                        </div>
+
+                        <div class="col-md col-sm-4 col-6 d-flex justify-content-md-end justify-content-center">
+                            <button type="button" class="form-btn blue-color btn" title="Search" id="search-btn">
+                                Search
+                            </button>
+
+                            <button type="reset" class="form-btn blue-admin-btn clear-btn btn" title="Clear" id="clear-btn">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <table class="table admin-table" style="margin-bottom: 0px !important; width: 100% !important;" id="requestsTable">
+                <thead>
+                    <tr>
+                        <th><a href="#" title="Service Id">Service ID <img src="~/assets/sort.png"
+                                    alt="Sort"></a>
+                        </th>
+                        <th><a href="#" title="Service Date">Service Date <img src="~/assets/sort.png"
+                                    alt="Sort"></a></th>
+                        <th><a href="#" title="Customer Details">Customer Details <img src="~/assets/sort.png"
+                                    alt="Sort"></a></th>
+                        <th><a href="#" title="Service Provider">Service Provider <img src="~/assets/sort.png"
+                                    alt="Sort"></a></th>
+                        <th><a href="#" title="Status">Status <img src="~/assets/sort.png" alt="Sort"></a></th>
+                        <th><a href="#" title="Actions">Actions</a></th>
+                        <th class="d-none">Date</th>
+                        <th class="d-none">Customer</th>
+                        <th class="d-none">Service Provider</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for(int i=0;i<allRequests.Count;i++)
+                    {
+                        <tr>
+                            <td>@allRequests[i].ServiceId</td>
+
+                            <td>
+                                <div class="table-cell-content">
+                                    <div class="table-cell-info-container make-bold">
+                                        <img src="~/assets/calendar2.png"> @allRequests[i].ServiceDate
+                                    </div>
+                                    <div class="table-cell-info-container">
+                                        <img src="~/assets/clock.png"> @allRequests[i].ServiceStartTime - @allRequests[i].ServiceEndTime
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="table-cell-content">
+                                    <div>@allRequests[i].CustomerName</div>
+                                    <div>
+                                        <img src="~/assets/home1.png"> @allRequests[i].ServiceAddress
+                                    </div>
+                                </div>
+                            </td>
+
+                            <td>
+                                @if(allRequests[i].SPName != "") 
+                                {
+                                    <div class="table-cell-content d-flex">
+                                        <div class="service-provider-left">
+                                            <img src="@allRequests[i].SPAvtar" alt="Service Provider">
+                                        </div>
+                                        <div class="service-provider-right">
+                                            <div>@allRequests[i].SPName</div>
+
+                                            <div class="service-provider-right-rating">
+                                        
+                                                @for(var j=1;j<=Math.Round(allRequests[i].SPRating);j++)
+                                                {
+                                                    <img src="~/assets/star1.png" alt="Filled Rating">
+                                                }
+                                                @for(var j=Math.Round(allRequests[i].SPRating)+1;j<=5;j++)
+                                                {
+                                                    <img src="~/assets/star2.png" alt="Empty Rating">
+                                                }
+                                                <div>@allRequests[i].SPRating.ToString("F02")</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                            </td>
+
+                            @switch(allRequests[i].Status)
+                            {
+                                case (int)ServiceRequestStatus.Paid:
+                                    <td>
+                                        <a href="#" title="New" class="btn-sm service-status status-new">New</a>
+                                    </td>
+                                    <td>
+                                        <a href="#" id="userActions_@i" data-toggle="dropdown" class="admin-actions dropdown-toggle"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userActions_@i">
+                                            <a class="dropdown-item" href="#" id="Edit_@i" data-toggle="modal" data-target="#editModal">Edit & Reschedule</a>
+                                            <a class="dropdown-item" href="#" id="HistoryLog_@i">History Log</a>
+                                            <a class="dropdown-item" href="#" id="Invoice_@i">Download Invoice</a>
+                                        </div>
+                                    </td>
+                                    break;
+                                case (int)ServiceRequestStatus.Accepted:
+                                    <td>
+                                        <a href="#" title="Pending" class="btn-sm service-status blue-color">Pending</a>
+                                    </td>
+                                    <td>
+                                        <a href="#" id="userActions_@i" data-toggle="dropdown" class="admin-actions dropdown-toggle"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userActions_@i">
+                                            <a class="dropdown-item" href="#" id="Edit_@i" data-toggle="modal" data-target="#editModal">Edit & Reschedule</a>
+                                            <a class="dropdown-item" href="#" id="Refund_@i">Refund</a>
+                                            <a class="dropdown-item" href="#" id="Cancel_@i">Cancel</a>
+                                            <a class="dropdown-item" href="#" id="ChangeSP_@i">Change SP</a>
+                                            <a class="dropdown-item" href="#" id="Escalte_@i">Escalate</a>
+                                            <a class="dropdown-item" href="#" id="HistoryLog_@i">History Log</a>
+                                            <a class="dropdown-item" href="#" id="Invoice_@i">Download Invoice</a>
+                                        </div>
+                                    </td>
+                                    break;
+                                case (int)ServiceRequestStatus.Completed:
+                                    <td>
+                                        <a href="#" title="Completed" class="btn-sm service-status">Completed</a>
+                                    </td>
+                                    <td>
+                                        <a href="#" id="userActions_@i" data-toggle="dropdown" class="admin-actions dropdown-toggle"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userActions_@i">
+                                            <a class="dropdown-item" href="#" id="Refund_@i">Refund</a>
+                                            <a class="dropdown-item" href="#" id="Escalte_@i">Escalate</a>
+                                            <a class="dropdown-item" href="#" id="HistoryLog_@i">History Log</a>
+                                            <a class="dropdown-item" href="#" id="Invoice_@i">Download Invoice</a>
+                                        </div>
+                                    </td>
+                                    break;
+                                case (int)ServiceRequestStatus.Cancelled:
+                                    <td>
+                                        <a href="#" title="Cancelled" class="btn-sm service-status btn-orange">Cancelled</a>
+                                    </td>
+                                    <td>
+                                        <a href="#" id="userActions_@i" data-toggle="dropdown" class="admin-actions dropdown-toggle"
+                                            aria-haspopup="true" aria-expanded="false">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userActions_@i">
+                                            <a class="dropdown-item" href="#" id="Edit_@i" data-toggle="modal" data-target="#editModal">Edit & Reschedule</a>
+                                            <a class="dropdown-item" href="#" id="Refund_@i">Refund</a>
+                                            <a class="dropdown-item" href="#" id="Escalte_@i">Escalate</a>
+                                            <a class="dropdown-item" href="#" id="HistoryLog_@i">History Log</a>
+                                            <a class="dropdown-item" href="#" id="Invoice_@i">Download Invoice</a>
+                                        </div>
+                                    </td>
+                                    break;
+                            }
+
+                            <td class="d-none">
+                                @{
+                                    var curDate = string.Join('-', allRequests[i].ServiceDate.Split('/').Reverse());
+                                }
+                                @curDate
+                            </td>
+                            <td class="d-none">@allRequests[i].CustomerName</td>
+                            <td class="d-none">@allRequests[i].SPName</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="admin-footer">
+                &copy;2022 Helperland. All rights reserved.
+            </div>
+        </div>
+
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered mw-600" role="document">
+                <div class="modal-content">
+                    <div class="modal-body p-25">
+                        <div class="login-modal-header modal-title mb-3">
+                            Edit Service Request
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"><img src="~/assets/close.png" alt="Close" /></span>
+                            </button>
+                        </div>
+                        
+                        <div class="request-details admin-filter-wrapper">
+                            <form>
+                                <input type="hidden" asp-for="@Model.adminRescheduleService.serviceDetails.ServiceId" />
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.serviceDetails.ServiceStartDate" class="custom-form-label">Date</label>
+                                        <input asp-for="@Model.adminRescheduleService.serviceDetails.ServiceStartDate" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.serviceDetails.ServiceStartDate" class="validation-text"></span>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.serviceDetails.StartTime" class="custom-form-label">Time</label>
+                                        <select asp-for="@Model.adminRescheduleService.serviceDetails.StartTime" class="form-control mb-0">
+                                            <option value="8" selected>8:00</option>
+                                            <option value="8.5">8:30</option>
+                                            <option value="9">9:00</option>
+                                            <option value="9.5">9:30</option>
+                                            <option value="10">10:00</option>
+                                            <option value="10.5">10:30</option>
+                                            <option value="11">11:00</option>
+                                            <option value="11.5">11:30</option>
+                                            <option value="12">12:00</option>
+                                            <option value="12.5">12:30</option>
+                                            <option value="13">13:00</option>
+                                            <option value="13.5">13:30</option>
+                                            <option value="14">14:00</option>
+                                            <option value="14.5">14:30</option>
+                                            <option value="15">15:00</option>
+                                            <option value="15.5">15:30</option>
+                                            <option value="16">16:00</option>
+                                            <option value="16.5">16:30</option>
+                                            <option value="17">17:00</option>
+                                            <option value="17.5">17:30</option>
+                                        </select>
+                                        <span asp-validation-for="@Model.adminRescheduleService.serviceDetails.StartTime" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <h3 class="header-16 mb-1">Service address</h3>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.address.Street">Street</label>
+                                        <input asp-for="@Model.adminRescheduleService.address.Street" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.address.Street" class="validation-text"></span>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.address.HouseNumber">House Number</label>
+                                        <input asp-for="@Model.adminRescheduleService.address.HouseNumber" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.address.HouseNumber" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.address.PostalCode">Postal Code</label>
+                                        <input asp-for="@Model.adminRescheduleService.address.PostalCode" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.address.PostalCode" class="validation-text"></span>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.address.City">City</label>
+                                        <input asp-for="@Model.adminRescheduleService.address.City" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.address.City" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <h3 class="header-16 mb-2">Invoice address</h3>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.invoiceAddress.Street">Street</label>
+                                        <input asp-for="@Model.adminRescheduleService.invoiceAddress.Street" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.invoiceAddress.Street" class="validation-text"></span>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.invoiceAddress.HouseNumber">House Number</label>
+                                        <input asp-for="@Model.adminRescheduleService.invoiceAddress.HouseNumber" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.invoiceAddress.HouseNumber" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.invoiceAddress.PostalCode">Postal Code</label>
+                                        <input asp-for="@Model.adminRescheduleService.invoiceAddress.PostalCode" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.invoiceAddress.PostalCode" class="validation-text"></span>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.invoiceAddress.City">City</label>
+                                        <input asp-for="@Model.adminRescheduleService.invoiceAddress.City" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.invoiceAddress.City" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        <label asp-for="@Model.adminRescheduleService.reason" class="custom-form-label">
+                                            Why do you want to rechedule service request?
+                                        </label>
+                                        <textarea class="form-control" asp-for="@Model.adminRescheduleService.reason" maxlength="500" rows="3"
+                                                placeholder="Why do you want to rechedule service request?"></textarea>
+                                        <span asp-validation-for="@Model.adminRescheduleService.reason" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        <label asp-for="@Model.adminRescheduleService.callCenterNotes" class="custom-form-label">
+                                            Call Center EMP Notes
+                                        </label>
+                                        <textarea class="form-control" asp-for="@Model.adminRescheduleService.callCenterNotes" maxlength="500" rows="2"
+                                                placeholder="Enter Notes"></textarea>
+                                        <span asp-validation-for="@Model.adminRescheduleService.callCenterNotes" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="login-modal-footer text-center text-md-left">
+                                    <button class="btn secondary-blue-btn text-white w-100 blue-color" title="Update" data-dismiss="modal">
+                                        Update
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="cancelModal" tabindex="-1" role="dialog" aria-labelledby="cancelModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered mw-360" role="document">
+                <div class="modal-content">
+                    <div class="modal-body p-25">
+                        <div class="login-modal-header mb-3">
+                            Cancel Service Request
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"><img src="~/assets/close.png" alt="Close" /></span>
+                            </button>
+                        </div>
+                        
+                        <div class="login-modal-form request-details admin-filter-wrapper">
+                            <input type="hidden" asp-for="@Model.cancelRequest.ServiceId" />
+                            <div class="form-group">
+                                <label asp-for="@Model.cancelRequest.Reason" class="form-label">Why you want to cancel the service request?</label>
+                                <textarea class="form-control" asp-for="@Model.cancelRequest.Reason" maxlength="500" rows="3"></textarea>
+                            </div>
+                            <button type="button" class="btn form-submit-btn blue-color w-100 mb-0" data-dismiss="modal" disabled>Cancel Now</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var curDate = new Date().toLocaleDateString().split('/').reverse().join('-');
+            $('#fromDate').val(curDate);
+            $('#toDate').val(curDate);
+
+            let fromDate = new Date($('#fromDate').val());
+            let toDate = new Date($('#toDate').val());
+
+            let commonFilter = {
+                exportOptions: {
+                    columns: "thead th:not(.do-not-export)",
+                    format: {
+                        body: function(data, row, column, node) {
+                            let textData = node.innerText;
+                            if(column===1) {
+                                return textData.substr(0, 11);
+                            }
+                            if(column===2) {
+                                return textData.length===0 ? "" : textData.split('\n')[0]; 
+                            }
+                            if(column===3) {
+                                return textData.replace("$", "");
+                            }
+                            return textData;
+                        }
+                    }
+                }
+            };
+
+            var dataTable = $("#requestsTable").DataTable({
+                "bInfo" : false,
+                dom: 't<"admin-pagination pagination-and-filter-wrapper d-sm-flex align-items-center justify-content-between"<"text-left "l><"text-right"p>>',
+                language: {
+                    emptyTable: "No Data found!",
+                    zeroRecords: "No Data found!",
+                    paginate: {
+                        first:'<img src="/assets/first-page.png" alt="First Page">',
+                        previous: '<img src="/assets/previous.png" alt="Previous Page">' ,
+                        next: '<img src="/assets/previous.png" alt="Next Page" class="rotate-180">',
+                        last: '<img src="/assets/first-page.png" alt="Last Page" class="rotate-180"></a>'
+                    }
+                },
+                columnDefs: [
+                    { 'targets': [5], 'orderable': false },
+                ],
+                pagingType: "full_numbers",
+            });
+
+            $('.dataTables_length select').removeClass('custom-select custom-select-sm form-control-sm');
+            $('.dataTables_length label').append(' Total Record : ' + @allRequests.Count);
+            
+            let allRequestsObj = JSON.parse('@Html.Raw(Json.Serialize(allRequests))');
+            var allUniqueCustomers = [];
+            var customerStr = "<option value='none' disabled selected>Customer</option><option value='All'>All</option>";
+            var allUniqueServiceProviders = [];
+            var spStr = "<option value='none' disabled selected>Service Provider</option><option value='All'>All</option>";
+            $.each(allRequestsObj, function(i, e) {
+                if(e.customerName.length > 0 && !allUniqueCustomers.includes(e.customerName)) {
+                    allUniqueCustomers.push(e.customerName);
+                    customerStr += `<option value="${e.customerName}">${e.customerName}</option>`;
+                }
+                if(e.spName.length > 0 && !allUniqueServiceProviders.includes(e.spName)) {
+                    allUniqueServiceProviders.push(e.spName);
+                    spStr += `<option value="${e.spName}">${e.spName}</option>`;
+                }
+            });
+
+            $('#customer-filter').html(customerStr);
+            $('#sp-filter').html(spStr);
+            
+            function serviceIdFilter() {
+                var serviceId = $('#serviceId').val();
+                if(serviceId !== '') {
+                    dataTable.column(0).search(serviceId).draw();
+                }
+            };
+
+            function statusFilter() {
+                var status = $('#status-filter').children('option:checked').val();
+                if(status !== 'none') {
+                    if(status==='All') {
+                        dataTable.column(4).search('').draw();
+                    } else {
+                        dataTable.column(4).search('^' + status + '$', true, false).draw();
+                    }
+                }
+            };
+
+            function customerFilter() {
+                var customer = $('#customer-filter').children('option:checked').val();
+                if(customer !== 'none') {
+                    if(customer==='All') {
+                        dataTable.column(7).search('').draw();
+                    } else {
+                        dataTable.column(7).search('^' + customer + '$', true, false).draw();
+                    }
+                }
+            };
+
+            function spFilter() {
+                var serviceProvider = $('#sp-filter').children('option:checked').val();
+                if(serviceProvider !== 'none') {
+                    if(serviceProvider==='All') {
+                        dataTable.column(8).search('').draw();
+                    } else {
+                        dataTable.column(8).search('^' + serviceProvider + '$', true, false).draw();
+                    }
+                }
+            };
+
+            function dateFilter() {
+                fromDate = new Date($('#fromDate').val());
+                toDate = new Date($('#toDate').val());
+
+                if(fromDate !== '' && toDate !== '') {
+                    var allDates = dataTable.column(6).data().unique().filter(function(d) {
+                        var date = new Date(d);
+                        if(fromDate <= date && date <= toDate) return d;
+                    });
+                    var allDatesStr = allDates.join('|');
+                    if(allDatesStr.length === 0) allDatesStr = "N/A";
+                    dataTable.columns(6).search(allDatesStr, true, false, true).draw();
+                }
+            };
+
+            $('.admin-filter-wrapper #search-btn').on('click', function() {
+                serviceIdFilter();
+                statusFilter();
+                customerFilter();
+                spFilter();
+                dateFilter();
+            });
+
+            $('.admin-filter-wrapper #clear-btn').on('click', function() {
+                dataTable.columns().search('').draw();
+            });
+
+            $('.right-side-wrapper').on('click', 'a[id^="Edit_"]', function(e) {
+                e.preventDefault();
+                let id = parseInt($(this)[0].id.split('_').pop());
+                $('#@Html.IdFor(m => m.adminRescheduleService.serviceDetails.ServiceId)').val(allRequestsObj[id].serviceId);
+               
+                var dateStr = allRequestsObj[id].serviceDate.split('/').reverse().join('-');
+                var serviceDate = new Date(dateStr).toISOString().split('T')[0];
+                $('#@Html.IdFor(m => m.adminRescheduleService.serviceDetails.ServiceStartDate)').val(serviceDate);
+                $(`#@Html.IdFor(m => m.adminRescheduleService.serviceDetails.StartTime) option[value="${allRequestsObj[id].startTimeFloat}"]`).prop('selected', true);
+
+                $('#@Html.IdFor(m => m.adminRescheduleService.address.Street)').val(allRequestsObj[id].street);
+                $('#@Html.IdFor(m => m.adminRescheduleService.address.HouseNumber)').val(allRequestsObj[id].houseNumber);
+                $('#@Html.IdFor(m => m.adminRescheduleService.address.City)').val(allRequestsObj[id].city);
+                $('#@Html.IdFor(m => m.adminRescheduleService.address.PostalCode)').val(allRequestsObj[id].postalCode);
+
+                $('#@Html.IdFor(m => m.adminRescheduleService.invoiceAddress.Street)').val(allRequestsObj[id].street);
+                $('#@Html.IdFor(m => m.adminRescheduleService.invoiceAddress.HouseNumber)').val(allRequestsObj[id].houseNumber);
+                $('#@Html.IdFor(m => m.adminRescheduleService.invoiceAddress.City)').val(allRequestsObj[id].city);
+                $('#@Html.IdFor(m => m.adminRescheduleService.invoiceAddress.PostalCode)').val(allRequestsObj[id].postalCode);
+                
+                $('#editModal').modal("show");
+                e.stopPropagation();
+            });
+
+            $('.right-side-wrapper').on('click', 'a[id^="Cancel_"]', function(e) {
+                e.preventDefault();
+                let id = parseInt($(this)[0].id.split('_').pop());
+                $('#@Html.IdFor(m => m.cancelRequest.ServiceId)').val(allRequestsObj[id].serviceId);  
+                $('#cancelModal').modal("show");
+                e.stopPropagation();
+            });
+
+            $('#editModal button.secondary-blue-btn').on('click', function() {
+                var ok = $('#editModal .request-details form').valid();
+                if(ok) 
+                {
+                    // parse int remaining
+                    let serviceModal = {
+                        ServiceId: parseInt($('#@Html.IdFor(m => m.adminRescheduleService.serviceDetails.ServiceId)').val()),
+                        ServiceStartDate: new Date($('#@Html.IdFor(m=>m.adminRescheduleService.serviceDetails.ServiceStartDate)').val()).toJSON(),
+                        StartTime: parseFloat($('#@Html.IdFor(m=>m.adminRescheduleService.serviceDetails.StartTime)').val()),
+                    }
+
+                    let addressModal = {
+                        Street: $('#@Html.IdFor(m => m.adminRescheduleService.address.Street)').val(),
+                        HouseNumber: $('#@Html.IdFor(m => m.adminRescheduleService.address.HouseNumber)').val(),
+                        City: $('#@Html.IdFor(m => m.adminRescheduleService.address.City)').val(),
+                        PostalCode: $('#@Html.IdFor(m => m.adminRescheduleService.address.PostalCode)').val(),
+                        Mobile: "NA",
+                    };
+
+                    let invoiceAddressModal = {
+                        Street: $('#@Html.IdFor(m => m.adminRescheduleService.invoiceAddress.Street)').val(),
+                        HouseNumber: $('#@Html.IdFor(m => m.adminRescheduleService.invoiceAddress.HouseNumber)').val(),
+                        City: $('#@Html.IdFor(m => m.adminRescheduleService.invoiceAddress.City)').val(),
+                        PostalCode: $('#@Html.IdFor(m => m.adminRescheduleService.invoiceAddress.PostalCode)').val(),
+                        Mobile: "NA",
+                    };
+
+                    let model = {
+                        serviceDetails: serviceModal,
+                        address: addressModal,
+                        invoiceAddress: invoiceAddressModal,
+                        reason: $('#@Html.IdFor(m => m.adminRescheduleService.reason)').val(),
+                        callCenterNotes: $('#@Html.IdFor(m => m.adminRescheduleService.callCenterNotes)').val(),
+                    };
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '@Url.Action("EditAndReschedule", "Admin")',
+                        dataType: "json",
+                        data: model,
+                        cache:false,
+                        beforeSend: function() {
+                            $(".loader").removeClass("d-none");
+                        },
+                        success: function(res) {
+                            $(".loader").addClass("d-none");
+                            if(res.Status==false) {
+                                setErrorMsg(res.Msg, res.AdditionalMsg);
+                            } else {
+                                setSuccessMsg(res.Msg, res.AdditionalMsg);
+                                $('#SuccessModal button').on('click', function() {
+                                    location.href = '@Url.Action("ServiceRequests", "Admin")';
+                                });
+                            }
+                        },
+                        error: function(e) {
+                            $(".loader").addClass("d-none");
+                            setErrorMsg("Something went wrong!");
+                        },
+                    });
+                }
+
+            });
+
+            $('#cancelModal button.form-submit-btn').on('click', function() {
+                let model = {
+                    ServiceId: parseInt($('#@Html.IdFor(m => m.cancelRequest.ServiceId)').val()),
+                    Reason: $('#@Html.IdFor(m => m.cancelRequest.Reason)').val(),
+                };
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("CancelRequest", "Admin")',
+                    dataType: "json",
+                    data: model,
+                    cache:false,
+                    beforeSend: function() {
+                        $(".loader").removeClass("d-none");
+                    },
+                    success: function(res) {
+                        $(".loader").addClass("d-none");
+                        if(res.Status==false) {
+                            setErrorMsg(res.Msg, res.AdditionalMsg);
+                        } else {
+                            setSuccessMsg(res.Msg, res.AdditionalMsg);
+                            $('#SuccessModal button').on('click', function() {
+                                location.href = '@Url.Action("ServiceRequests", "Admin")';
+                            });
+                        }
+                    },
+                    error: function(e) {
+                        $(".loader").addClass("d-none");
+                        setErrorMsg("Something went wrong!");
+                    },
+                });
+            });
+
+            $('#@Html.IdFor(m => m.cancelRequest.Reason)').on('input', function() {
+                $('#cancelModal button').attr('disabled', $(this).val() === "" ? true: false);
+            });
+
+            function setSuccessMsg(mainmsg, secondarymsg="") {
+                $('#SuccessModal').modal('show');
+                $('.success-modal span').css('background-color', '#67b644');
+                $('#success-msg-img').prop('src', '/assets/correct-white-medium.png');
+                $('#success-msg').text(mainmsg);
+                $("#success-additional-msg").text(secondarymsg);
+            }
+
+            function setErrorMsg(mainmsg, secondarymsg="") {
+                $('#SuccessModal').modal('show');
+                $('.success-modal span').css('background-color', '#e82e2e');
+                $('#success-msg-img').prop('src', '/assets/close-white.png');
+                $('#success-msg').text(mainmsg);
+                $("#success-additional-msg").text(secondarymsg);
+            }
+        });
+    </script>
+}

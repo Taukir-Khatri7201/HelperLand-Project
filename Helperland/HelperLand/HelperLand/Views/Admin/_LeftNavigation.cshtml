@@ -1,0 +1,6 @@
+﻿<div class="admin-left-nav">
+    <ul>
+        <li><a asp-action="ServiceRequests" asp-controller="Admin" class='@(Model.ActiveTab==1 ? "active" : "")'>Service Requests</a></li>
+        <li><a asp-action="UserManagement" asp-controller="Admin" class='@(Model.ActiveTab==2 ? "active" : "")'>User Management</a></li>
+    </ul>
+</div>

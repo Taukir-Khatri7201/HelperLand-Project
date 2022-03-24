@@ -166,13 +166,23 @@ namespace HelperLand.Controllers
                     new Claim(ClaimTypes.Name, username),
                 };
                 string userrole = "";
+                if (user.UserTypeId == (int)Roles.ServiceProvider)
+                {
+                    userrole = "ServiceProvider";
+                    if(user.IsApproved == false)
+                    {
+                        TempData["Error"] = "Your account is not yet approved!";
+                        return RedirectToAction("Index");
+                    }
+                }
+                if(user.IsActive == false)
+                {
+                    TempData["Error"] = "Your account is not active at the moment!";
+                    return RedirectToAction("Index");
+                }
                 if (user.UserTypeId == (int)Roles.Customer)
                 {
                     userrole = "Customer";
-                }
-                else if (user.UserTypeId == (int)Roles.ServiceProvider)
-                {
-                    userrole = "ServiceProvider";
                 }
                 else if (user.UserTypeId == (int)Roles.Admin)
                 {
@@ -213,6 +223,10 @@ namespace HelperLand.Controllers
                 if(user.UserTypeId == (int)Roles.ServiceProvider)
                 {
                     return RedirectToAction("NewServiceRequests", "ServiceProvider");
+                }
+                if(user.UserTypeId == (int)Roles.Admin)
+                {
+                    return RedirectToAction("ServiceRequests", "Admin");
                 }
                 return RedirectToAction("ServiceRequests", "Customer");
             }

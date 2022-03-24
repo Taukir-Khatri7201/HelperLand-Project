@@ -1,0 +1,578 @@
+﻿@model CombinedViewModel
+@using HelperLand.Controllers
+@inject Microsoft.AspNetCore.Http.IHttpContextAccessor httpContextAccessor
+
+@{
+    Layout = "_Layout";
+    ViewBag.SecondaryNav = true;
+    ViewBag.Admin = true;
+    ViewBag.Title = "User Management";
+    
+    var loggedUser = httpContextAccessor.HttpContext.Session.Get<User>("User");
+    if (loggedUser == null) loggedUser = new User();
+    var flag = (loggedUser.DateOfBirth != null);
+    if(loggedUser.DateOfBirth == null) loggedUser.DateOfBirth = new DateTime();
+    var allUsers = Model.allUsers;
+}
+
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.4/css/dataTables.bootstrap4.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/buttons/2.2.2/css/buttons.dataTables.min.css" />
+    <link rel="stylesheet" type="text/css" href="~/css/star-rating.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css"
+        integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+}
+
+<section class="admin-content">
+    <div class="d-lg-flex">
+        @Html.Partial("_LeftNavigation", new { ActiveTab = 2 })
+
+        <div class="right-side-wrapper admin-right-content admin-service-request flex-grow-1">
+            <div class="d-flex align-items-center justify-content-between">
+                <h2 class="header-22">User Management</h2>
+                <a class="btn admin-blue-btn" href="#" title="Add new user">
+                    <img src="~/assets/add.png" alt="Add User">
+                    <span>Add New User</span>
+                </a>
+            </div>
+
+            <div class="admin-filter-wrapper">
+                <form>
+                    <div class="form-row justify-content-start">
+                        <div class="col-md-3 col-sm-4 col-6 mb-3">
+                            <select class="form-control" id="username-filter" title="Username">
+                                <option value="none" disabled selected>Select Username</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2 col-sm-4 col-6 mb-3">
+                            <select class="form-control" id="usertype-filter" title="User type">
+                                <option value="none" disabled selected>User type</option>
+                                <option value="All">All</option>
+                                <option value="Customer">Customer</option>
+                                <option value="Service Provider">Service Provider</option>
+                                <option value="Admin">Admin</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-2 col-sm-4 col-6 mb-3">
+                            <div class="input-group" title="Mobile number">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text" id="number-pref">+49</span>
+                                </div>
+                                <input type="text" class="form-control" id="mobile-filter"
+                                    placeholder="Mobile number" aria-describedby="number-pref">
+                            </div>
+                        </div>
+
+                        <div class="col-md-2 col-sm-4 col-6 mb-3">
+                            <input type="text" class="form-control" id="postalcode-filter" placeholder="Postal Code" title="Postal Code">
+                        </div>
+
+                        <div class="col-md-3 col-sm-4 col-6 mb-3">
+                            <input type="text" class="form-control" id="email-filter" placeholder="Email" title="Email">
+                        </div>
+
+                        <div class="col-md-2 col-sm-4 col-6">
+                            <input type="date" id="fromDate" class="form-control" placeholder="DD/MM/YYYY" title="From Date">
+                        </div>
+
+                        <div class="col-md-2 col-sm-4 col-6">
+                            <input type="date" id="toDate" class="form-control" placeholder="DD/MM/YYYY" title="To Date">
+                        </div>
+
+                        <div class="col-md-2 col-sm-4 col-6 d-flex">
+                            <button type="button" class="form-btn blue-color btn" title="Search" id="search-btn">
+                                Search
+                            </button>
+
+                            <button type="reset" class="form-btn blue-admin-btn clear-btn btn" title="Clear" id="clear-btn">
+                                Clear
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <table class="table admin-table" style="margin-bottom: 0px !important; width: 100% !important;" id="requestsTable">
+                <thead>
+                    <tr>
+                        <th><a href="#" title="User Name">User Name <img src="~/assets/sort.png"
+                                    alt="Sort"></a>
+                        </th>
+                        <th><a href="#" title="Role">Role</a></th>
+                        <th><a href="#" title="Date of Registration">Date of<br />Registration <img src="~/assets/sort.png"
+                                    alt="Sort"></a></th>
+                        <th><a href="#" title="User Type">User Type</a></th>
+                        <th><a href="#" title="Phone">Phone</a></th>
+                        <th><a href="#" title="Status">Status</a></th>
+                        <th><a href="#" title="Action">Action</a></th>
+                        
+                        <th class="d-none">Postal Code</th>
+                        <th class="d-none">Email</th>
+                        <th class="d-none">Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @for(int i=0;i<allUsers.Count;i++)
+                    {
+                        <tr>
+                            <td>@allUsers[i].UserName</td>
+
+                            <td></td>
+
+                            <td>
+                                <div class="table-cell-info-container make-bold">
+                                    <img src="~/assets/calendar2.png"> @allUsers[i].RegistrationDate
+                                </div>
+                            </td>
+
+
+                            <td>
+                                @switch(allUsers[i].UserType)
+                                {
+                                    case (int)Roles.Customer: <span>Customer</span>
+                                                              break;
+                                    case (int)Roles.ServiceProvider: <span>Service Provider</span>
+                                                                     break;
+                                    case (int)Roles.Admin: <span>Admin</span>
+                                                           break;
+                                }
+                            </td>
+
+                            <td>@allUsers[i].Mobile</td>
+
+                            @if(allUsers[i].UserType != (int)Roles.Admin)
+                            {
+                                @switch(allUsers[i].Status)
+                                {
+                                    case (int)UserStatus.Active:
+                                        <td>
+                                            <button title="Active" class="btn-sm service-status">Active</button>
+                                        </td>
+                                        <td>
+                                            <a href="#" class="admin-actions dropdown-toggle" id="useractions_@i"
+                                                                             data-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="useractions_@i">
+                                                <a class="dropdown-item" href="#" id="Deactivate_@i">Deactivate</a>
+                                                <a class="dropdown-item" href="#" id="Delete_@i">Delete</a>
+                                            </div>
+                                        </td>
+                                        break;
+
+                                    case (int)UserStatus.Inactive:
+                                        <td>
+                                            <button title="Inactive" class="btn-sm service-status btn-orange">Inactive</button>
+                                        </td>
+                                        <td>
+                                            <a href="#" class="admin-actions dropdown-toggle" id="useractions_@i"
+                                                                             data-toggle="dropdown">
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </a>
+                                            <div class="dropdown-menu dropdown-menu-right" aria-labelledby="useractions_@i">
+                                                <a class="dropdown-item" href="#" id="Activate_@i">Activate</a>
+                                                <a class="dropdown-item" href="#" id="Delete_@i">Delete</a>
+                                            </div>
+                                        </td>
+                                        break;
+
+                                    case (int)UserStatus.NeedsApproval:
+                                    <td>
+                                        <button title="Inactive" class="btn-sm service-status blue-color">Needs Approval</button>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="admin-actions dropdown-toggle" id="useractions_@i"
+                                                                         data-toggle="dropdown">
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="useractions_@i">
+                                            <a class="dropdown-item" href="#" id="Approve_@i">Approve</a>
+                                            <a class="dropdown-item" href="#" id="Delete_@i">Delete</a>
+                                        </div>
+                                    </td>
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                <td></td>
+                                <td></td>
+                            }
+
+                            <td class="d-none">@allUsers[i].PostalCode</td>
+                            <td class="d-none">@allUsers[i].Email</td>
+                            <td class="d-none">
+                                @{
+                                    var curDate = string.Join('-', allUsers[i].RegistrationDate.Split('/').Reverse());
+                                }
+                                @curDate
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <div class="admin-footer">
+                &copy;2022 Helperland. All rights reserved.
+            </div>
+        </div>
+
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered mw-600" role="document">
+                <div class="modal-content">
+                    <div class="modal-body p-25">
+                        <div class="login-modal-header modal-title mb-3">
+                            Edit Service Request
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true"><img src="~/assets/close.png" alt="Close" /></span>
+                            </button>
+                        </div>
+                        
+                        <div class="request-details admin-filter-wrapper">
+                            <form>
+                                <input type="hidden" asp-for="@Model.adminRescheduleService.serviceDetails.ServiceId" />
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.serviceDetails.ServiceStartDate" class="custom-form-label">Date</label>
+                                        <input asp-for="@Model.adminRescheduleService.serviceDetails.ServiceStartDate" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.serviceDetails.ServiceStartDate" class="validation-text"></span>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.serviceDetails.StartTime" class="custom-form-label">Time</label>
+                                        <select asp-for="@Model.adminRescheduleService.serviceDetails.StartTime" class="form-control mb-0">
+                                            <option value="8" selected>8:00</option>
+                                            <option value="8.5">8:30</option>
+                                            <option value="9">9:00</option>
+                                            <option value="9.5">9:30</option>
+                                            <option value="10">10:00</option>
+                                            <option value="10.5">10:30</option>
+                                            <option value="11">11:00</option>
+                                            <option value="11.5">11:30</option>
+                                            <option value="12">12:00</option>
+                                            <option value="12.5">12:30</option>
+                                            <option value="13">13:00</option>
+                                            <option value="13.5">13:30</option>
+                                            <option value="14">14:00</option>
+                                            <option value="14.5">14:30</option>
+                                            <option value="15">15:00</option>
+                                            <option value="15.5">15:30</option>
+                                            <option value="16">16:00</option>
+                                            <option value="16.5">16:30</option>
+                                            <option value="17">17:00</option>
+                                            <option value="17.5">17:30</option>
+                                        </select>
+                                        <span asp-validation-for="@Model.adminRescheduleService.serviceDetails.StartTime" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <h3 class="header-16 mb-1">Service address</h3>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.address.Street">Street</label>
+                                        <input asp-for="@Model.adminRescheduleService.address.Street" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.address.Street" class="validation-text"></span>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.address.HouseNumber">House Number</label>
+                                        <input asp-for="@Model.adminRescheduleService.address.HouseNumber" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.address.HouseNumber" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.address.PostalCode">Postal Code</label>
+                                        <input asp-for="@Model.adminRescheduleService.address.PostalCode" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.address.PostalCode" class="validation-text"></span>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.address.City">City</label>
+                                        <input asp-for="@Model.adminRescheduleService.address.City" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.address.City" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <h3 class="header-16 mb-2">Invoice address</h3>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.invoiceAddress.Street">Street</label>
+                                        <input asp-for="@Model.adminRescheduleService.invoiceAddress.Street" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.invoiceAddress.Street" class="validation-text"></span>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.invoiceAddress.HouseNumber">House Number</label>
+                                        <input asp-for="@Model.adminRescheduleService.invoiceAddress.HouseNumber" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.invoiceAddress.HouseNumber" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.invoiceAddress.PostalCode">Postal Code</label>
+                                        <input asp-for="@Model.adminRescheduleService.invoiceAddress.PostalCode" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.invoiceAddress.PostalCode" class="validation-text"></span>
+                                    </div>
+
+                                    <div class="col-sm-6">
+                                        <label asp-for="@Model.adminRescheduleService.invoiceAddress.City">City</label>
+                                        <input asp-for="@Model.adminRescheduleService.invoiceAddress.City" class="form-control" />
+                                        <span asp-validation-for="@Model.adminRescheduleService.invoiceAddress.City" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        <label asp-for="@Model.adminRescheduleService.reason" class="custom-form-label">
+                                            Why do you want to rechedule service request?
+                                        </label>
+                                        <textarea class="form-control" asp-for="@Model.adminRescheduleService.reason" maxlength="500" rows="3"
+                                                placeholder="Why do you want to rechedule service request?"></textarea>
+                                        <span asp-validation-for="@Model.adminRescheduleService.reason" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <div class="col-12">
+                                        <label asp-for="@Model.adminRescheduleService.callCenterNotes" class="custom-form-label">
+                                            Call Center EMP Notes
+                                        </label>
+                                        <textarea class="form-control" asp-for="@Model.adminRescheduleService.callCenterNotes" maxlength="500" rows="2"
+                                                placeholder="Enter Notes"></textarea>
+                                        <span asp-validation-for="@Model.adminRescheduleService.callCenterNotes" class="validation-text"></span>
+                                    </div>
+                                </div>
+
+                                <div class="login-modal-footer text-center text-md-left">
+                                    <button class="btn secondary-blue-btn text-white w-100 blue-color" title="Update" data-dismiss="modal">
+                                        Update
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.11.4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/buttons/2.2.2/js/buttons.html5.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var curDate = new Date().toLocaleDateString().split('/').reverse().join('-');
+            $('#fromDate').val(curDate);
+            $('#toDate').val(curDate);
+
+            let fromDate = new Date($('#fromDate').val());
+            let toDate = new Date($('#toDate').val());
+
+            let commonFilter = {
+                exportOptions: {
+                    columns: "thead th:not(.do-not-export)",
+                    format: {
+                        body: function(data, row, column, node) {
+                            let textData = node.innerText;
+                            if(column===1) {
+                                return textData.substr(0, 11);
+                            }
+                            if(column===2) {
+                                return textData.length===0 ? "" : textData.split('\n')[0]; 
+                            }
+                            if(column===3) {
+                                return textData.replace("$", "");
+                            }
+                            return textData;
+                        }
+                    }
+                }
+            };
+
+            var dataTable = $("#requestsTable").DataTable({
+                bInfo: false,
+                dom: 't<"admin-pagination pagination-and-filter-wrapper d-sm-flex align-items-center justify-content-between"<"d-flex align-items-center "li><"text-right"p>>',
+                language: {
+                    emptyTable: "No Data found!",
+                    zeroRecords: "No Data found!",
+                    paginate: {
+                        first:'<img src="/assets/first-page.png" alt="First Page">',
+                        previous: '<img src="/assets/previous.png" alt="Previous Page">' ,
+                        next: '<img src="/assets/previous.png" alt="Next Page" class="rotate-180">',
+                        last: '<img src="/assets/first-page.png" alt="Last Page" class="rotate-180"></a>'
+                    },
+                },
+                columnDefs: [
+                    { 'targets': [1,3,4,5,6], 'orderable': false },
+                    { 'targets': [7,8], 'visible': false },
+                ],
+                pagingType: "full_numbers",
+            });
+
+            $('.dataTables_length select').removeClass('custom-select custom-select-sm form-control-sm');
+            $('.dataTables_length label').append(' Total Record : ' + @allUsers.Count);
+            
+            let allUsersObj = JSON.parse('@Html.Raw(Json.Serialize(allUsers))');
+            
+            var allUniqueUsernames = [];
+            var usernameStr = "<option value='none' disabled selected>Select Username</option><option value='All'>All</option>";
+
+            $.each(allUsersObj, function(i, e) {
+                if(e.userName.length > 0 && !allUniqueUsernames.includes(e.userName)) {
+                    allUniqueUsernames.push(e.userName);
+                    usernameStr += `<option value="${e.userName}">${e.userName}</option>`;
+                }
+            });
+
+            $('#username-filter').html(usernameStr);
+            
+            function userNameFilter() {
+                var user = $('#username-filter').children('option:checked').val();
+                if(user !== 'none') {
+                    if(user==='All') {
+                        dataTable.column(0).search('').draw();
+                    } else {
+                        dataTable.column(0).search('^' + user + '$', true, false).draw();
+                    }
+                }
+            };
+
+            function userTypeFilter() {
+                var usertype = $('#usertype-filter').children('option:checked').val();
+                if(usertype !== 'none') {
+                    if(usertype === 'All') {
+                        dataTable.column(3).search('').draw();
+                    } else {
+                        dataTable.column(3).search('^' + usertype + '$', true, false).draw();
+                    }
+                }
+            };
+
+            function mobileNumberFilter() {
+                var mobilenumber = $('#mobile-filter').val();
+                if(mobilenumber !== '') {
+                    dataTable.column(4).search(mobilenumber).draw();
+                }
+            };
+
+            function postalCodeFilter() {
+                var postalCode = $('#postalcode-filter').val();
+                if(postalCode !== '') {
+                    dataTable.column(7).search(postalCode).draw();
+                }
+            };
+
+            function emailFilter() {
+                var email = $('#email-filter').val();
+                if(email !== '') {
+                    dataTable.column(8).search(email).draw();
+                }
+            };
+
+            function dateFilter() {
+                fromDate = new Date($('#fromDate').val());
+                toDate = new Date($('#toDate').val());
+
+                if(fromDate !== '' && toDate !== '') {
+                    var allDates = dataTable.column(9).data().unique().filter(function(d) {
+                        var date = new Date(d);
+                        if(fromDate <= date && date <= toDate) return d;
+                    });
+                    var allDatesStr = allDates.join('|');
+                    if(allDatesStr.length === 0) allDatesStr = "N/A";
+                    dataTable.columns(9).search(allDatesStr, true, false, true).draw();
+                }
+            };
+
+            $('.admin-filter-wrapper #search-btn').on('click', function() {
+                userNameFilter();
+                userTypeFilter();
+                mobileNumberFilter();
+                postalCodeFilter();
+                emailFilter();
+                dateFilter();
+            });
+
+            $('.admin-filter-wrapper #clear-btn').on('click', function() {
+                dataTable.columns().search('').draw();
+            });
+
+            $('.right-side-wrapper').on('click', 'a[id^="Approve_"], a[id^="Activate_"], a[id^="Deactivate_"], a[id^="Delete_"]', function(e) {
+                e.preventDefault();
+                let splitedId = $(this)[0].id.split('_');
+                let textId = splitedId[0];
+                let id = parseInt(splitedId[1]);
+                let type = @((int)Actions.Approve);
+                if(textId === "Activate") {
+                    type = @((int)Actions.Activate);
+                } else if(textId === "Deactivate") {
+                    type = @((int)Actions.Deactivate);
+                } else if(textId === "Delete") {
+                    type = @((int)Actions.Delete);
+                }
+
+                var model = {
+                    userId: allUsersObj[id].userId,
+                    type: type,
+                }
+
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("UserActions", "Admin")',
+                    dataType: "json",
+                    data: model,
+                    cache:false,
+                    beforeSend: function() {
+                        $(".loader").removeClass("d-none");
+                    },
+                    success: function(res) {
+                        $(".loader").addClass("d-none");
+                        if(res.Status==false) {
+                            setErrorMsg(res.Msg, res.AdditionalMsg);
+                        } else {
+                            setSuccessMsg(res.Msg, res.AdditionalMsg);
+                            $('#SuccessModal button').on('click', function() {
+                                location.href = '@Url.Action("UserManagement", "Admin")';
+                            });
+                        }
+                    },
+                    error: function(e) {
+                        $(".loader").addClass("d-none");
+                        setErrorMsg("Something went wrong!");
+                    },
+                });
+            });
+
+            function setSuccessMsg(mainmsg, secondarymsg="") {
+                $('#SuccessModal').modal('show');
+                $('.success-modal span').css('background-color', '#67b644');
+                $('#success-msg-img').prop('src', '/assets/correct-white-medium.png');
+                $('#success-msg').text(mainmsg);
+                $("#success-additional-msg").text(secondarymsg);
+            }
+
+            function setErrorMsg(mainmsg, secondarymsg="") {
+                $('#SuccessModal').modal('show');
+                $('.success-modal span').css('background-color', '#e82e2e');
+                $('#success-msg-img').prop('src', '/assets/close-white.png');
+                $('#success-msg').text(mainmsg);
+                $("#success-additional-msg").text(secondarymsg);
+            }
+        });
+    </script>
+}

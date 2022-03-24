@@ -11,20 +11,20 @@
       "destination": "wwwroot/lib/jquery-validation-unobtrusive/"
     },
     {
-      "library": "jquery@3.6.0",
-      "destination": "wwwroot/lib/jquery/"
+      "library": "jquery-steps@1.1.0",
+      "destination": "wwwroot/jquery-steps/"
     },
     {
-      "library": "bootstrap@4.5.3",
-      "destination": "wwwroot/lib/bootstrap/"
+      "library": "jquery@3.5.1",
+      "destination": "wwwroot/lib/jquery"
     },
     {
-      "library": "popper.js@2.11.2",
+      "library": "popper.js@1.16.1",
       "destination": "wwwroot/lib/popper.js/"
     },
     {
-      "library": "jquery-steps@1.1.0",
-      "destination": "wwwroot/jquery-steps/"
+      "library": "bootstrap@4.6.1",
+      "destination": "wwwroot/lib/bootstrap/"
     }
   ]
 }

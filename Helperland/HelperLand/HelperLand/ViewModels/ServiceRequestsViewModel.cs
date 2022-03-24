@@ -11,6 +11,7 @@ namespace HelperLand.ViewModels
         public int ServiceRequestId { get; set; }
         public int ServiceId { get; set; }
         public string ServiceDate { get; set; }
+        public float StartTimeFloat { get; set; }
         public string ServiceStartTime { get; set; }
         public string ServiceEndTime { get; set; }
         public float TotalAmount { get; set; }
@@ -20,6 +21,10 @@ namespace HelperLand.ViewModels
         public float SPRating { get; set; }
         public float Duration { get; set; }
         public string ExtraServices { get; set; }
+        public string Street { get; set; }
+        public string HouseNumber { get; set; }
+        public string City { get; set; }
+        public string PostalCode { get; set; }
         public string ServiceAddress { get; set; }
         public string Mobile { get; set; }
         public string Email { get; set; }

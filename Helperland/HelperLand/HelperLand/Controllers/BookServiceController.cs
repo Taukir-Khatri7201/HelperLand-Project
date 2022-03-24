@@ -221,7 +221,7 @@ namespace HelperLand.Controllers
         }
     }
 
-    enum ServiceRequestStatus
+    public enum ServiceRequestStatus
     {
         Created=1,
         Paid,
@@ -230,7 +230,7 @@ namespace HelperLand.Controllers
         Completed,
         Refunded,
     }
-    enum ExtraServices
+    public enum ExtraServices
     {
         Cabinets=1,
         Fridge,

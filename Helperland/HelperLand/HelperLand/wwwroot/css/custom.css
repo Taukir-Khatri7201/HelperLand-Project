@@ -1609,6 +1609,7 @@ li.nav-item.text-center.nav-notification {
     text-align: center;
     color: #646464;
     align-items: center;
+    justify-content: center;
     text-decoration: none;
     width: 8px;
     height: 15px;
@@ -1634,7 +1635,6 @@ li.nav-item.text-center.nav-notification {
 .admin-navbar {
     background-color: #1fb6ff !important;
     color: #FFFFFF;
-    z-index: 10000;
 }
 
 .admin-navbar .navbar-brand {
@@ -1676,7 +1676,9 @@ li.nav-item.text-center.nav-notification {
 
 .admin-left-nav ul {
     padding: 0;
+    width: 272px;
     height: 100%;
+    min-height: calc(100vh - 74px);
     color: #646464 !important;
     background-color: #FFFFFF;
     list-style: none;
@@ -1720,7 +1722,7 @@ li.nav-item.text-center.nav-notification {
 }
 
 .admin-right-content .btn:hover {
-    color: #FFFFFF !important;
+    color: #FFFFFF;
 }
 
 .admin-right-content .btn img {
@@ -1742,6 +1744,38 @@ li.nav-item.text-center.nav-notification {
     height: 100% !important;
 }
 
+.admin-filter-wrapper select {
+    height: 100% !important;
+    min-height: calc(1.5em + 1.5rem + 2px) !important;
+}
+
+.admin-filter-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+    background-image: url("../assets/admin-calendar-blue.png");
+}
+
+.admin-right-content .admin-filter-wrapper button {
+    margin-left: 0px;
+}
+
+.admin-right-content .admin-filter-wrapper button+button {
+    margin-left: 15px;
+}
+
+.admin-table thead tr {
+    border: 1px solid #dee2e6;
+}
+
+.admin-table thead th {
+     border: 0px;
+     padding-left: 15px !important;
+     padding-right: 15px !important;
+}
+
+.admin-table tbody td {
+    padding: 15px !important;
+}
+
+
 .form-btn {
     display: inline-flex;
     align-items: center;
@@ -1756,7 +1790,7 @@ li.nav-item.text-center.nav-notification {
 }
 
 .form-btn.clear-btn:hover {
-    color: #646464 !important;
+    color: #646464;
 }
 
 .admin-table > tbody > tr {
@@ -1805,6 +1839,7 @@ li.nav-item.text-center.nav-notification {
     padding: 15px;
     margin-top: 0;
     background-color: #FFFFFF;
+    color: #646464;
 }
 
 .admin-pagination ul > li {
@@ -1826,17 +1861,26 @@ li.nav-item.text-center.nav-notification {
     border-bottom-right-radius: 4px;
 }
 
-.blue-color {
-    color: #FFFFFF;
-    background-color: #1fb6ff;
+.admin-pagination .page-link {
+    padding: 0;
+}
+
+.admin-right-content input:focus, .admin-right-content select:focus {
+    border-color: #80bdff !important;
+}
+
+.blue-color, .blue-color:hover, .blue-color:focus {
+    color: #FFFFFF !important;
+    background-color: #1fb6ff !important;
 }
 
 .dropdown-menu {
     margin-top: 10px;
 }
 
-.dropdown-item:hover {
+.dropdown-item:hover, .dropdown-item:focus {
     background-color: #f8f9fa !important;
+    color: #16181b !important;
 }
 
 .dropdown-menu::before {
@@ -2624,6 +2668,17 @@ textarea {
     margin: auto 10px;
 }
 
+.dataTables_info {
+    float: left !important;
+    padding-top: 0px !important;
+    margin-bottom: 8px;
+    margin-left: 8px;
+}
+
+.dataTables_empty {
+    text-align: center !important;
+}
+
 .dataTable > thead .sorting:before, .dataTable > thead .sorting:after {
     content: none !important;
 }
@@ -2875,6 +2930,29 @@ textarea {
 
 .settings-avatar img.active {
     border: 3px solid #1D7A8C;
+}
+
+.request-details.admin-filter-wrapper input[type="date"]::-webkit-calendar-picker-indicator {
+    left: 5px;
+}
+
+.request-details .form-control:focus {
+    outline: none !important;
+    border-color: #80bdff !important;
+}
+
+.request-details.admin-filter-wrapper select {
+    height: calc(1.5em + 1.5rem + 2px) !important;
+}
+
+.request-details.admin-filter-wrapper textarea {
+    resize: none !important;
+}
+
+.blue-admin-btn:hover {
+    border: 1px solid #1fb6ff !important;
+    background-color: #FFFFFF;
+    color: #1fb6ff !important;
 }
 
 @media (max-width: 1199px) {
@@ -3317,7 +3395,7 @@ textarea {
         margin-top: -15px;
     }
 
-    .dataTables_length {
+    .dataTables_length, .dataTables_info {
          float: none;
     }
 
@@ -3405,7 +3483,7 @@ textarea {
     }
 
     .pagination-and-filter-wrapper ul > li {
-        padding: 12px;
+        padding: 8px;
     }
 
     .admin-navbar .navbar-brand {
@@ -3437,8 +3515,8 @@ textarea {
         font-size: 20px;
     }
     
-    .dataTables_length {
-        font-size: 13px;
+    .dataTables_length, .dataTables_info {
+        font-size: 12px;
     }
 
     .dataTables_length select {
@@ -3448,5 +3526,13 @@ textarea {
 
     .page-item .page-link {
         padding: 5px 8px !important;
+    }
+
+    .admin-right-content .admin-filter-wrapper button {
+        padding: unset !important;
+    }
+
+    .admin-right-content .admin-filter-wrapper button + button {
+        margin-left: 5px;
     }
 }
