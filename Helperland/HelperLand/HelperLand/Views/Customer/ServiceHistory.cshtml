@@ -397,7 +397,6 @@
             $('#rateSPModal .secondary-blue-btn').on('click', function() {
                 ratingModel.Effective = parseFloat(ratingModel.Effective);
                 let id = parseInt($('#currentId').val());
-                console.log(id);
                 var model = {
                     ServiceRequestId: $('#@Html.IdFor(m=>m.spRating.ServiceRequestId)').val(),
                     RatingFrom: @loggedUser.UserId,
@@ -432,7 +431,6 @@
                     },
                     error: function(e) {
                         $(".loader").addClass("d-none");
-                        console.log("Error: " + e);
                     },
                 });
             });

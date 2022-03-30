@@ -254,7 +254,7 @@
 
                                     <div class="form-group">
                                         <h3 class="header-16">Comments</h3>
-                                        <textarea asp-for="@Model.scheduleAndPlan.Comments" class="form-control" formcontrolname="message" maxlength="1000"
+                                        <textarea asp-for="@Model.scheduleAndPlan.Comments" class="form-control" formcontrolname="message" maxlength="500"
                                             rows="3" placeholder="Comments"></textarea>
                                     </div>
 
@@ -327,9 +327,7 @@
                                         </div>
                                         <div class="form-group col-sm-6">
                                             <label asp-for="@Model.address.City">City</label>
-                                            <select asp-for="@Model.address.City" class="form-control">
-                                                <option selected>Bonn</option>
-                                            </select>
+                                            <input class="form-control" asp-for="@Model.address.City" placeholder="City" />
                                         </div>
                                     </div>
 
@@ -949,7 +947,8 @@
                         },
                         error: function(e) {
                             $(".loader").addClass("d-none");
-                            console.log("Error: " + e);
+                            var mainMsg = "Something went wrong!";
+                            setErrorMsg(mainMsg);
                         },
                     });
                 }
@@ -1077,7 +1076,6 @@
                     Total: getEffectiveValue(paymentModel.totalamount),
                     Code: $('#@Html.IdFor(m=>m.postalcode.code)').val(),
                 }
-                //console.log(model);
 
                 if(isvalid) {
                     $.ajax({
@@ -1091,7 +1089,6 @@
                         },
                         success: function(res) {
                             $(".loader").addClass("d-none");
-                            console.log(res);
                             if(res.Status==false) {
                                 @*$('span[data-valmsg-for="@Html.NameFor(m=>m.postalcode.code)"]').text("Postal code you have entered is not valid");
                                 $('span[data-valmsg-for="@Html.NameFor(m=>m.postalcode.code)"]').delay(5000).hide(0);*@
@@ -1110,7 +1107,8 @@
                         },
                         error: function(e) {
                             $(".loader").addClass("d-none");
-                            console.log("Error: " + e);
+                            var mainMsg = "Something went wrong!";
+                            setErrorMsg(mainMsg);
                         },
                     });
                 }
@@ -1135,7 +1133,7 @@
                 var newAddress = {
                     "Street": $('#@Html.IdFor(m => m.address.Street)').val(),
                     "HouseNumber": $('#@Html.IdFor(m => m.address.HouseNumber)').val(),
-                    "City": $('#@Html.IdFor(m => m.address.City) option:selected').text(),
+                    "City": $('#@Html.IdFor(m => m.address.City)').val(),
                     "PostalCode": $('#@Html.IdFor(m => m.address.PostalCode)').val(),
                     "Mobile": $('#@Html.IdFor(m => m.address.Mobile)').val(),
                 }
@@ -1159,7 +1157,8 @@
                         },
                         error: function(e) {
                             $(".loader").addClass("d-none");
-                            console.log("Error: " + e);
+                            var mainMsg = "Something went wrong!";
+                            setErrorMsg(mainMsg);
                         },
                     });
                 }
@@ -1211,12 +1210,12 @@
                                     disableallafter(3);
                                     enableallbefore(3);
                                     $.extend(true, finalModel, {address : model});
-                                    console.log(finalModel);
                                 }
                             },
                             error: function(e) {
                                 $(".loader").addClass("d-none");
-                                console.log("Error: " + e);
+                                var mainMsg = "Something went wrong!";
+                                setErrorMsg(mainMsg);
                             },
                         });
                     }

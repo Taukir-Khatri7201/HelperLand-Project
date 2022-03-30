@@ -504,9 +504,7 @@
             
             function serviceIdFilter() {
                 var serviceId = $('#serviceId').val();
-                if(serviceId !== '') {
-                    dataTable.column(0).search(serviceId).draw();
-                }
+                dataTable.column(0).search(serviceId).draw();
             };
 
             function statusFilter() {
@@ -543,10 +541,12 @@
             };
 
             function dateFilter() {
-                fromDate = new Date($('#fromDate').val());
-                toDate = new Date($('#toDate').val());
+                var fromDateval = $('#fromDate').val();
+                var toDateval = $('#toDate').val();
 
-                if(fromDate !== '' && toDate !== '') {
+                if(fromDateval !== '' && toDateval !== '') {
+                    fromDate = new Date($('#fromDate').val());
+                    toDate = new Date($('#toDate').val());
                     var allDates = dataTable.column(6).data().unique().filter(function(d) {
                         var date = new Date(d);
                         if(fromDate <= date && date <= toDate) return d;
@@ -605,7 +605,6 @@
                 var ok = $('#editModal .request-details form').valid();
                 if(ok) 
                 {
-                    // parse int remaining
                     let serviceModal = {
                         ServiceId: parseInt($('#@Html.IdFor(m => m.adminRescheduleService.serviceDetails.ServiceId)').val()),
                         ServiceStartDate: new Date($('#@Html.IdFor(m=>m.adminRescheduleService.serviceDetails.ServiceStartDate)').val()).toJSON(),

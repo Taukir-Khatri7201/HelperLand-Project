@@ -79,5 +79,10 @@ $(document).ready(function () {
 				turnoffleftnav();
 			}
 		}
-    });
+	});
+
+	$('#loginmodal button.form-submit-btn').on('click', function () {
+		$('#loginmodal').modal('hide');
+		$(".loader").removeClass("d-none");
+	});
 });

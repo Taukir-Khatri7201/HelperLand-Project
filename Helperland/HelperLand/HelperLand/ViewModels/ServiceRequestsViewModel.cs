@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace HelperLand.ViewModels
 {
@@ -28,6 +29,8 @@ namespace HelperLand.ViewModels
         public string ServiceAddress { get; set; }
         public string Mobile { get; set; }
         public string Email { get; set; }
+
+        [StringLength(500, ErrorMessage = "Comments length cannot be more than 500 characters")]
         public string Comments { get; set; }
         public bool HasPets { get; set; }
         public int? Status { get; set; } 

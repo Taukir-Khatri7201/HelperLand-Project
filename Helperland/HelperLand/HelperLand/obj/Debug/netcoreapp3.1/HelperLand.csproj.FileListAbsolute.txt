@@ -102,6 +102,6 @@ E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\Help
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\ServiceProvider\my_settings.cshtml.g.cs
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Admin\ServiceRequests.cshtml.g.cs
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Shared\_ViewImports.cshtml.g.cs
-E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\HelperLand.csproj.AssemblyReference.cache
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Admin\_LeftNavigation.cshtml.g.cs
 E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\Razor\Views\Admin\UserManagement.cshtml.g.cs
+E:\Taukir Study\TatvaSoft\Training\Project\Helperland\Helperland\HelperLand\HelperLand\obj\Debug\netcoreapp3.1\HelperLand.csproj.AssemblyReference.cache

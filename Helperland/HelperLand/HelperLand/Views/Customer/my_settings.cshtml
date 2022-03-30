@@ -448,7 +448,6 @@
                         },
                         error: function(e) {
                             $(".loader").addClass("d-none");
-                            console.log("Error: " + e);
                         },
                     });
                 } else {
@@ -459,7 +458,6 @@
                         City: $('#@Html.IdFor(m => m.address.City)').val(),
                         Mobile: $('#@Html.IdFor(m => m.address.Mobile)').val(),
                     };
-                    //debugger;
                     $.ajax({
                         type: 'POST',
                         url: '@Url.Action("AddAddress", "BookService")',
@@ -494,7 +492,6 @@
                         },
                         error: function(e) {
                             $(".loader").addClass("d-none");
-                            console.log("Error: " + e);
                         },
                     });
                 }
@@ -548,7 +545,6 @@
                     },
                     error: function(e) {
                         $(".loader").addClass("d-none");
-                        console.log("Error: " + e);
                     },
                 });
             }
@@ -586,7 +582,6 @@
                 },
                 error: function(e) {
                     $(".loader").addClass("d-none");
-                    console.log("Error: " + e);
                 },
             });
         });
@@ -639,7 +634,6 @@
                 },
                 error: function(e) {
                     $(".loader").addClass("d-none");
-                    console.log("Error: " + e);
                 },
             });
         });
@@ -679,9 +673,7 @@
                         }
                     },
                     error: function(e) {
-                        debugger;
                         $(".loader").addClass("d-none");
-                        console.log("Error: " + e);
                     },
                 });
             }

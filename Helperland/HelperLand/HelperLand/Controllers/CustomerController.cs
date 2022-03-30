@@ -308,9 +308,16 @@ namespace HelperLand.Controllers
                     } 
                     else
                     {
+                        var allBlockedSP = context.FavoriteAndBlockeds
+                                                    .Where(x => x.UserId == loggedUser.UserId)
+                                                    .Select(x => x.TargetUserId);
+
                         ServiceProvider = context.Users
-                                                        .Where(x => x.UserTypeId == 2 && x.ZipCode == prevRequest.ZipCode)
+                                                        .Where(x => x.UserTypeId == 2 
+                                                                    && x.ZipCode == prevRequest.ZipCode
+                                                                    && !allBlockedSP.Contains(x.UserId))
                                                         .Select(x => x.Email).ToArray();
+
                         subject = "New Service Available (Rescheduled)";
 
                         body = "<div>" +

@@ -114,6 +114,8 @@ namespace HelperLand.Controllers
                     IsRegisteredUser = true,
                     CreatedDate = DateTime.Now,
                     ModifiedDate = DateTime.Now,
+                    IsApproved = true,
+                    IsActive = true,
                 };
                 user.ModifiedBy = user.UserId;
                 context.Users.Add(user);

@@ -10,6 +10,7 @@ namespace HelperLand.ViewModels
         [Required(ErrorMessage = "Enter Password")]
         [DataType(DataType.Password)]
         [Display(Name = "New Password")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=]).{6,14}$", ErrorMessage = "Password must contain atleast 6 to 14 characters, 1 Alphabet, 1 Number, 1 Special Character")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Enter Confirm Password")]

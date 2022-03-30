@@ -9,6 +9,7 @@ namespace HelperLand.ViewModels
         public int ServiceProviderId { get; set; }
 
         [Required(ErrorMessage = "Please enter a reason")]
+        [StringLength(500, ErrorMessage = "Reason length cannot be more than 500 characters")]
         public string Reason { get; set; }
     }
 }

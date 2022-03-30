@@ -245,9 +245,18 @@ namespace HelperLand.Controllers
             DateTime dateTime = DateTime.Now;
             IQueryable<Models.ServiceRequest> available = null;
             if (type == 1) {
+                var allBlockedUsersBySP = context.FavoriteAndBlockeds
+                                                        .Where(x => x.UserId == loggedUser.UserId && x.IsBlocked == true)
+                                                        .Select(x => x.TargetUserId).ToHashSet();
+                var allUsersWhoBlockedSP = context.FavoriteAndBlockeds
+                                                        .Where(x => x.TargetUserId == loggedUser.UserId && x.IsBlocked == true)
+                                                        .Select(x => x.UserId).ToHashSet();
+
                 available = context.ServiceRequests.Where(s => s.ServiceStartDate >= DateTime.Now
                                                                && s.Status < (int)ServiceRequestStatus.Accepted
-                                                               && s.ServiceProviderId == null);
+                                                               && s.ServiceProviderId == null
+                                                               && !allBlockedUsersBySP.Contains(s.UserId)
+                                                               && !allUsersWhoBlockedSP.Contains(s.UserId));
             }
             else if (type == 2)
             {

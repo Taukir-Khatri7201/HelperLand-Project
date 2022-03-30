@@ -152,9 +152,13 @@ namespace HelperLand.Controllers
             context.ServiceRequestAddresses.Add(address);
             context.SaveChanges();
 
+            var blockedSPs = (from sp in context.FavoriteAndBlockeds
+                             where sp.UserId == loggedUser.UserId && sp.IsBlocked == true
+                             select sp.TargetUserId).ToHashSet();
+
             string[] allServiceProviders = context.Users
-                                                    .Where(x => x.UserTypeId == 2 && x.ZipCode == model.address.PostalCode)
-                                                    .Select(x => x.Email).ToArray();
+                                .Where(x => x.UserTypeId==2 && x.IsActive==true && x.IsApproved==true && !blockedSPs.Contains(x.UserId))
+                                .Select(x => x.Email).ToArray();
 
             var subject = "New service request available";
             var body = "<div>" +

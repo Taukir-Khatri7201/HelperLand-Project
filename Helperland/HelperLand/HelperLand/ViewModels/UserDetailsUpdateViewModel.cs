@@ -9,6 +9,7 @@ namespace HelperLand.ViewModels
         public int UserId { get; set; }
 
         [Required(ErrorMessage = "Please enter first name")]
+        [StringLength(100, ErrorMessage = "Firstname cannot be more than 100 characters")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Please enter last name")]
@@ -17,6 +18,7 @@ namespace HelperLand.ViewModels
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Please enter phone number")]
+        [RegularExpression(@"^[6789]\d{9}$", ErrorMessage = "Invalid Mobile Number")]
         public string Mobile { get; set; }
 
         public int Day { get; set; }

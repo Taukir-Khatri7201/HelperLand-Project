@@ -465,30 +465,25 @@
 
             function mobileNumberFilter() {
                 var mobilenumber = $('#mobile-filter').val();
-                if(mobilenumber !== '') {
-                    dataTable.column(4).search(mobilenumber).draw();
-                }
+                dataTable.column(4).search(mobilenumber).draw();
             };
 
             function postalCodeFilter() {
                 var postalCode = $('#postalcode-filter').val();
-                if(postalCode !== '') {
-                    dataTable.column(7).search(postalCode).draw();
-                }
+                dataTable.column(7).search(postalCode).draw();
             };
 
             function emailFilter() {
                 var email = $('#email-filter').val();
-                if(email !== '') {
-                    dataTable.column(8).search(email).draw();
-                }
+                dataTable.column(8).search(email).draw();
             };
 
             function dateFilter() {
-                fromDate = new Date($('#fromDate').val());
-                toDate = new Date($('#toDate').val());
-
-                if(fromDate !== '' && toDate !== '') {
+                var fromDateval = $('#fromDate').val();
+                var toDateval = $('#toDate').val();
+                if(fromDateval !== '' && toDateval !== '') {
+                    fromDate = new Date($('#fromDate').val());
+                    toDate = new Date($('#toDate').val());
                     var allDates = dataTable.column(9).data().unique().filter(function(d) {
                         var date = new Date(d);
                         if(fromDate <= date && date <= toDate) return d;

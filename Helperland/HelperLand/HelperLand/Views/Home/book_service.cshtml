@@ -10,10 +10,6 @@
     Array.Reverse(todaysDateArr);
     var defaultDate = string.Join("/", todaysDateArr);
 }
-
-@*@section Styles {
-    <link href="~/css/jquery-steps-style.css" rel="stylesheet">
-}*@
         <section class="common-banner book-service-banner d-none d-md-block"></section>
 
         <!-- Book Service Section -->
@@ -875,7 +871,7 @@
                                     }
                                 },
                                 error: function(e) {
-                                    console.log("Error: " + e);
+                                    $(".loader").addClass("d-none");
                                 },
                             });
                         }
@@ -994,8 +990,6 @@
                     $('#scheduleAndPlan button').on('click', function(e) {
                         e.preventDefault();
 
-                        //console.log('@User.Identity.IsAuthenticated' == "False");
-                        
                         var _form = $('#scheduleAndPlan form');
                         var isvalid = _form.valid();
                         var ExtraServicesModel = {
@@ -1019,8 +1013,6 @@
                             Total: getEffectiveValue(paymentModel.totalamount),
                         }
 
-                        //console.log(model);
-
                         if(isvalid) {
                             $.ajax({
                                 type: 'POST',
@@ -1029,7 +1021,6 @@
                                 dataType: "json",
                                 cache:false,
                                 success: function(res) {
-                                    console.log(res);
                                     if(res==false) {
                                         @*$('span[data-valmsg-for="@Html.NameFor(m=>m.postalcode.code)"]').text("Postal code you have entered is not valid");
                                         $('span[data-valmsg-for="@Html.NameFor(m=>m.postalcode.code)"]').delay(5000).hide(0);*@
@@ -1039,7 +1030,7 @@
                                     }
                                 },
                                 error: function(e) {
-                                    console.log("Error: " + e);
+                                    $(".loader").addClass("d-none");
                                 },
                             });
                         }
@@ -1056,69 +1047,5 @@
                     });
 
                 });
-
-                @*$(document).ready(function () {
-                    $('#setupService button').on('click', function() {
-                        var model = '@Json.Serialize(Model)';
-                        let finalModel;
-                        if(model != null) {
-                            finalModel = '@Html.Raw(Json.Serialize(Model.postalcode))';
-                            console.log(finalModel);
-                        }
-                        console.log(model);
-                        console.log(finalModel);
-                        $.ajax({
-                            type: 'POST',
-                            url: '@Url.Action("PostalCodeCheck", "Home")',
-                            data: {code: },
-                            success: function(res) {
-                                if(res==false) {
-                                    $('#postalcode-validation').text("Postal code you have entered is not valid");
-                                    $("#postalcode-validation").show().delay(3000).hide();
-                                }
-                                console.log("Found");
-                            },
-                            error: function(e) {
-                                console.log("Error: " + e);
-                            },
-                        });
-
-                        //let f=false;
-                        //for(let i=2;i<=4;i++) {
-                        //    let temp = ".navlink.step-" + i;
-                        //    f |= $(temp).hasClass('myactive');
-                        //}
-                        //if(f) {
-
-                        //} else {
-                        //    var model = {code: $('#postalcode_code').val};
-                        //    console.log(model);
-                        //}
-                        $.post("/Home/PostalCodeCheck", @Model.postalcode, function(data) {
-                            var postalcodecheck = "@ViewData["PostalCodeCheck"]";
-                            console.log(postalcodecheck); 
-                        });
-                    });
-                    //const totaltabs = $('ul.book-service-tab li').length;
-                    //$('ul.book-service-tab li').on('click', function (e) {
-                    //    var currenttab = e.currentTarget.attributes["class"].value;
-                    //    var last = parseInt(currenttab[currenttab.length - 1]);
-                    //    currenttab = currenttab.slice(0, -1);
-                    //    currenttab = currenttab.split(" ").map(word => `.${word}`).join("");
-                    //    // console.log(currenttab);
-                    //    for (let i = 1; i <= totaltabs; i++) {
-                    //        var activetab = currenttab + i + " a.nav-link";
-                    //        if (i <= last) {
-                    //            $(activetab).addClass('myactive');
-                    //            $(activetab).css("pointer-events", "visible");
-                    //        }
-                    //        else {
-                    //            $(activetab).removeClass('myactive');
-                    //            $(currenttab + i).css("pointer-events", "none");
-                    //            $(activetab).css("pointer-events", "none");
-                    //        }
-                    //    }
-                    //});
-                });*@
             </script>
         }
